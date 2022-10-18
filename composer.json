@@ -1,0 +1,16 @@
+{
+	"name": "mahendradwipurwanto/base-ci",
+	"description": "Base code ci with ready to deploy library for new CI 3 project",
+	"type": "project",
+	"require": {
+		"phpoffice/phpspreadsheet": "dev-master",
+		"phpmailer/phpmailer": "dev-master",
+		"tecnickcom/tcpdf": "dev-main"
+	},
+	"license": "AFL-1.1",
+	"authors": [{
+		"name": "Mahendra Dwi Purwanto",
+		"email": "ngodingin.indonesia@gmail.com"
+	}],
+	"minimum-stability": "dev"
+}
