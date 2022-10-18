@@ -8,4 +8,4 @@ Ready to dev. CI 3 Modul MVC
 
 use [Composer](http://getcomposer.org/) and run `composer i` to instal requred vendor
 
-then open `http://localhost/base-ci-3/CreateDb` to create based database, after done change db name on `config/database.php`.
+then open `http://localhost/base-ci-3/Database` to create based database, after done change db name on `config/database.php`.
