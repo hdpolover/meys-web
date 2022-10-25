@@ -13,6 +13,48 @@ class Home extends CI_Controller
 
     public function index()
     {
-        $this->templatefront->view('home/home');
+        // style
+        $data['navbar_style']   = "navbar-dark";
+        $data['logo_style']     = 1;
+        $data['btn_sign_up']    = "btn-light";
+        $data['btn_sign_in']    = "btn-outline-light";
+
+        $data['swiper'] = $this->M_home->getHomeSwiper();
+        $data['home']['hero'] = $this->M_home->getHomeComponents('hero');
+
+        $this->templatefront->view('home/home', $data);
+    }
+
+    public function faq()
+    {   
+        // style
+        $data['navbar_style']   = "navbar-dark bg-dark shadow-sm";
+        $data['logo_style']     = 1;
+        $data['btn_sign_up']    = "btn-light";
+        $data['btn_sign_in']    = "btn-outline-light";
+
+        $data['faq'] = $this->M_home->getFaqAll();
+        // ej($data);
+        $this->templatefront->view('home/faq', $data);
+    }
+
+    public function about()
+    {   
+        // style
+        $data['navbar_style']   = "navbar-dark bg-dark shadow-sm";
+        $data['logo_style']     = 1;
+        $data['btn_sign_up']    = "btn-light";
+        $data['btn_sign_in']    = "btn-outline-light";
+        // ej($data);
+        $this->templatefront->view('home/about', $data);
+    }
+
+    public function helpCenter()
+    {
+        $this->templatefront->view('home/help_center');
+    }
+
+    public function e_404(){
+        $this->templateauth->view('utility/not_found');
     }
 }
