@@ -6,19 +6,20 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Title -->
-    <title><?= ($this->uri->segment(1) ? ucwords(str_replace('-', ' ', $this->uri->segment(1)) . ' ' . ($this->uri->segment(2) ? str_replace('-', ' ', $this->uri->segment(2)) : "") . " - ".$web_title) : $web_title); ?></title>
+	<!-- Title -->
+	<title>
+		<?= ($this->uri->segment(1) ? ucwords(str_replace('-', ' ', $this->uri->segment(1)) . ' ' . ($this->uri->segment(2) ? str_replace('-', ' ', $this->uri->segment(2)) : "") . " - ".$web_title) : $web_title); ?>
+	</title>
 
 	<meta name="description" content="<?= $web_desc; ?>">
 	<meta property="og:title"
 		content="<?= ($this->uri->segment(1) ? ucwords(str_replace('-', ' ', $this->uri->segment(1)) . ' ' . ($this->uri->segment(2) ? str_replace('-', ' ', $this->uri->segment(2)) : "") . $web_title) : $web_title); ?>">
 	<meta property="og:description" content="<?= $web_desc; ?>">
-	<meta property="og:image"
-		content="<?= base_url(); ?><?= $web_icon?>">
+	<meta property="og:image" content="<?= base_url(); ?><?= $web_icon?>">
 	<meta property="og:url" content="<?= base_url(uri_string()) ?>">
 
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="<?= base_url(); ?><?= $web_icon;?>">
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="<?= base_url(); ?><?= $web_icon;?>">
 
 	<!-- Font -->
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -35,7 +36,13 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js@5.0.0/minified/introjs.min.css">
 	<link rel="stylesheet" href="<?= base_url(); ?>assets/plugin/intro-js-modern.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-	
+
+	<!-- Tagsinput -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.css"
+		integrity="sha512-uKwYJOyykD83YchxJbUxxbn8UcKAQBu+1hcLDRKZ9VtWfpMb1iYfJ74/UIjXQXWASwSzulZEC1SFGj+cslZh7Q=="
+		crossorigin="anonymous" />
+	<link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/tom-select/dist/css/tom-select.bootstrap5.css">
+
 	<!-- CSS Front Template -->
 	<link rel="stylesheet" href="<?= base_url(); ?>assets/css/theme.min.css">
 	<link rel="stylesheet" href="<?= base_url(); ?>assets/css/docs.min.css">
@@ -60,6 +67,10 @@
 
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+	<!-- Tagsinput -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.js"
+		integrity="sha512-wTIaZJCW/mkalkyQnuSiBodnM5SRT8tXJ3LkIUA/3vBJ01vWe5Ene7Fynicupjt4xqxZKXA97VgNBHvIf5WTvg=="
+		crossorigin="anonymous"></script>
 	<script src="<?= base_url();?>assets/js/apexchart.js"></script>
 </head>
 

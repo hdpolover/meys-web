@@ -28,7 +28,8 @@ class Admin extends CI_Controller
 
     public function participans()
     {
-        $this->templateback->view('admin/dashboard');
+        $data['participans'] = $this->M_admin->getParticipans();
+        $this->templateback->view('admin/participans/list', $data);
     }
 
     public function participans_detail($participans_id = null)
@@ -89,5 +90,34 @@ class Admin extends CI_Controller
                 }
                 break;
         }
+    }
+    
+    public function getAjaxParticipant(){
+        $draw   = $this->input->post('draw');
+        $search = $this->input->post('search')['value'];
+        
+        $participants = $this->M_admin->getParticipansAll();
+        $arr = [];
+        $no = 1;
+        foreach ($participants['records'] as $key => $val) {
+            $arr[] = [
+                "no"       => $no++,
+                "name"     => $val->name,
+                "email"    => $val->email,
+                "action"   => '
+                    <a target="_blank" href="'.site_url('admin/participant/'.$val->user_id).'" class="btn btn-soft-info btn-icon btn-sm"><i class="bi-eye"></i></a>
+                    <button onclick="showMdlChangePassword(\''.$val->user_id.'\')" class="btn btn-soft-primary btn-icon btn-sm"><i class="bi-key"></i></button>
+                    '
+            ];
+        }
+
+        $response = array(
+            "draw" => intval($draw),
+            "recordsTotal" => $participants['totalRecords'],
+            "recordsFiltered" => ($search != "" ? $participants['totalDisplayRecords'] : $participants['totalRecords']),
+            "data" => $arr,
+        );
+
+        echo json_encode($response);
     }
 }

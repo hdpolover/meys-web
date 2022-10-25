@@ -34,7 +34,7 @@
 <script src="<?= base_url(); ?>assets/vendor/fslightbox/index.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/imask/dist/imask.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/hs-quantity-counter/dist/hs-quantity-counter.min.js"></script>
-
+<script src="<?= base_url(); ?>assets/vendor/tom-select/dist/js/tom-select.complete.min.js"></script>
 <!-- JS Front -->
 <script src="<?= base_url(); ?>assets/js/theme.min.js"></script>
 
@@ -110,7 +110,7 @@
 		// INITIALIZATION OF INPUT MASK
 		// =======================================================
 		HSCore.components.HSMask.init('.js-input-mask')
-		
+
 		// INITIALIZATION OF  QUANTITY COUNTER
 		// =======================================================
 		new HSQuantityCounter('.js-quantity-counter')
@@ -192,14 +192,65 @@
 				},
 			},
 		});
+		
+		// INITIALIZATION OF SELECT
+		// =======================================================
+		HSCore.components.HSTomSelect.init('.js-select')
 	})()
 
 	$(document).ready(function () {
-		$('#table').DataTable({
-			responsive: true
+		$('table.dataTables').each(function () {
+			$('#' + $(this).attr('id')).DataTable({
+				"language": {
+					"emptyTable": '<div class="text-center p-4">' +
+						'<img class="mb-3" src="<?= base_url() ?>assets/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">' +
+						'<p class="mb-0">Tidak ada data untuk ditampilkan</p>' +
+						'</div>'
+				},
+				"scrollX": true,
+				"responsive": true
+			});
 		});
-		$('#table2').DataTable({
-			responsive: true
+
+		//binds to onchange event of your input field
+		$('input.imgprev').each(function () {
+			$('#' + $(this).attr('id')).bind('change', function () {
+				//this.files[0].size gets the size of your file.
+				if (this.files[0].size > 2000000) {
+					Swal.fire({
+						text: 'File size to large !',
+						icon: 'warning',
+					})
+					this.value = "";
+					imgthumbnail.src = '<?=base_url();?>assets/images/placeholder.jpg'
+				} else {
+					const [file] = this.files
+					if (file) {
+						imgthumbnail.src = URL.createObjectURL(file)
+					}
+				}
+			})
+		});
+
+		$('#tag').tagsInput({
+			'width': 'auto',
+			'delimiter': ',',
+			'defaultText': 'Tag',
+			onAddTag: function (item) {
+				$($(".tagsinput").get(0)).find(".tag").each(function () {
+					if (!ValidateText($(this).text().trim().split(/(\s+)/)[0])) {
+						$(this).addClass("badge-primary");
+					}
+				});
+			},
+			'onChange': function (item) {
+				$($(".tagsinput").get(0)).find(".tag").each(function () {
+					if (!ValidateText($(this).text().trim().split(/(\s+)/)[0])) {
+						$(this).addClass("badge-primary");
+					}
+				});
+			}
+
 		});
 	})
 

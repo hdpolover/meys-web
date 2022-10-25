@@ -530,3 +530,6 @@ div.dataTables_wrapper {
 	height: auto;
 	border-radius: 0;
 }
+.modal-backdrop {
+    background-color: rgba(33,50,91,.25) !important;
+}

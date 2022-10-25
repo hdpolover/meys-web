@@ -8,7 +8,7 @@ class User extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model(['M_user', 'M_auth']);
+        $this->load->model(['M_user', 'M_auth', 'M_announcements', 'M_master']);
     }
 
     public function index()
@@ -34,6 +34,8 @@ class User extends CI_Controller
         $data['btn_sign_up']    = "btn-light";
         $data['btn_sign_in']    = "btn-outline-light";
 
+        $data['documents']  = $this->M_master->getDocuments();
+
         $this->templateuser->view('user/documents', $data);
     }
 
@@ -46,6 +48,8 @@ class User extends CI_Controller
         $data['logo_style']     = 1;
         $data['btn_sign_up']    = "btn-light";
         $data['btn_sign_in']    = "btn-outline-light";
+
+        $data['announcements']  = $this->M_announcements->getParticipansAnnouncements();
 
         $this->templateuser->view('user/announcements', $data);
     }
@@ -71,6 +75,7 @@ class User extends CI_Controller
 
         // mengambil data user dengan param email
         $user = $this->M_auth->get_auth($this->session->userdata('email'));
+                // ej($user);
 
         if ($password == $conf_password) {
             //mengecek apakah password benar
@@ -81,24 +86,24 @@ class User extends CI_Controller
                     $now = date("d F Y - H:i");
                     $email = htmlspecialchars($this->session->userdata("email"), true);
 
-                    $subject = "Perubahan password";
-                    $message = "Hai, password untuk akun YBB Foundation Scholarship <b>{$email}</b> telah dirubah pada {$now}. <br>Jika kamu tidak merasa melakukan perubahan password, harap hubungi ADMIN YBB Scholarship Program secepatnya!";
+                    $subject = "Password change - Middle East Youth Summit";
+                    $message = "Hi, password for Middle East Youth Summit account with email <b>{$email}</b> has been changed at {$now}. <br> If you feel you did not make these changes, please contact our admin immediately.";
 
                     // mengirimemailperubahan password
                     sendMail(htmlspecialchars($this->session->userdata("email"), true), $subject, $message);
 
-                    $this->session->set_flashdata('notif_success', 'Passwordmu berhasil dirubah');
+                    $this->session->set_flashdata('notif_success', 'Password has been changes');
                     redirect($this->agent->referrer());
                 } else {
-                    $this->session->set_flashdata('notif_warning', 'Terjadi kesalahan saat mencoba merubah passwordmu');
+                    $this->session->set_flashdata('notif_warning', 'There something wrong when try to changes your password');
                     redirect($this->agent->referrer());
                 }
             } else {
-                $this->session->set_flashdata('notif_warning', 'Password salah, coba lagi');
+                $this->session->set_flashdata('notif_warning', 'Password wrong');
                 redirect($this->agent->referrer());
             }
         } else {
-            $this->session->set_flashdata('notif_warning', 'Konfirmasi password tidak sesuai');
+            $this->session->set_flashdata('notif_warning', 'Password doesn`t match');
             redirect($this->agent->referrer());
         }
     }

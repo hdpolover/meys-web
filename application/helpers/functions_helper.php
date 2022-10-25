@@ -106,8 +106,8 @@ if (!function_exists('penalty_remaining')) {
         $diff->d -= $diff->w * 7;
 
         $string = [
-            'i' => 'Menit ',
-            's' => 'Detik ',
+            'i' => 'Minutes ',
+            's' => 'Seconds ',
         ];
         $a = null;
         foreach ($string as $k => &$v) {
@@ -122,12 +122,33 @@ if (!function_exists('penalty_remaining')) {
     }
 }
 
-
 if (!function_exists('arrToObj')) {
     function arrToObj($data) {
     if (gettype($data) == 'array')
         return (object)array_map("arrToObj", $data);
     else
         return $data;
+    }
+}
+
+if (!function_exists('createPermalink')) {
+    function createPermalink($string){
+        
+		$permalink = null;
+
+		$chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+		$word = preg_replace("/[^a-zA-Z0-9]+/", "-", $string);
+		$word = strtolower($word);
+        
+		// generate permalink kursus
+        $uniqid = "";
+
+        for ($i = 1; $i <= 4; $i++) {
+            $uniqid .= $chars[mt_rand(0, strlen($chars) - 1)];
+            $permalink = strtolower($word . '-' . $uniqid);
+        }
+
+        return $permalink;
     }
 }

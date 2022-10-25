@@ -21,6 +21,12 @@ class M_home extends CI_Model
             $models[$key]->lists = $this->getFaqLists($val->id);
         }
 
+        foreach($models as $key => $val){
+            if($val->lists == null){
+                unset($models[$key]);
+            }
+        }
+
         return $models;
     }
 

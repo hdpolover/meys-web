@@ -7,7 +7,7 @@ $route['about'] = 'home/about';
 $route['help-center'] = 'home/helpCenter';
 $route['faq'] = 'home/faq';
 $route['announcements'] = 'announcements';
-$route['announcements/(:any)'] = 'announcements/detail/($1)';
+$route['announcements/(:any)'] = 'announcements/detail/$1';
 
 // AUTHENTICATION PROCESS
 $route['sign-in'] = 'authentication';
@@ -29,8 +29,9 @@ $route['admin/dashboard'] = 'admin';
 $route['admin/statistics'] = 'admin/statistics';
 $route['admin/participans'] = 'admin/participans';
 $route['admin/participans/(:any)'] = 'admin/participans_detail/$1';
-$route['master/announcements'] = 'announcements/manageList';
+$route['master/announcements'] = 'master/manageList';
 $route['master/faq'] = 'master/faq';
+$route['master/master-faq'] = 'master/masterFaq';
 $route['master/payment-batch'] = 'master/paymentBatch';
 $route['master/entrant-form'] = 'master/entrantForm';
 $route['admin/settings'] = 'admin/settings';

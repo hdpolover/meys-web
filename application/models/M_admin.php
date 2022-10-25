@@ -53,4 +53,44 @@ class M_admin extends CI_Model
 
         return $this->db->get()->row();
     }
+
+    function getParticipans(){
+        $this->db->select('*')
+        ->from('tb_auth a')
+        ->join('tb_user b', 'a.user_id = b.user_id', 'inner')
+        ->where(['a.role' => 2])
+        ;
+
+        return $this->db->get()->result();
+    }
+
+    public function getParticipansAll(){
+
+        $offset = $this->input->post('start');
+        $limit  = $this->input->post('length'); // Rows display per page
+        
+        $filter = [];
+
+        if($this->input->post('filterEmail') != null || $this->input->post('filterEmail') != '') $filter[] = "a.email like '%".$this->input->post('filterEmail')."%'";
+        if($this->input->post('filterName') != null || $this->input->post('filterName') != '') $filter[] = "b.name like '%".$this->input->post('filterName')."%'";
+        if($this->input->post('filterNumber') != null || $this->input->post('filterNumber') != '') $filter[] = "b.phone like '%".$this->input->post('filterNumber')."%'";
+
+        if($filter != null){
+            $filter = implode(' AND ', $filter);
+        }  
+
+        $this->db->select('*')
+        ->from('tb_auth a')
+        ->join('tb_user b', 'a.user_id = b.user_id', 'inner')
+        ->where(['a.role' => 2])
+        ;
+
+        $this->db->where($filter);
+
+        $this->db->limit($limit)->offset($offset);
+
+        $models = $this->db->get()->result();
+
+        return ['records' => $models, 'totalDisplayRecords' => count($models), 'totalRecords' => count($this->getParticipans())];
+    }
 }
