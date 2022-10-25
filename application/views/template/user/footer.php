@@ -70,18 +70,6 @@
 
          		<div class="row mb-7">
          			<div class="col-sm mb-3 mb-sm-0">
-         				<!-- Socials -->
-         				<ul class="list-inline list-separator list-separator-light mb-0">
-         					<li class="list-inline-item">
-         						<a class="link-sm link-light" href="<?= site_url('kebijakan-privasi');?>">Kebijakan
-         							Privasi</a>
-         					</li>
-         					<li class="list-inline-item">
-         						<a class="link-sm link-light"
-         							href="<?= site_url('ketentuan-pengguna');?>">Ketentuan</a>
-         					</li>
-         				</ul>
-         				<!-- End Socials -->
          			</div>
 
          			<div class="col-sm-auto">
