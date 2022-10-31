@@ -49,6 +49,16 @@ class Home extends CI_Controller
         $this->templatefront->view('home/about', $data);
     }
 
+    public function partnership_sponshorship()
+    {
+        $this->templatefront->view('home/sponshorship');
+    }
+
+    public function eligible_countries()
+    {
+        $this->templatefront->view('home/eligible');
+    }
+
     public function helpCenter()
     {
         $this->templatefront->view('home/help_center');

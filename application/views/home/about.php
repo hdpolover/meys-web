@@ -177,8 +177,8 @@
 					<div class="flex-grow-1 ms-3">
 						<h4>Why join MEYS?</h4>
 						<p style="text-align: justify;">This summit is not only a meeting hub for the world's Muslim
-							youth but also the delegates can perform Umrah and worship in two Haramain mosques
-							(Mecca and Medina).</p>
+							youth but also the delegates can perform Umrah and worship in one of Haramain mosques
+							(Mecca).</p>
 					</div>
 				</div>
 				<!-- End Icon Blocks -->

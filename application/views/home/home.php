@@ -59,7 +59,7 @@
 						</svg>
 					</div>
 					<h3>Event Location</h3>
-					<p>Mecca, Medina, Jeddah</p>
+					<p>Mecca</p>
 				</div>
 				<!-- End Icon Blocks -->
 			</div>
@@ -112,7 +112,7 @@
 	<div class="container content-space-t-2 content-space-t-lg-3 content-space-b-lg-2">
 		<!-- Heading -->
 		<div class="w-md-75 w-lg-50 text-center mx-md-auto mb-5 mb-md-9">
-			<h2>About This Events</h2>
+			<h2>About this event</h2>
 		</div>
 		<div class="row justify-content-lg-center">
 			<div class="col-md-6 col-lg-5 mb-3 mb-md-5 mb-lg-7">
@@ -167,8 +167,7 @@
 					<div class="flex-grow-1 ms-3">
 						<h4>Why you join?</h4>
 						<p style="text-align: justify;">This summit is not only a meeting hub for the world's Muslim
-							youth but also the delegates can perform Umrah and worship in two Haramain mosques (Mecca
-							and Medina).</p>
+							youth but also the delegates can perform Umrah and worship in one of Haramain mosques (Mecca).</p>
 					</div>
 				</div>
 				<!-- End Icon Blocks -->
@@ -301,7 +300,7 @@
 						<p class="card-text text-white">Are you confused about the MEYS guide? You can download the
 							guide
 							below.</p>
-						<a class="btn btn-light btn-sm btn-transition" href="https://bit.ly/IYSRegistrationGuidelines"
+						<a class="btn btn-light btn-sm btn-transition" href="<?= prep_url($web_guidelines);?>"
 							target="_blank">Download <i class="bi-chevron-right small ms-1"></i></a>
 					</div>
 
@@ -332,24 +331,12 @@
 			</span>
 
 			<!-- Nav -->
-			<ul class="js-filter-options nav nav-segment nav-pills d-flex mx-auto" style="max-width: 38rem;">
+			<ul class="js-filter-options nav nav-segment nav-pills d-flex mx-auto" style="width: fit-content;">
 				<li class="nav-item">
-					<a class="nav-link active" href="javascript:;" data-group="all">All</a>
+					<a class="nav-link active" href="javascript:;" data-group="iys">Istanbul Youth Summit</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="javascript:;" data-group="2017">YESS! 2017</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="javascript:;" data-group="2019">YCEE 2019</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="javascript:;" data-group="2020">IYS 2020</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="javascript:;" data-group="2021">IYS 2021</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="javascript:;" data-group="2022">the 5th IYS</a>
+					<a class="nav-link" href="javascript:;" data-group="kls">Kuala Lumpur Summit</a>
 				</li>
 			</ul>
 			<!-- End Nav -->
@@ -357,54 +344,14 @@
 		<!-- End Nav Scroller -->
 
 		<div class="js-shuffle row row-cols-1 row-cols-sm-2 row-cols-md-3">
-			<div class="js-shuffle-item col mb-5" data-groups='["2022"]'>
-				<!-- Card -->
-				<a class="card card-flush card-transition" href="#">
-					<img class="card-img-top lazy" style="object-fit: cover;height: 250px;"
-						data-src="<?= site_url('')?>assets/images/landing/2022_1.JPG" alt="Image Description">
-					<div class="card-body">
-						<span class="card-subtitle text-body">the 5th IYS</span>
-						<!-- <h3 class="card-title">Lorem Ipsum</h3> -->
-					</div>
-				</a>
-				<!-- End Card -->
-			</div>
-			<!-- End Col -->
-			<div class="js-shuffle-item col mb-5" data-groups='["2022"]'>
-				<!-- Card -->
-				<a class="card card-flush card-transition" href="#">
-					<img class="card-img-top lazy" style="object-fit: cover;height: 250px;"
-						data-src="<?= site_url('')?>assets/images/landing/2022_2.JPG" alt="Image Description">
-					<div class="card-body">
-						<span class="card-subtitle text-body">the 5th IYS</span>
-						<!-- <h3 class="card-title">Lorem Ipsum</h3> -->
-					</div>
-				</a>
-				<!-- End Card -->
-			</div>
-			<!-- End Col -->
 
-			<div class="js-shuffle-item col mb-5" data-groups='["2022"]'>
-				<!-- Card -->
-				<a class="card card-flush card-transition" href="#">
-					<img class="card-img-top lazy" style="object-fit: cover;height: 250px;"
-						data-src="<?= site_url('')?>assets/images/landing/2022_3.jpg" alt="Image Description">
-					<div class="card-body">
-						<span class="card-subtitle text-body">the 5th IYS</span>
-						<!-- <h3 class="card-title">Lorem Ipsum</h3> -->
-					</div>
-				</a>
-				<!-- End Card -->
-			</div>
-			<!-- End Col -->
-
-			<div class="js-shuffle-item col mb-5" data-groups='["2021"]'>
+			<div class="js-shuffle-item col mb-5" data-groups='["iys"]'>
 				<!-- Card -->
 				<a class="card card-flush card-transition" href="#">
 					<img class="card-img-top lazy" style="object-fit: cover;height: 250px;"
 						data-src="<?= site_url('')?>assets/images/landing/2021_1.JPG" alt="Image Description">
 					<div class="card-body">
-						<span class="card-subtitle text-body">IYS 2021</span>
+						<span class="card-subtitle text-body">Istanbul Youth Summit</span>
 						<!-- <h3 class="card-title">Lorem Ipsum</h3> -->
 					</div>
 				</a>
@@ -412,13 +359,13 @@
 			</div>
 			<!-- End Col -->
 
-			<div class="js-shuffle-item col mb-5" data-groups='["2021"]'>
+			<div class="js-shuffle-item col mb-5" data-groups='["iys"]'>
 				<!-- Card -->
 				<a class="card card-flush card-transition" href="#">
 					<img class="card-img-top lazy" style="object-fit: cover;height: 250px;"
 						data-src="<?= site_url('')?>assets/images/landing/2021_2.JPG" alt="Image Description">
 					<div class="card-body">
-						<span class="card-subtitle text-body">IYS 2021</span>
+						<span class="card-subtitle text-body">Istanbul Youth Summit</span>
 						<!-- <h3 class="card-title">Lorem Ipsum</h3> -->
 					</div>
 				</a>
@@ -426,13 +373,13 @@
 			</div>
 			<!-- End Col -->
 
-			<div class="js-shuffle-item col mb-5" data-groups='["2021"]'>
+			<div class="js-shuffle-item col mb-5" data-groups='["iys"]'>
 				<!-- Card -->
 				<a class="card card-flush card-transition" href="#">
 					<img class="card-img-top lazy" style="object-fit: cover;height: 250px;"
 						data-src="<?= site_url('')?>assets/images/landing/2021_3.JPG" alt="Image Description">
 					<div class="card-body">
-						<span class="card-subtitle text-body">IYS 2021</span>
+						<span class="card-subtitle text-body">Istanbul Youth Summit</span>
 						<!-- <h3 class="card-title">Lorem Ipsum</h3> -->
 					</div>
 				</a>
@@ -440,13 +387,13 @@
 			</div>
 			<!-- End Col -->
 
-			<div class="js-shuffle-item col mb-5" data-groups='["2020"]'>
+			<div class="js-shuffle-item col mb-5" data-groups='["iys"]'>
 				<!-- Card -->
 				<a class="card card-flush card-transition" href="#">
 					<img class="card-img-top lazy" style="object-fit: cover;height: 250px;"
 						data-src="<?= site_url('')?>assets/images/landing/2020_1.JPG" alt="Image Description">
 					<div class="card-body">
-						<span class="card-subtitle text-body">IYS 2020</span>
+						<span class="card-subtitle text-body">Istanbul Youth Summit</span>
 						<!-- <h3 class="card-title">Lorem Ipsum</h3> -->
 					</div>
 				</a>
@@ -454,13 +401,13 @@
 			</div>
 			<!-- End Col -->
 
-			<div class="js-shuffle-item col mb-5" data-groups='["2020"]'>
+			<div class="js-shuffle-item col mb-5" data-groups='["iys"]'>
 				<!-- Card -->
 				<a class="card card-flush card-transition" href="#">
 					<img class="card-img-top lazy" style="object-fit: cover;height: 250px;"
 						data-src="<?= site_url('')?>assets/images/landing/2020_2.JPG" alt="Image Description">
 					<div class="card-body">
-						<span class="card-subtitle text-body">IYS 2020</span>
+						<span class="card-subtitle text-body">Istanbul Youth Summit</span>
 						<!-- <h3 class="card-title">Lorem Ipsum</h3> -->
 					</div>
 				</a>
@@ -468,13 +415,13 @@
 			</div>
 			<!-- End Col -->
 
-			<div class="js-shuffle-item col mb-5" data-groups='["2020"]'>
+			<div class="js-shuffle-item col mb-5" data-groups='["iys"]'>
 				<!-- Card -->
 				<a class="card card-flush card-transition" href="#">
 					<img class="card-img-top lazy" style="object-fit: cover;height: 250px;"
 						data-src="<?= site_url('')?>assets/images/landing/2020_3.JPG" alt="Image Description">
 					<div class="card-body">
-						<span class="card-subtitle text-body">IYS 2020</span>
+						<span class="card-subtitle text-body">Istanbul Youth Summit</span>
 						<!-- <h3 class="card-title">Lorem Ipsum</h3> -->
 					</div>
 				</a>
@@ -482,13 +429,13 @@
 			</div>
 			<!-- End Col -->
 
-			<div class="js-shuffle-item col mb-5" data-groups='["2019"]'>
+			<div class="js-shuffle-item col mb-5" data-groups='["kls"]'>
 				<!-- Card -->
 				<a class="card card-flush card-transition" href="#">
 					<img class="card-img-top lazy" style="object-fit: cover;height: 250px;"
-						data-src="<?= site_url('')?>assets/images/landing/2019_1.JPG" alt="Image Description">
+						data-src="<?= site_url('')?>assets/images/landing/ksl1.jpg" alt="Image Description">
 					<div class="card-body">
-						<span class="card-subtitle text-body">YCEE 2019</span>
+						<span class="card-subtitle text-body">Kuala Lumpur Summit</span>
 						<!-- <h3 class="card-title">Lorem Ipsum</h3> -->
 					</div>
 				</a>
@@ -496,13 +443,13 @@
 			</div>
 			<!-- End Col -->
 
-			<div class="js-shuffle-item col mb-5" data-groups='["2019"]'>
+			<div class="js-shuffle-item col mb-5" data-groups='["kls"]'>
 				<!-- Card -->
 				<a class="card card-flush card-transition" href="#">
 					<img class="card-img-top lazy" style="object-fit: cover;height: 250px;"
-						data-src="<?= site_url('')?>assets/images/landing/2019_2.JPG" alt="Image Description">
+						data-src="<?= site_url('')?>assets/images/landing/ksl2.jpg" alt="Image Description">
 					<div class="card-body">
-						<span class="card-subtitle text-body">YCEE 2019</span>
+						<span class="card-subtitle text-body">Kuala Lumpur Summit</span>
 						<!-- <h3 class="card-title">Lorem Ipsum</h3> -->
 					</div>
 				</a>
@@ -510,13 +457,13 @@
 			</div>
 			<!-- End Col -->
 
-			<div class="js-shuffle-item col mb-5" data-groups='["2019"]'>
+			<div class="js-shuffle-item col mb-5" data-groups='["kls"]'>
 				<!-- Card -->
 				<a class="card card-flush card-transition" href="#">
 					<img class="card-img-top lazy" style="object-fit: cover;height: 250px;"
-						data-src="<?= site_url('')?>assets/images/landing/2019_3.JPG" alt="Image Description">
+						data-src="<?= site_url('')?>assets/images/landing/ksl3.jpg" alt="Image Description">
 					<div class="card-body">
-						<span class="card-subtitle text-body">YCEE 2019</span>
+						<span class="card-subtitle text-body">Kuala Lumpur Summit</span>
 						<!-- <h3 class="card-title">Lorem Ipsum</h3> -->
 					</div>
 				</a>
@@ -524,13 +471,13 @@
 			</div>
 			<!-- End Col -->
 
-			<div class="js-shuffle-item col mb-5" data-groups='["2017"]'>
+			<div class="js-shuffle-item col mb-5" data-groups='["kls"]'>
 				<!-- Card -->
 				<a class="card card-flush card-transition" href="#">
 					<img class="card-img-top lazy" style="object-fit: cover;height: 250px;"
-						data-src="<?= site_url('')?>assets/images/landing/2017_1.JPG" alt="Image Description">
+						data-src="<?= site_url('')?>assets/images/landing/ksl4.jpg" alt="Image Description">
 					<div class="card-body">
-						<span class="card-subtitle text-body">YESS! 2017</span>
+						<span class="card-subtitle text-body">Kuala Lumpur Summit</span>
 						<!-- <h3 class="card-title">Lorem Ipsum</h3> -->
 					</div>
 				</a>
@@ -538,13 +485,13 @@
 			</div>
 			<!-- End Col -->
 
-			<div class="js-shuffle-item col mb-5" data-groups='["2017"]'>
+			<div class="js-shuffle-item col mb-5" data-groups='["kls"]'>
 				<!-- Card -->
 				<a class="card card-flush card-transition" href="#">
 					<img class="card-img-top lazy" style="object-fit: cover;height: 250px;"
-						data-src="<?= site_url('')?>assets/images/landing/2017_2.JPG" alt="Image Description">
+						data-src="<?= site_url('')?>assets/images/landing/ksl5.jpg" alt="Image Description">
 					<div class="card-body">
-						<span class="card-subtitle text-body">YESS! 2017</span>
+						<span class="card-subtitle text-body">Kuala Lumpur Summit</span>
 						<!-- <h3 class="card-title">Lorem Ipsum</h3> -->
 					</div>
 				</a>
@@ -552,13 +499,13 @@
 			</div>
 			<!-- End Col -->
 
-			<div class="js-shuffle-item col mb-5" data-groups='["2017"]'>
+			<div class="js-shuffle-item col mb-5" data-groups='["kls"]'>
 				<!-- Card -->
 				<a class="card card-flush card-transition" href="#">
 					<img class="card-img-top lazy" style="object-fit: cover;height: 250px;"
-						data-src="<?= site_url('')?>assets/images/landing/2017_3.JPG" alt="Image Description">
+						data-src="<?= site_url('')?>assets/images/landing/ksl6.jpg" alt="Image Description">
 					<div class="card-body">
-						<span class="card-subtitle text-body">YESS! 2017</span>
+						<span class="card-subtitle text-body">Kuala Lumpur Summit</span>
 						<!-- <h3 class="card-title">Lorem Ipsum</h3> -->
 					</div>
 				</a>

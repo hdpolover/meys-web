@@ -211,7 +211,7 @@ class Authentication extends CI_Controller
                                 redirect($this->session->userdata('redirect'));
                             } else {
                                 $this->session->set_flashdata('notif_success', "Welcome, {$user->name}");
-                                redirect(base_url());
+                                redirect(site_url('user'));
                             }
                         } else {
                             $this->session->set_flashdata('notif_success', "Welcome, {$user->name}");

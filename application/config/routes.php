@@ -4,6 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // HOME
 $route['home'] = 'home';
 $route['about'] = 'home/about';
+$route['partnership-sponshorship'] = 'home/partnership_sponshorship';
+$route['eligible-countries'] = 'home/eligible_countries';
 $route['help-center'] = 'home/helpCenter';
 $route['faq'] = 'home/faq';
 $route['announcements'] = 'announcements';

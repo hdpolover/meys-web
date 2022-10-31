@@ -37,6 +37,10 @@
   						<a class="nav-link fs-15 <?= $this->uri->segment(1) == 'help-center' ? 'active' : '';?>"
   							aria-current="page" href="<?= site_url('help-center');?>" role="button">Help Center</a>
   					</li>
+  					<li class="nav-item">
+  						<a class="nav-link fs-15 <?= $this->uri->segment(1) == 'eligible-countries' ? 'active' : '';?>"
+  							aria-current="page" href="<?= site_url('eligible-countries');?>" role="button">Eligible Countries</a>
+  					</li>
   					<?php if($this->session->userdata('logged_in') || $this->session->userdata('logged_in') == true):?>
   					<!-- End Demos -->
   					<li class="hs-has-sub-menu nav-item fs-15"
@@ -108,6 +112,13 @@
   						<li class="nav-item">
   							<a class="nav-link <?= $this->uri->segment(1) == 'about' ? 'active' : '';?>"
   								href="<?= site_url('about');?>">About MEYS</a>
+  						</li>
+  						<!-- End Beranda -->
+
+  						<!-- Beranda -->
+  						<li class="nav-item">
+  							<a class="nav-link <?= $this->uri->segment(1) == 'partnership-sponshorship' ? 'active' : '';?>"
+  								href="<?= site_url('partnership-sponshorship');?>">Partnership & Sponshorship</a>
   						</li>
   						<!-- End Beranda -->
 

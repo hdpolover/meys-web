@@ -41,7 +41,7 @@
          				<!-- List -->
          				<ul class="list-unstyled list-py-1 mb-0">
          					<li><a class="link-sm link-light" href="<?= site_url('about');?>">About us</a></li>
-         					<li><a class="link-sm link-light" href="<?= site_url('sponsorship');?>">Sponsorship</a>
+         					<li><a class="link-sm link-light" href="<?= site_url('partnership-sponshorship');?>">Sponsorship</a>
          					</li>
          				</ul>
          				<!-- End List -->

@@ -26,6 +26,7 @@ class TemplateBack
         $data['web_alamat'] = $this->getSettingsValue('web_alamat');
         $data['web_telepon'] = $this->getSettingsValue('web_telepon');
         $data['web_email'] = $this->getSettingsValue('web_email');
+        $data['web_guidelines'] = $this->getSettingsValue('web_guidelines');
 
         $data['sosmed_ig'] = $this->getSettingsValue('sosmed_ig');
         $data['sosmed_twitter'] = $this->getSettingsValue('sosmed_twitter');
