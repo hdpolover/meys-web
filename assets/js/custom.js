@@ -65,8 +65,8 @@ $(document).ready(function () {
 		$('#' + $(this).attr('id')).DataTable({
 			"language": {
 				"emptyTable": '<div class="text-center p-4">' +
-					'<img class="mb-3" src="<?= base_url() ?>assets/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">' +
-					'<p class="mb-0">Tidak ada data untuk ditampilkan</p>' +
+					'<img class="mb-3" src="../assets/svg/illustrations/sorry.svg" alt="Image Description" style="width: 7rem;">' +
+					'<p class="mb-0">No data to display</p>' +
 					'</div>'
 			},
 			"scrollX": true,
