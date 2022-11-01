@@ -41,7 +41,8 @@
          				<!-- List -->
          				<ul class="list-unstyled list-py-1 mb-0">
          					<li><a class="link-sm link-light" href="<?= site_url('about');?>">About us</a></li>
-         					<li><a class="link-sm link-light" href="<?= site_url('partnership-sponshorship');?>">Sponsorship</a>
+         					<li><a class="link-sm link-light"
+         							href="<?= site_url('partnership-sponshorship');?>">Sponsorship</a>
          					</li>
          				</ul>
          				<!-- End List -->
@@ -161,8 +162,11 @@
          <script src="<?= base_url();?>assets/vendor/typed.js/lib/typed.min.js"></script>
          <script src="<?= base_url();?>assets/vendor/swiper/swiper-bundle.min.js"></script>
          <script src="<?= base_url();?>assets/vendor/hs-step-form/dist/hs-step-form.min.js"></script>
+         <script src="<?= base_url(); ?>assets/vendor/tom-select/dist/js/tom-select.complete.min.js"></script>
+         <script type="text/javascript" src="<?= site_url();?>assets/js/flatpickr.min.js"></script>
          <!-- JS Front -->
          <script src="<?= base_url();?>assets/js/theme.min.js"></script>
+         <script type="text/javascript" src="<?= base_url();?>assets/js/custom.js?<?=time();?>"></script>
 
          <!-- JS Plugins Init. -->
          <script>
@@ -237,6 +241,10 @@
          				prevEl: '.js-swiper-navigation-button-prev',
          			},
          		});
+
+         		// INITIALIZATION OF SELECT
+         		// =======================================================
+         		HSCore.components.HSTomSelect.init('.js-select')
 
 
 

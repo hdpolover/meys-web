@@ -195,4 +195,15 @@ class M_master extends CI_Model
 
         return $models;
     }
+
+    function getParticipansEssay(){
+        $this->db->select('a.*')
+        ->from('m_essay a')
+        ->where(['a.is_deleted' => 0])
+        ;
+
+        $models = $this->db->get()->result();
+
+        return $models;
+    }
 }

@@ -20,7 +20,12 @@ class User extends CI_Controller
         $data['logo_style']     = 1;
         $data['btn_sign_up']    = "btn-light";
         $data['btn_sign_in']    = "btn-outline-light";
-
+        
+        $data['participants']   = $this->M_user->getUserParticipans($this->session->userdata('user_id'));
+        $data['p_essay']        = $this->M_user->getUserParticipansEssay($this->session->userdata('user_id'), $data['participants']->id);
+        $data['m_essay']        = $this->M_master->getParticipansEssay();
+        $data['countries']      = $this->M_user->getAllCountries();
+        // ej($data['participants']->address);
         $this->templateuser->view('user/overview', $data);
     }
 
