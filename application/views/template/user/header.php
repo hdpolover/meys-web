@@ -58,8 +58,13 @@
 
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-	<script type="text/javascript" src="<?= base_url();?>assets/plugin/jquery.inputmask.bundle.min.js" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="<?= base_url();?>assets/plugin/jquery.inputmask.bundle.min.js"
+		crossorigin="anonymous"></script>
 	<script type="text/javascript" src="<?= base_url();?>assets/js/apexchart.js"></script>
+	<!-- Tagsinput -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.js"
+		integrity="sha512-wTIaZJCW/mkalkyQnuSiBodnM5SRT8tXJ3LkIUA/3vBJ01vWe5Ene7Fynicupjt4xqxZKXA97VgNBHvIf5WTvg=="
+		crossorigin="anonymous"></script>
 </head>
 
 <body>

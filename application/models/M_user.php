@@ -20,10 +20,11 @@ class M_user extends CI_Model
     }
 
     function getUserParticipans($user_id){
-        $this->db->select('a.*, b.*, c.*')
+        $this->db->select('a.*, b.*, c.*, d.fullname')
         ->from('tb_participants a')
         ->join('tb_user b', 'a.user_id = b.user_id')
         ->join('tb_auth c', 'a.user_id = c.user_id')
+        ->join('tb_ambassador d', 'a.referral_code = d.referral_code')
         ->where(['a.is_deleted' => 0, 'c.status' => 1, 'a.user_id' => $user_id])
         ;
 
@@ -53,7 +54,7 @@ class M_user extends CI_Model
     function formStepBasic(){
         $formData = [
             'user_id'               => $this->session->userdata('user_id'),
-            'birthdate'            => strtotime($this->input->post('birthdate')),
+            'birthdate'             => strtotime($this->input->post('birthdate')),
             'nationality'           => $this->input->post('nationality'),
             'occupation'            => $this->input->post('occupation'),
             'field_of_study'        => $this->input->post('fieldofstudy'),
@@ -75,7 +76,7 @@ class M_user extends CI_Model
         $participans = $this->getUserParticipans($this->session->userdata('user_id'));
         
         $userData = [
-            'name'              => $this->input->post('fullname'),
+            'name'                  => $this->input->post('fullname'),
             'gender'                => $this->input->post('gender')
         ];
 
@@ -94,9 +95,11 @@ class M_user extends CI_Model
 
     function formStepOthers(){
 
+        $participans = $this->getUserParticipans($this->session->userdata('user_id'));
+
         $formData = [
             'user_id'               => $this->session->userdata('user_id'),
-            'step'                  => 2,
+            'step'                  => $participans->step <= 2 ? 2 : $participans->step,
             'achievements'          => $this->input->post('achievements'),
             'experience'            => $this->input->post('experience'),
             'social_projects'       => $this->input->post('socialProjects'),
@@ -104,8 +107,6 @@ class M_user extends CI_Model
             'modified_by'           => $this->session->userdata('user_id'),
             'modified_at'           => time(),
         ];
-
-        $participans = $this->getUserParticipans($this->session->userdata('user_id'));
 
         if(empty($participans)){
             $this->db->insert('tb_participants', $formData);
@@ -123,7 +124,7 @@ class M_user extends CI_Model
         $essay          = $this->getUserParticipansEssay($this->session->userdata('user_id'), $participans->id);
 
         $this->db->where('id', $participans->id);
-        $this->db->update('tb_participants', ['step' => 3]);
+        $this->db->update('tb_participants', ['step' => $participans->step <= 3 ? 3 : $participans->step]);
 
         if(empty($participans)){
             if(empty($essay)){
@@ -215,18 +216,18 @@ class M_user extends CI_Model
     }
 
     function formStepProgram(){
+        $participans = $this->getUserParticipans($this->session->userdata('user_id'));
 
         $formData = [
-            'step'                  => 4,
+            'step'                  => $participans->step <= 4 ? 4 : $participans->step,
             'source'                => $this->input->post('source'),
             'source_account'        => $this->input->post('sourceAccount'),
             'twibbon_link'          => $this->input->post('twibbon_link'),
             'share_proof_link'      => $this->input->post('shareRequirement'),
+            'referral_code'         => $this->input->post('referral'),
             'modified_by'           => $this->session->userdata('user_id'),
             'modified_at'           => time(),
         ];
-
-        $participans = $this->getUserParticipans($this->session->userdata('user_id'));
 
         if(empty($participans)){
             $this->db->insert('tb_participants', $formData);
@@ -236,5 +237,29 @@ class M_user extends CI_Model
         }
 
         return ($this->db->affected_rows() != 1) ? false : true;
+    }
+
+    function formStepSelf($photo = null){
+        $participans = $this->getUserParticipans($this->session->userdata('user_id'));
+
+        if(!is_null($photo)){
+            $formData = [
+                'step'                  => $participans->step <= 5 ? 5 : $participans->step,
+                'self_photo'            => $photo,
+                'modified_by'           => $this->session->userdata('user_id'),
+                'modified_at'           => time(),
+            ];
+    
+            if(empty($participans)){
+                $this->db->insert('tb_participants', $formData);
+            }else{
+                $this->db->where('id', $participans->id);
+                $this->db->update('tb_participants', $formData);
+            }
+    
+            return ($this->db->affected_rows() != 1) ? false : true;
+        }else{
+            return true;
+        }
     }
 }

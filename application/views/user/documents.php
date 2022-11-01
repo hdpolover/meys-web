@@ -39,8 +39,8 @@
 		<div class="card-footer pt-0">
 			<div class="card-footer">
 				<p><b>Note:</b></p>
-				<p>For further information, you can contact: <?= $web_email;?><a
-						href="mailto:<?= $web_email;?>"><?= $web_email;?></a></p>
+				<p>For further information, you can contact: <a href="mailto:<?= $web_email;?>"><?= $web_email;?></a>
+				</p>
 			</div>
 		</div>
 	</div>

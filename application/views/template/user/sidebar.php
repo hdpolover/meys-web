@@ -84,15 +84,27 @@
     									</a>
     								</li>
     								<li class="nav-item">
+    									<a class="nav-link <?= ($this->uri->segment(2) == "submission" ? "active" : "") ?>"
+    										href="<?= site_url('user/submission'); ?>">
+    										<i class="bi-clipboard nav-icon"></i> Submission <span class="badge bg-soft-danger text-danger rounded-pill nav-link-badge"><i class="bi bi-exclamation-lg"></i></span>
+    									</a>
+    								</li>
+    								<li class="nav-item">
+    									<a class="nav-link <?= ($this->uri->segment(2) == "payment" ? "active" : "") ?>"
+    										href="<?= site_url('user/payment'); ?>">
+    										<i class="bi-credit-card nav-icon"></i> Payment
+    									</a>
+    								</li>
+    								<li class="nav-item">
     									<a class="nav-link <?= ($this->uri->segment(2) == "announcements" ? "active" : "") ?>"
     										href="<?= site_url('user/announcements'); ?>">
-    										<i class="bi-app-indicator nav-icon"></i> Announcements
+    										<i class="bi-app-indicator nav-icon"></i> Announcements <span class="badge bg-soft-danger text-danger rounded-pill nav-link-badge"><?= $countAnnouncements;?></span>
     									</a>
     								</li>
     								<li class="nav-item">
     									<a class="nav-link <?= ($this->uri->segment(2) == "documents" ? "active" : "") ?>"
     										href="<?= site_url('user/documents'); ?>">
-    										<i class="bi-file nav-icon"></i> Documents
+    										<i class="bi-file nav-icon"></i> Documents <span class="badge bg-soft-danger text-danger rounded-pill nav-link-badge"><?= $countDocuments;?></span>
     									</a>
     								</li>
     								<li class="nav-item">

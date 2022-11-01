@@ -15,6 +15,18 @@ class TemplateUser
         return $query->row()->value;
     }
 
+    public function countAnnouncements()
+    {
+        $query = $this->_ci->db->get_where('tb_announcements', ['is_member' => 1 , 'is_deleted' => 0]);
+        return $query->num_rows();
+    }
+
+    public function countDocuments()
+    {
+        $query = $this->_ci->db->get_where('m_documents', ['is_deleted' => 0]);
+        return $query->num_rows();
+    }
+
     public function view($content, $data = null)
     {
         $data['web_title'] = $this->getSettingsValue('web_title');
@@ -26,6 +38,10 @@ class TemplateUser
         $data['web_telepon'] = $this->getSettingsValue('web_telepon');
         $data['web_email'] = $this->getSettingsValue('web_email');
         $data['web_guidelines'] = $this->getSettingsValue('web_guidelines');
+        $data['submission_deadline'] = $this->getSettingsValue('submission_deadline');
+
+        $data['countAnnouncements'] = $this->countAnnouncements();
+        $data['countDocuments'] = $this->countDocuments();
 
         $data['sosmed_ig'] = $this->getSettingsValue('sosmed_ig');
         $data['sosmed_twitter'] = $this->getSettingsValue('sosmed_twitter');

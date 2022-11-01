@@ -18,7 +18,7 @@
 		<div class="input-group">
 			<input type="file" class="form-control imgprev" name="image" accept="image/*" id="poster-announcements">
 		</div>
-		<small class="text-muted">Max file size 2Mb</small>
+		<small class="text-muted">Max file size 1Mb</small>
 	</div>
 
 	<div class="mb-3">

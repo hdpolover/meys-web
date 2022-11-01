@@ -20,11 +20,7 @@ class User extends CI_Controller
         $data['logo_style']     = 1;
         $data['btn_sign_up']    = "btn-light";
         $data['btn_sign_in']    = "btn-outline-light";
-        
         $data['participants']   = $this->M_user->getUserParticipans($this->session->userdata('user_id'));
-        $data['p_essay']        = $this->M_user->getUserParticipansEssay($this->session->userdata('user_id'), $data['participants']->id);
-        $data['m_essay']        = $this->M_master->getParticipansEssay();
-        $data['countries']      = $this->M_user->getAllCountries();
         // ej($data['participants']->address);
         $this->templateuser->view('user/overview', $data);
     }
@@ -57,6 +53,38 @@ class User extends CI_Controller
         $data['announcements']  = $this->M_announcements->getParticipansAnnouncements();
 
         $this->templateuser->view('user/announcements', $data);
+    }
+
+    public function payment()
+    {
+        $data['user'] = $this->M_auth->get_auth($this->session->userdata('email'));
+
+        // style
+        $data['navbar_style']   = "navbar-dark";
+        $data['logo_style']     = 1;
+        $data['btn_sign_up']    = "btn-light";
+        $data['btn_sign_in']    = "btn-outline-light";
+
+        $this->templateuser->view('user/payment', $data);
+    }
+
+    public function submission()
+    {
+        $data['user'] = $this->M_auth->get_auth($this->session->userdata('email'));
+
+        // style
+        $data['navbar_style']   = "navbar-dark";
+        $data['logo_style']     = 1;
+        $data['btn_sign_up']    = "btn-light";
+        $data['btn_sign_in']    = "btn-outline-light";
+        
+        $data['participants']   = $this->M_user->getUserParticipans($this->session->userdata('user_id'));
+        $participans_id         = isset($data['participants']->id) ? $data['participants']->id : null;
+        $data['p_essay']        = $this->M_user->getUserParticipansEssay($this->session->userdata('user_id'), $participans_id);
+        $data['m_essay']        = $this->M_master->getParticipansEssay();
+        $data['countries']      = $this->M_user->getAllCountries();
+
+        $this->templateuser->view('user/submission', $data);
     }
 
     public function settings()

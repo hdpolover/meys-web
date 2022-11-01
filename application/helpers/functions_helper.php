@@ -152,3 +152,34 @@ if (!function_exists('createPermalink')) {
         return $permalink;
     }
 }
+
+if(!function_exists('base64ToImage')){
+
+    function base64ToImage($path, $base64){   
+        try {
+            $image_parts = explode(';base64,', $base64);
+            $image_type_aux = explode('image/', $image_parts[0]);
+            $image_type = $image_type_aux[1];
+            $image_base64 = base64_decode($image_parts[1]);
+            $namaFile = uniqid().'.'.$image_type;
+            if (!file_exists($path)) {
+                mkdir($path, 0777, true);
+            }
+
+            $file = $path.$namaFile;
+            file_put_contents($file, $image_base64);
+
+            return [
+                'status' => true,
+                'data' => $namaFile,
+                'url' => $file,
+            ];
+
+        } catch (\Throwable $e) {
+            return [
+                'status' => false,
+                'error' => $e->getMessage(),
+            ];
+        }
+    }
+}

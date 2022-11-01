@@ -206,4 +206,8 @@ class M_master extends CI_Model
 
         return $models;
     }
+
+    function getAmbasadorByReferral($referral_code = null){
+        return $this->db->get_where('tb_ambassador', ['referral_code' => $referral_code, 'status' => 1, 'is_deleted' => 0])->row();
+    }
 }
