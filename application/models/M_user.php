@@ -24,7 +24,7 @@ class M_user extends CI_Model
         ->from('tb_participants a')
         ->join('tb_user b', 'a.user_id = b.user_id')
         ->join('tb_auth c', 'a.user_id = c.user_id')
-        ->join('tb_ambassador d', 'a.referral_code = d.referral_code')
+        ->join('tb_ambassador d', 'a.referral_code = d.referral_code', 'left')
         ->where(['a.is_deleted' => 0, 'c.status' => 1, 'a.user_id' => $user_id])
         ;
 

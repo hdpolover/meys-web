@@ -35,6 +35,7 @@
 <script src="<?= base_url(); ?>assets/vendor/imask/dist/imask.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/hs-quantity-counter/dist/hs-quantity-counter.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/tom-select/dist/js/tom-select.complete.min.js"></script>
+<script type="text/javascript" src="<?= site_url();?>assets/js/flatpickr.min.js"></script>
 <!-- JS Front -->
 <script src="<?= base_url(); ?>assets/js/theme.min.js"></script>
 <script type="text/javascript" src="<?= base_url();?>assets/js/custom.js?<?=time();?>"></script>
@@ -58,6 +59,9 @@
 			}, {
 				element: document.querySelector('#tour-payments'),
 				intro: "Manage participans payments with ease on this page"
+			}, {
+				element: document.querySelector('#tour-ambassador'),
+				intro: "You can manage all your ambassador on here"
 			}, {
 				element: document.querySelector('#tour-announcements'),
 				intro: "You can manage all announcements on here"

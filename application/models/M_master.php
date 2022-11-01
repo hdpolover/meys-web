@@ -210,4 +210,100 @@ class M_master extends CI_Model
     function getAmbasadorByReferral($referral_code = null){
         return $this->db->get_where('tb_ambassador', ['referral_code' => $referral_code, 'status' => 1, 'is_deleted' => 0])->row();
     }
+
+    function getAllAmbassador(){
+        return $this->db->get_where('tb_ambassador', ['is_deleted' => 0])->result();
+    }
+
+    public function addAmbassador($poster = null)
+    {
+        $fullname           = $this->input->post('fullname');
+        $referral_code      = $this->input->post('referral_code');
+        $email              = $this->input->post('email');
+        $address            = $this->input->post('address');
+        $whatsapp_number    = $this->input->post('whatsapp_number');
+        $nationality        = $this->input->post('nationality');
+        $instagram          = $this->input->post('instagram');
+        $tiktok             = $this->input->post('tiktok');
+        $institution        = $this->input->post('institution');
+        $occupation         = $this->input->post('occupation');
+
+        $data = [
+            'fullname' => $fullname,
+            'referral_code' => $referral_code,
+            'email' => $email,
+            'address' => $address,
+            'whatsapp_number' => $whatsapp_number,
+            'nationality' => $nationality,
+            'instagram' => $instagram,
+            'tiktok' => $tiktok,
+            'institution' => $institution,
+            'occupation' => $occupation,
+            'created_by' => $this->session->userdata('user_id'),
+            'created_at' => time()
+        ];
+
+        $this->db->insert('tb_ambassador', $data);
+        return ($this->db->affected_rows() != 1) ? false : true;
+    }
+
+    public function editAmbassador($photo = null)
+    {
+        $id                 = $this->input->post('id');
+        $fullname           = $this->input->post('fullname');
+        $referral_code      = $this->input->post('referral_code');
+        $email              = $this->input->post('email');
+        $address            = $this->input->post('address');
+        $whatsapp_number    = $this->input->post('whatsapp_number');
+        $nationality        = $this->input->post('nationality');
+        $instagram          = $this->input->post('instagram');
+        $tiktok             = $this->input->post('tiktok');
+        $institution        = $this->input->post('institution');
+        $occupation         = $this->input->post('occupation');
+
+        if($photo == null){
+            $data = [
+                'fullname' => $fullname,
+                'referral_code' => $referral_code,
+                'email' => $email,
+                'address' => $address,
+                'whatsapp_number' => $whatsapp_number,
+                'nationality' => $nationality,
+                'instagram' => $instagram,
+                'tiktok' => $tiktok,
+                'institution' => $institution,
+                'occupation' => $occupation,
+                'modified_by' => $this->session->userdata('user_id'),
+                'modified_at' => time()
+            ];
+        }else{
+            $data = [
+                'fullname' => $fullname,
+                'referral_code' => $referral_code,
+                'email' => $email,
+                'address' => $address,
+                'whatsapp_number' => $whatsapp_number,
+                'nationality' => $nationality,
+                'instagram' => $instagram,
+                'tiktok' => $tiktok,
+                'institution' => $institution,
+                'occupation' => $occupation,
+                'modified_by' => $this->session->userdata('user_id'),
+                'modified_at' => time()
+            ];
+        }
+
+        $this->db->where('id', $id);
+        $this->db->update('tb_ambassador', $data);
+        return ($this->db->affected_rows() != 1) ? false : true;
+    }
+
+    public function deleteAmbassador()
+    {
+        $id = $this->input->post('id');
+
+        $this->db->where('id', $id);
+        $this->db->update('tb_ambassador', ['is_deleted' => 1]);
+        return ($this->db->affected_rows() != 1) ? false : true;
+    }
 }

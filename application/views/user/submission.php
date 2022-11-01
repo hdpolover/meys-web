@@ -765,9 +765,7 @@
 
 
 									<div class="js-form-message form-check">
-										<input type="checkbox" id="formHelperCheck1" name="terms"
-											class="form-check-input"
-											<?= $participants->terms_condition == 1 ? 'checked' : ''?> required>
+										<input type="checkbox" id="formHelperCheck1" name="terms" class="form-check-input" <?= isset($participants->terms_condition) && $participants->terms_condition == 1 ? 'checked' : ''?> required>
 										<label class="form-check-label" for="formHelperCheck1">I Agree</label>
 										<div class="text-muted">I understand and agree to the terms and conditions of
 											this program and that this program is self-funded meaning that participants
@@ -829,36 +827,35 @@
 		</div>
 	</div>
 	<!-- End Body -->
-</div>
-<!-- End Card -->
-<!-- Card -->
-<div class="card d-none">
-	<div class="card-header border-bottom">
-		<h4 class="card-header-title">Delete your account</h4>
-	</div>
+	<!-- End Card -->
+	<!-- Card -->
+	<div class="card d-none">
+		<div class="card-header border-bottom">
+			<h4 class="card-header-title">Delete your account</h4>
+		</div>
 
-	<!-- Body -->
-	<div class="card-body">
-		<p class="card-text">When you delete your account, you lose access to Front account services, and
-			we permanently delete your personal data. You can cancel the deletion for 14 days.</p>
+		<!-- Body -->
+		<div class="card-body">
+			<p class="card-text">When you delete your account, you lose access to Front account services, and
+				we permanently delete your personal data. You can cancel the deletion for 14 days.</p>
 
-		<div class="mb-3">
-			<!-- Check -->
-			<div class="form-check">
-				<input type="checkbox" class="form-check-input" id="deleteAccountCheckbox">
-				<label class="form-check-label" for="deleteAccountCheckbox">Confirm that I want to delete
-					my account.</label>
+			<div class="mb-3">
+				<!-- Check -->
+				<div class="form-check">
+					<input type="checkbox" class="form-check-input" id="deleteAccountCheckbox">
+					<label class="form-check-label" for="deleteAccountCheckbox">Confirm that I want to delete
+						my account.</label>
+				</div>
+				<!-- End Check -->
 			</div>
-			<!-- End Check -->
-		</div>
 
-		<div class="d-flex justify-content-end">
-			<button type="submit" class="btn btn-danger">Delete</button>
+			<div class="d-flex justify-content-end">
+				<button type="submit" class="btn btn-danger">Delete</button>
+			</div>
 		</div>
+		<!-- End Body -->
 	</div>
-	<!-- End Body -->
-</div>
-<!-- End Card -->
+	<!-- End Card -->
 </div>
 
 

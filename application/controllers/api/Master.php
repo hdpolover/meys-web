@@ -230,4 +230,94 @@ class Master extends CI_Controller
         $this->session->set_userdata(['mailer_debug' => $debug]);
         redirect($this->agent->referrer());
     }
+
+    public function ajxGenRC(){
+        $referral = strtoupper(substr($this->input->post('name'), 0, 3));
+        $ambassador = $this->db->order_by('id', 'desc')->limit(1)->get('tb_ambassador')->row();
+
+        if(empty($ambassador->id_ambassador)){
+            $referral .= '001';
+        }else{
+            $lastOrder = (int)strlen($ambassador->referral_code) - 3;
+            $lastOrder = sprintf('%03d', substr($ambassador->referral_code, $lastOrder, 3) + 1);
+            $referral .= $lastOrder;
+        }
+
+        echo json_encode(['referral_code' => $referral]);
+    }
+
+    function addAmbassador()
+    {
+        if (isset($_FILES['image'])) {
+            $perma = createPermalink($this->input->post('subject'));
+            $path = "berkas/landing/announcements/{$perma}/profile/";
+            $upload = $this->uploader->uploadImage($_FILES['image'], $path);
+            
+            if ($upload == true) {
+                $subject = $this->input->post('subject');
+                if ($this->M_master->addAmbassador($upload['filename']) == true) {
+                    $this->session->set_flashdata('notif_success', 'Succesfuly posted the announcement '.$subject);
+                    redirect(site_url('master/ambassador'));
+                } else {
+                    $this->session->set_flashdata('notif_warning', 'There is a problem when trying to post the announcement, try again later');
+                    redirect($this->agent->referrer());
+                }
+            } else {
+                $this->session->set_flashdata('notif_warning', $upload['message']);
+                redirect($this->agent->referrer());
+            }
+        } else {
+            $subject = $this->input->post('subject');
+            if ($this->M_master->addAmbassador() == true) {
+                $this->session->set_flashdata('notif_success', 'Succesfuly posted the announcement '.$subject);
+                redirect(site_url('master/ambassador'));
+            } else {
+                $this->session->set_flashdata('notif_warning', 'There is a problem when trying to post the announcement, try again later');
+                redirect($this->agent->referrer());
+            }
+        }
+    }
+
+    function editAmbassador()
+    {
+        if (isset($_FILES['image']) && $_FILES['image']['size'] > 0) {
+            $perma = $this->input->post('permalink');
+            $path = "berkas/landing/announcements/{$perma}/profile/";
+            $upload = $this->uploader->uploadImage($_FILES['image'], $path);
+            if ($upload == true) {
+                $subject = $this->input->post('subject');
+                if ($this->M_master->editAmbassador($upload['filename']) == true) {
+                    $this->session->set_flashdata('notif_success', 'Succesfuly editted the  announcement '.$subject);
+                    redirect(site_url('master/ambassador'));
+                } else {
+                    $this->session->set_flashdata('notif_warning', 'There is a problem when trying to edit the announcement, try again later');
+                    redirect($this->agent->referrer());
+                }
+            } else {
+                $this->session->set_flashdata('notif_warning', $upload['message']);
+                redirect($this->agent->referrer());
+            }
+        } else {
+            $subject = $this->input->post('subject');
+            if ($this->M_master->editAmbassador() == true) {
+                $this->session->set_flashdata('notif_success', 'Succesfuly editted the  announcement '.$subject);
+                redirect(site_url('master/ambassador'));
+            } else {
+                $this->session->set_flashdata('notif_warning', 'There is a problem when trying to edit the announcement, try again later');
+                redirect($this->agent->referrer());
+            }
+        }
+    }
+
+    function deleteAmbassador()
+    {
+        $subject = $this->input->post('subject');
+        if ($this->M_master->deleteAmbassador() == true) {
+            $this->session->set_flashdata('notif_success', 'Succesfuly deleted announcement '.$subject);
+            redirect(site_url('master/ambassador'));
+        } else {
+            $this->session->set_flashdata('notif_warning', 'There is a problem when trying to delete the announcement, try again later');
+            redirect($this->agent->referrer());
+        }
+    }
 }

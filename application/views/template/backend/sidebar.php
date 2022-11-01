@@ -70,6 +70,11 @@
   					<li class="nav-item">
   						<span class="nav-subtitle">Master</span>
   					</li>
+  					<li class="nav-item" id="tour-ambassador">
+  						<a class="nav-link <?= ($this->uri->segment(2) == "ambassador" ? "active" : "") ?>"
+  							href="<?= site_url('master/ambassador'); ?>"><i class="bi bi-people nav-icon"></i>
+  							Ambassador</a>
+  					</li>
   					<li class="nav-item" id="tour-announcements">
   						<a class="nav-link <?= ($this->uri->segment(2) == "announcements" ? "active" : "") ?>"
   							href="<?= site_url('master/announcements'); ?>"><i class="bi bi-megaphone nav-icon"></i>

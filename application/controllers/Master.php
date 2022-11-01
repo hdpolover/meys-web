@@ -8,7 +8,16 @@ class Master extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model(['M_master', 'M_announcements', 'M_home']);
+        $this->load->model(['M_master', 'M_announcements', 'M_home', 'M_user']);
+    }
+
+    public function ambassador()
+    {
+        $data['countries']      = $this->M_user->getAllCountries();
+        $data['ambassador'] = $this->M_master->getAllAmbassador();
+        $data['faq'] = $this->M_home->getFaqAll();
+
+        $this->templateback->view('admin/master/ambassador', $data);
     }
 
     public function faq()

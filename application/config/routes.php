@@ -24,6 +24,7 @@ $route['user'] = 'user';
 $route['user/overview'] = 'user';
 $route['user/entry-paper'] = 'user/entryPaper';
 $route['user/settings'] = 'user/settings';
+$route['user/payments'] = 'user/payment';
 
 // ADMIN
 $route['admin'] = 'admin';
