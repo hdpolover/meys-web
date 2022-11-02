@@ -47,6 +47,11 @@
 				<a href="<?= site_url('user/payment');?>" class="text-primary fw-bold">click here</a>
 			</div>
 			<?php endif;?>
+			<?php if (isset($participants->status) && $participants->is_payment == 1 && $participants->status == 0 || $participants->status == 1):?>
+			<div class="alert alert-soft-info small" role="alert">
+				You has been paid your submission, you can submit your submission now !
+			</div>
+			<?php endif;?>
 			<?php if (isset($participants->status) && $participants->status == 2):?>
 			<div class="alert alert-soft-info small" role="alert">
 				Your submission has been submitted, please wait until your submission verified by our TEAM
