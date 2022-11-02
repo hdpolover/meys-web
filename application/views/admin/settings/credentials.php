@@ -20,6 +20,7 @@
 							<th width="5%">No</th>
 							<th>Users</th>
 							<th>Last access</th>
+							<th>Device</th>
 							<th>Account Status</th>
 						</tr>
 					</thead>
@@ -42,10 +43,7 @@
 													class="badge bg-soft-info small ms-2">Admin</span>
 												<?php elseif($val->role == 2):?>
 												<span data-bs-toggle="tooltip" data-bs-html="true" title="Leader"
-													class="badge bg-soft-warning small ms-2">Leader</span>
-												<?php elseif($val->role == 3):?>
-												<span data-bs-toggle="tooltip" data-bs-html="true" title="Staff"
-													class="badge bg-soft-success small ms-2">Staff</span>
+													class="badge bg-soft-warning small ms-2">Participans / Member</span>
 												<?php endif;?>
 											</h6>
 										</a>
@@ -54,6 +52,7 @@
 								</div>
 							</td>
 							<td><?= date("d F Y - H:i:s", $val->log_time);?></td>
+							<td><?= $val->device;?></td>
 							<td>
 								<?php if($val->is_deleted == 1):?>
 								<span data-bs-toggle="tooltip" data-bs-html="true" title="deleted"

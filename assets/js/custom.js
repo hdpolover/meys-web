@@ -123,3 +123,11 @@ function toBase64(file) {
 		reader.onerror = error => reject(error);
 	});
 }
+
+
+function prettyJson() {
+	var ugly = document.getElementById('textJson').value;
+	var obj = JSON.parse(ugly);
+	var pretty = JSON.stringify(obj, undefined, 4);
+	document.getElementById('textJson').value = pretty;
+}

@@ -545,3 +545,19 @@ div.dataTables_wrapper {
 .stepy-last:after {
 	content: none !important;
 }
+
+.payments-height {
+	max-height: 325px !important;
+	overflow: hidden !important;
+}
+
+.payments-height-user {
+	height: 150px !important;
+	overflow: hidden !important;
+}
+
+.payments-setting-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}

@@ -25,7 +25,7 @@ class M_admin extends CI_Model
     }
 
     function get_allAccount(){
-        $this->db->select('a.email, a.role, a.status, a.is_deleted, a.log_time, b.*')
+        $this->db->select('a.email, a.role, a.status, a.is_deleted, a.log_time, a.device, b.*')
         ->from('tb_auth a')
         ->join('tb_user b', 'a.user_id = b.user_id', 'inner')
         ->order_by('a.role ASC')
@@ -35,7 +35,7 @@ class M_admin extends CI_Model
     }
 
     function get_superAccount(){
-        $this->db->select('a.email, a.password, a.log_time, b.*')
+        $this->db->select('a.email, a.password, a.log_time, a.device, b.*')
         ->from('tb_auth a')
         ->join('tb_user b', 'a.user_id = b.user_id', 'inner')
         ->where(['a.role' => 0])
@@ -45,7 +45,7 @@ class M_admin extends CI_Model
     }
 
     function get_adminAccount(){
-        $this->db->select('a.email, a.log_time, b.*')
+        $this->db->select('a.email, a.log_time, a.device, b.*')
         ->from('tb_auth a')
         ->join('tb_user b', 'a.user_id = b.user_id', 'inner')
         ->where(['a.role' => 1])
@@ -93,4 +93,43 @@ class M_admin extends CI_Model
 
         return ['records' => $models, 'totalDisplayRecords' => count($models), 'totalRecords' => count($this->getParticipans())];
     }
+
+    function get_statistik(){
+        $total_pendaftar = $this->db->get_where('tb_auth', ['role' => 2])->num_rows();
+        $total_participants = $this->db->get_where('tb_participants', ['is_deleted' => 0])->num_rows();
+
+        $arr = [
+            'total' => $total_pendaftar,
+            'participants' => $total_participants,
+        ];
+
+        return $arr;
+    }
+
+    function getChartGender()
+    {
+        $this->db->select('a.gender, COUNT(a.user_id) as count');
+        $this->db->from('tb_user a');
+        $this->db->join('tb_auth b', 'a.user_id = b.user_id');
+        $this->db->where('b.role', 2);
+        $this->db->group_by('gender');
+        return $this->db->get()->result();
+    }
+
+    function getChartDaily()
+    {
+        $this->db->select("FROM_UNIXTIME(created_at, '%Y-%m-%d') AS created_at, COUNT(FROM_UNIXTIME(created_at, '%Y-%m-%d')) AS count");
+        $this->db->from('tb_participants');
+        $this->db->group_by("FROM_UNIXTIME(created_at, '%Y-%m-%d')");
+        return $this->db->get()->result();
+    }
+
+    function getChartDailyAccount()
+    {
+        $this->db->select("FROM_UNIXTIME(created_at, '%Y-%m-%d') AS created_at, COUNT(FROM_UNIXTIME(created_at, '%Y-%m-%d')) AS count");
+        $this->db->from('tb_auth');
+        $this->db->group_by("FROM_UNIXTIME(created_at, '%Y-%m-%d')");
+        return $this->db->get()->result();
+    }
+
 }

@@ -167,7 +167,8 @@
 					<div class="flex-grow-1 ms-3">
 						<h4>Why you join?</h4>
 						<p style="text-align: justify;">This summit is not only a meeting hub for the world's Muslim
-							youth but also the delegates can perform Umrah and worship in one of Haramain mosques (Mecca).</p>
+							youth but also the delegates can perform Umrah and worship in one of Haramain mosques
+							(Mecca).</p>
 					</div>
 				</div>
 				<!-- End Icon Blocks -->
@@ -525,21 +526,24 @@
 			<div class="container content-space-b-2">
 				<div class="position-relative">
 					<div class="bg-light text-center rounded-2 p-4 p-md-7">
-						<img class="avatar avatar-lg avatar-4x3 mx-auto mb-4"
-							src="<?= base_url();?>assets/images/placeholder.jpg" alt="SVG Logo">
+						<div class="avatar avatar-xxl avatar-circle img-thumbnail shadow-sm mx-auto">
+							<img class="avatar-img" src="<?= base_url();?>berkas/landing/testimoni/dhohan.jpeg">
+						</div>
 
 						<!-- Blockquote -->
 						<figure class="w-md-80 w-lg-50 mx-md-auto">
 							<div class="mb-3">
 								<span class="text-cap text-white-70 mb-5">Event Testimonials</span>
 							</div>
-							<blockquote class="blockquote">Joining Middle East Summit allow me to expand my
-								knowledge, widen my connection and that is what I get during IYS.
+							<blockquote class="blockquote">I feel that this foundation can make me develop in a positive
+								direction as one of the internships at YBB. YBB always prioritizes young people to be
+								able to develop themselves with the facilities provided such as mentoring, sharing and
+								also exchanging ideas with each other.
 							</blockquote>
 
 							<figcaption class="blockquote-footer">
-								Irfan bin Jasni
-								<span class="blockquote-footer-source">Best presenter Middle East Summit 2022</span>
+								Dhohan F. Chaniagolla
+								<!-- <span class="blockquote-footer-source">Best presenter Middle East Summit 2022</span> -->
 							</figcaption>
 						</figure>
 						<!-- End Blockquote -->

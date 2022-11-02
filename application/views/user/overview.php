@@ -13,12 +13,11 @@
 				<div class="card-body">
 					<div class="row justify-content-md-start align-items-md-center text-center text-md-start">
 						<div class="col-md offset-md-3 mb-3 mb-md-0">
-							<h4 class="card-title">You still not yet send your submission!</h4>
+							<h4 class="card-title">You haven't submitted your registration form!</h4>
 						</div>
 
 						<div class="col-md-auto">
-							<a class="btn btn-primary btn-sm btn-transition" href="<?= site_url('user/submission');?>">Send
-								your submission now</a>
+							<a class="btn btn-primary btn-sm btn-transition" href="<?= site_url('user/submission');?>">Submit it now</a>
 						</div>
 					</div>
 

@@ -172,10 +172,10 @@ class Master extends CI_Controller
     function addFaq()
     {
         if ($this->M_master->addFaq() == true) {
-            $this->session->set_flashdata('notif_success', 'Succesfuly added a new payment batch content');
+            $this->session->set_flashdata('notif_success', 'Succesfuly added a new FAQ content');
             redirect(site_url('master/faq'));
         } else {
-            $this->session->set_flashdata('notif_warning', 'There is a problem when trying to add new payment batch content, try again later');
+            $this->session->set_flashdata('notif_warning', 'There is a problem when trying to add new FAQ content, try again later');
             redirect($this->agent->referrer());
         }
     }
@@ -320,4 +320,38 @@ class Master extends CI_Controller
             redirect($this->agent->referrer());
         }
     }
+
+    function addMasterEligilibity()
+    {
+        if ($this->M_master->addEligilibity() == true) {
+            $this->session->set_flashdata('notif_success', 'Succesfuly added a new Eligibilty Countries content');
+            redirect(site_url('master/eligilibity-countries'));
+        } else {
+            $this->session->set_flashdata('notif_warning', 'There is a problem when trying to add new Eligibilty Countries content, try again later');
+            redirect($this->agent->referrer());
+        }
+    }
+
+    function editMasterEligilibity()
+    {
+        if ($this->M_master->editEligilibity() == true) {
+            $this->session->set_flashdata('notif_success', 'Succesfuly editted a Eligibilty Countries ');
+            redirect(site_url('master/eligilibity-countries'));
+        } else {
+            $this->session->set_flashdata('notif_warning', 'There is a problem when trying to edit Eligibilty Countries, try again later');
+            redirect($this->agent->referrer());
+        }
+    }
+
+    function deleteMasterEligilibity()
+    {
+        if ($this->M_master->deleteEligilibity() == true) {
+            $this->session->set_flashdata('notif_success', 'Succesfuly deleted a Eligibilty Countries ');
+            redirect(site_url('master/eligilibity-countries'));
+        } else {
+            $this->session->set_flashdata('notif_warning', 'There is a problem when trying to delete Eligibilty Countries, try again later');
+            redirect($this->agent->referrer());
+        }
+    }
+
 }

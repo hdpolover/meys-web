@@ -30,7 +30,36 @@ class Admin extends CI_Controller
 
     public function statistics()
     {
-        $this->templateback->view('admin/statistics');
+
+        // statistik
+        $data['statistik'] = $this->M_admin->get_statistik();
+
+        // gender chart
+        $statChartGender = $this->M_admin->getChartGender();
+        foreach ($statChartGender as $val):
+            $val->gender = $val->gender == "" ? "others" : $val->gender;
+            $data['arrChartGender']['gender'][] = "'".$val->gender."'";
+            $data['arrChartGender']['jmlPeserta'][] = $val->count;
+        endforeach;
+
+        // daiily chart
+        $statChartDaily = $this->M_admin->getChartDaily();
+        foreach ($statChartDaily as $val):
+            // $data['arrChartDaily']['created_at'][] = "'".date("Y-m-d\TH:i:s\.v\Z", $val->created_at)."'";
+            $data['arrChartDaily']['created_at'][] = "'".$val->created_at."'";
+            $data['arrChartDaily']['jmlPeserta'][] = $val->count;
+        endforeach;
+
+        // daily  account chart
+        $statChartDailyAccount = $this->M_admin->getChartDailyAccount();
+        foreach ($statChartDailyAccount as $val):
+            // $data['arrChartDailyAccount']['created_at'][] = "'".date("Y-m-d\TH:i:s\.v\Z", $val->created_at)."'";
+            $data['arrChartDailyAccount']['created_at'][] = "'".$val->created_at."'";
+            $data['arrChartDailyAccount']['jmlPeserta'][] = $val->count;
+        endforeach;
+        $data['arrChartDailyDate'] = array_unique(array_merge($data['arrChartDailyAccount']['created_at'], $data['arrChartDaily']['created_at']), SORT_REGULAR);
+        
+        $this->templateback->view('admin/statistics', $data);
     }
 
     public function payments()

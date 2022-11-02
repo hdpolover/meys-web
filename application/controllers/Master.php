@@ -20,6 +20,13 @@ class Master extends CI_Controller
         $this->templateback->view('admin/master/ambassador', $data);
     }
 
+    public function eligilibity_countries()
+    {
+        $data['eligilibity'] = $this->M_master->get_masterEligilibity();
+
+        $this->templateback->view('admin/master/eligilibity', $data);
+    }
+
     public function faq()
     {
         $data['master_faq'] = $this->M_master->get_masterFaqContent();

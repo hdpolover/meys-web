@@ -58,7 +58,7 @@
 									data-hs-step-form-next-options='{"targetSelector": "#formEssay"}'>
 									<span class="step-icon step-icon-soft-dark">3</span>
 									<div class="step-content d-flex align-items-center">
-										<span class="step-title">Essay</span>
+										<span class="step-title">Questions</span>
 									</div>
 								</a>
 							</li>
@@ -522,7 +522,9 @@
 							</div>
 
 							<div id="formEssay" style="display: none; min-height: 15rem;">
-
+								<p>ANSWER EACH OF THE FOLLOWING QUESTIONS AND EXPLAIN YOUR ANALYSIS BRIEFLY. EACH ANSWER
+									CAN BE FILLED IN USING A MAXIMUM OF 200 WORDS.
+								</p>
 								<?php if(!empty($m_essay)):?>
 								<?php foreach($m_essay as $key => $val):?>
 								<!-- Form Group -->
@@ -533,10 +535,10 @@
 									<div class="js-form-message">
 										<?php if($val->type == 'textarea'):?>
 										<textarea class="form-control form-control-sm formEssay"
-											name="essay[<?= $val->id;?>][]" <?= $val->required == 1 ? 'required' : '';?>
+											name="essay[<?= $val->id;?>][]" <?= $val->required == 1 ? 'required' : '';?> maxlength="200"
 											rows="5"><?= !empty($p_essay) && isset($p_essay[$val->id]->answer) ? $p_essay[$val->id]->answer : '';?></textarea>
 										<?php else:?>
-										<input class="form-control form-control-sm formEssay"
+										<input class="form-control form-control-sm formEssay" maxlength="200"
 											name="essay[<?= $val->id;?>][]" <?= $val->required == 1 ? 'required' : '';?>
 											rows="5">
 										<?php endif;?>
@@ -765,7 +767,10 @@
 
 
 									<div class="js-form-message form-check">
-										<input type="checkbox" id="formHelperCheck1" name="terms" class="form-check-input" <?= isset($participants->terms_condition) && $participants->terms_condition == 1 ? 'checked' : ''?> required>
+										<input type="checkbox" id="formHelperCheck1" name="terms"
+											class="form-check-input"
+											<?= isset($participants->terms_condition) && $participants->terms_condition == 1 ? 'checked' : ''?>
+											required>
 										<label class="form-check-label" for="formHelperCheck1">I Agree</label>
 										<div class="text-muted">I understand and agree to the terms and conditions of
 											this program and that this program is self-funded meaning that participants

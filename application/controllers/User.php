@@ -8,7 +8,7 @@ class User extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model(['M_user', 'M_auth', 'M_announcements', 'M_master']);
+        $this->load->model(['M_user', 'M_auth', 'M_announcements', 'M_master', 'M_payment']);
 
         // cek apakah user sudah login
         if ($this->session->userdata('logged_in') == false || !$this->session->userdata('logged_in')) {
@@ -77,7 +77,25 @@ class User extends CI_Controller
         $data['btn_sign_up']    = "btn-light";
         $data['btn_sign_in']    = "btn-outline-light";
 
+        $data['payment_settings']   = $this->M_payment->getPaymentSettings();
+        $data['payment_batch']      = $this->M_payment->getUserPaymentBatch();
+
         $this->templateuser->view('user/payment', $data);
+    }
+
+    public function payments_history($batch_id = null)
+    {
+        $data['user'] = $this->M_auth->get_auth($this->session->userdata('email'));
+
+        // style
+        $data['navbar_style']   = "navbar-dark";
+        $data['logo_style']     = 1;
+        $data['btn_sign_up']    = "btn-light";
+        $data['btn_sign_in']    = "btn-outline-light";
+
+        $data['payment_batch']  = $this->M_payment->getUserPaymentBatchHistory($this->session->userdata('user_id'), $batch_id);
+
+        $this->templateuser->view('user/payment_history', $data);
     }
 
     public function submission()

@@ -8,7 +8,7 @@ class Home extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model(['M_home']);
+        $this->load->model(['M_home', 'M_master']);
     }
 
     public function index()
@@ -56,7 +56,15 @@ class Home extends CI_Controller
 
     public function eligible_countries()
     {
-        $this->templatefront->view('home/eligible');
+        // style
+        $data['navbar_style']   = "navbar-dark";
+        $data['logo_style']     = 1;
+        $data['btn_sign_up']    = "btn-light";
+        $data['btn_sign_in']    = "btn-outline-light";
+
+        $data['eligilibity'] = $this->M_master->get_masterEligilibity();
+
+        $this->templatefront->view('home/eligible', $data);
     }
 
     public function helpCenter()

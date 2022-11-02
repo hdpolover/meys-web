@@ -42,7 +42,7 @@
 							</td>
 							<td><?= $val->fullname;?></td>
 							<td><?= $val->referral_code;?></td>
-							<td>0</td>
+							<td><?= $val->affiliate;?> participans</td>
 							<td>
 								<?php if($val->status == 1):?>
 								<span class="badge bg-success">active</span>

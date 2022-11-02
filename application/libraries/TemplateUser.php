@@ -27,6 +27,20 @@ class TemplateUser
         return $query->num_rows();
     }
 
+    function getUserParticipans($user_id){
+        $this->_ci->db->select('a.*, b.*, c.*, d.fullname')
+        ->from('tb_participants a')
+        ->join('tb_user b', 'a.user_id = b.user_id')
+        ->join('tb_auth c', 'a.user_id = c.user_id')
+        ->join('tb_ambassador d', 'a.referral_code = d.referral_code', 'left')
+        ->where(['a.is_deleted' => 0, 'c.status' => 1, 'a.user_id' => $user_id])
+        ;
+
+        $models = $this->_ci->db->get()->row();
+
+        return $models;
+    }
+
     public function view($content, $data = null)
     {
         $data['web_title'] = $this->getSettingsValue('web_title');
@@ -39,6 +53,7 @@ class TemplateUser
         $data['web_email'] = $this->getSettingsValue('web_email');
         $data['web_guidelines'] = $this->getSettingsValue('web_guidelines');
         $data['submission_deadline'] = $this->getSettingsValue('submission_deadline');
+        $data['user_profil']   = $this->getUserParticipans($this->_ci->session->userdata('user_id'));
 
         $data['countAnnouncements'] = $this->countAnnouncements();
         $data['countDocuments'] = $this->countDocuments();

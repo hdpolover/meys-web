@@ -56,7 +56,7 @@
     							<div class="d-none d-lg-block text-center mb-5">
     								<div class="avatar avatar-xxl avatar-circle mb-3">
     									<img class="avatar-img"
-    										src="<?= $user->picture == null ? 'https://i.stack.imgur.com/ZQT8Z.png' : base_url(). '/' . $user->picture; ?>"
+    										src="<?= !isset($user_profil->self_photo) ? 'https://i.stack.imgur.com/ZQT8Z.png' : base_url(). '/' . $user_profil->self_photo; ?>"
     										alt="<?= $user->name; ?>">
     									<img class="avatar-status avatar-lg-status"
     										src="<?= base_url(); ?>assets/svg/illustrations/top-vendor.svg"

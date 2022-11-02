@@ -52,6 +52,8 @@
 
 						<ul class="small">
 							<li>Had at least 8 characters</li>
+							<li>1 special character</li>
+							<li>1 capitalized letter</li>
 						</ul>
 					</div>
 				</div>

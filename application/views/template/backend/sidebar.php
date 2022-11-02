@@ -64,6 +64,16 @@
   								class="bi bi-credit-card-2-back nav-icon"></i> Payments <span
   								class="badge bg-warning ms-2">locked</span> </a>
   					</li>
+  					<li class="nav-item" id="tour-payment-settings">
+  						<a class="nav-link <?= ($this->uri->segment(2) == "payment-settings" ? "active" : "") ?>"
+  							href="<?= site_url('admin/payment-settings'); ?>"><i
+  								class="bi bi-credit-card nav-icon"></i> Payment Settings</a>
+  					</li>
+  					<li class="nav-item" id="tour-payment-xendit">
+  						<a class="nav-link <?= ($this->uri->segment(2) == "xendit-settings" ? "active" : "") ?>"
+  							href="<?= site_url('admin/xendit-settings'); ?>"><i
+  								class="bi bi-credit-card nav-icon"></i> Xendit Settings</a>
+  					</li>
 
   					<li class="nav-item my-2 my-lg-5"></li>
 
@@ -74,6 +84,11 @@
   						<a class="nav-link <?= ($this->uri->segment(2) == "ambassador" ? "active" : "") ?>"
   							href="<?= site_url('master/ambassador'); ?>"><i class="bi bi-people nav-icon"></i>
   							Ambassador</a>
+  					</li>
+  					<li class="nav-item" id="tour-eligilibity-countries">
+  						<a class="nav-link <?= ($this->uri->segment(2) == "eligilibity-countries" ? "active" : "") ?>"
+  							href="<?= site_url('master/eligilibity-countries'); ?>"><i class="bi bi-file-break nav-icon"></i>
+  							Eligilibity Countries</a>
   					</li>
   					<li class="nav-item" id="tour-announcements">
   						<a class="nav-link <?= ($this->uri->segment(2) == "announcements" ? "active" : "") ?>"
@@ -98,12 +113,12 @@
   					<li class="nav-item my-2 my-lg-5"></li>
 
   					<li class="nav-item">
-  						<span class="nav-subtitle">Participans</span>
+  						<span class="nav-subtitle">Participants</span>
   					</li>
   					<li class="nav-item" id="tour-participans">
   						<a class="nav-link <?= ($this->uri->segment(2) == "participans" ? "active" : "") ?>"
   							href="<?= site_url('admin/participans'); ?>"><i class="bi bi-people nav-icon"></i>
-  							Participans</a>
+  							Participants</a>
   					</li>
 
   					<li class="nav-item my-2 my-lg-5"></li>

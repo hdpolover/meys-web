@@ -125,14 +125,17 @@ class M_master extends CI_Model
     {
         $summit = $this->input->post('summit');
         $description = $this->input->post('desc');
-        $ammount = $this->input->post('ammount');
+        $amount = $this->input->post('amount');
+        $amount_usd = $this->input->post('amount_usd');
+
         $start_date = $this->input->post('start_date');
         $end_date = $this->input->post('end_date');
 
         $data = [
             'summit' => $summit,
             'description' => $description,
-            'ammount' => $ammount,
+            'amount' => $amount,
+            'amount_usd' => $amount_usd,
             'start_date' => strtotime($start_date),
             'end_date' => strtotime($end_date),
             'created_at' => time(),
@@ -148,14 +151,16 @@ class M_master extends CI_Model
         $id = $this->input->post('id');
         $summit = $this->input->post('summit');
         $description = $this->input->post('desc');
-        $ammount = $this->input->post('ammount');
+        $amount = $this->input->post('amount');
+        $amount_usd = $this->input->post('amount_usd');
         $start_date = $this->input->post('start_date');
         $end_date = $this->input->post('end_date');
 
         $data = [
             'summit' => $summit,
             'description' => $description,
-            'ammount' => $ammount,
+            'amount' => $amount,
+            'amount_usd' => $amount_usd,
             'start_date' => strtotime($start_date),
             'end_date' => strtotime($end_date),
             'modified_at' => time(),
@@ -212,7 +217,17 @@ class M_master extends CI_Model
     }
 
     function getAllAmbassador(){
-        return $this->db->get_where('tb_ambassador', ['is_deleted' => 0])->result();
+        $models = $this->db->get_where('tb_ambassador', ['is_deleted' => 0])->result();
+
+        foreach($models as $key => $val){
+            $val->affiliate = $this->countAffiliateAmbassador($val->referral_code);
+        }
+
+        return $models;
+    }
+
+    function countAffiliateAmbassador($referral_code){
+        return $this->db->get_where('tb_participants', ['referral_code' => $referral_code, 'is_deleted' => 0])->num_rows();
     }
 
     public function addAmbassador($poster = null)
@@ -304,6 +319,62 @@ class M_master extends CI_Model
 
         $this->db->where('id', $id);
         $this->db->update('tb_ambassador', ['is_deleted' => 1]);
+        return ($this->db->affected_rows() != 1) ? false : true;
+    }
+
+    function get_masterEligilibity(){
+        return $this->db->get_where('m_eligilibity_countries', ['is_deleted' => 0])->result();
+    }
+
+    public function addEligilibity()
+    {
+        $nationality            = $this->input->post('nationality');
+        $continent              = $this->input->post('continent');
+        $type_visa              = $this->input->post('type_visa');
+        $issued_from            = $this->input->post('issued_from');
+
+        $data = [
+            'nationality' => $nationality,
+            'continent' => $continent,
+            'type_visa' => $type_visa,
+            'issued_from' => $issued_from,
+            'created_by' => $this->session->userdata('user_id'),
+            'created_at' => time()
+        ];
+
+        $this->db->insert('m_eligilibity_countries', $data);
+        return ($this->db->affected_rows() != 1) ? false : true;
+    }
+
+    public function editEligilibity()
+    {
+        $id                     = $this->input->post('id');
+        $nationality            = $this->input->post('nationality');
+        $continent              = $this->input->post('continent');
+        $type_visa              = $this->input->post('type_visa');
+        $issued_from            = $this->input->post('issued_from');
+
+        $data = [
+            'nationality' => $nationality,
+            'continent' => $continent,
+            'type_visa' => $type_visa,
+            'issued_from' => $issued_from,
+            'modified_by' => $this->session->userdata('user_id'),
+            'modified_at' => time()
+        ];
+
+
+        $this->db->where('id', $id);
+        $this->db->update('m_eligilibity_countries', $data);
+        return ($this->db->affected_rows() != 1) ? false : true;
+    }
+
+    public function deleteEligilibity()
+    {
+        $id = $this->input->post('id');
+
+        $this->db->where('id', $id);
+        $this->db->update('m_eligilibity_countries', ['is_deleted' => 1]);
         return ($this->db->affected_rows() != 1) ? false : true;
     }
 }

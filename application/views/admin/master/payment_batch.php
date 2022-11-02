@@ -23,7 +23,7 @@
 							<th width="15%">Action</th>
 							<th>Summit</th>
 							<th>Description</th>
-							<th>Ammount</th>
+							<th>Amount</th>
 							<th>Start Date</th>
 							<th>End Date</th>
 						</tr>
@@ -41,7 +41,7 @@
 							</td>
 							<td><?= $val->summit;?></td>
 							<td><?= $val->description;?></td>
-							<td>Rp. <?= number_format($val->ammount);?></td>
+							<td>Rp. <?= number_format($val->amount);?> / $<?= number_format($val->amount_usd);?></td>
 							<td><?= date("d F Y", $val->start_date);?></td>
 							<td><?= date("d F Y", $val->end_date);?></td>
 						</tr>
@@ -73,20 +73,38 @@
 												<label for="inputDesc" class="form-label">Desc <small
 														class="text-secondary">(optional)</small></label>
 												<textarea class="form-control form-control-sm" type="text"
-													id="inputDesc" rows="3" name="desc"><?= $val->description;?></textarea>
+													id="inputDesc" rows="3"
+													name="desc"><?= $val->description;?></textarea>
 											</div>
 
 											<div class="mb-3">
-												<label for="inputAmmount" class="form-label">Ammount <small
+												<label for="inputAmount" class="form-label">Amount <small
 														class="text-danger">*</small></label>
-												<div class="input-group input-group-merge">
-													<div class="input-group-prepend input-group-text"
-														id="inputAmmountGroup">
-														Rp.
+												<div class="row">
+													<div class="col-6">
+														<div class="input-group input-group-merge">
+															<div class="input-group-prepend input-group-text"
+																id="inputAmountGroup">
+																Rp.
+															</div>
+															<input type="text" class="form-control" id="inputAmount"
+																name="amount" value="<?= $val->amount;?>"
+																aria-label="Mark Williams"
+																aria-describedby="inputAmountGroup">
+														</div>
 													</div>
-													<input type="text" class="form-control" id="inputAmmount"
-														name="ammount" value="<?= $val->ammount;?>" aria-label="Mark Williams"
-														aria-describedby="inputAmmountGroup">
+													<div class="col-6">
+														<div class="input-group input-group-merge">
+															<div class="input-group-prepend input-group-text"
+																id="inputAmountGroup">
+																$
+															</div>
+															<input type="text" class="form-control" id="inputAmount"
+																name="amount_usd" value="<?= $val->amount_usd;?>"
+																aria-label="Mark Williams"
+																aria-describedby="inputAmountGroup">
+														</div>
+													</div>
 												</div>
 											</div>
 
@@ -128,7 +146,7 @@
 											aria-label="Close"></button>
 									</div>
 									<div class="modal-body">
-										<form action="<?= site_url('api/master/deletePaymentsBatch');?>" method="post"
+										<form action="<?= site_url('api/master/deletePaymentBatch');?>" method="post"
 											class="js-validate need-validate" novalidate>
 											<input type="hidden" name="id" value="<?= $val->id;?>">
 											<p>Are you sure want to delete <b><?= $val->summit;?></b>?</p>
@@ -178,14 +196,28 @@
 					</div>
 
 					<div class="mb-3">
-						<label for="inputAmmount" class="form-label">Ammount <small
-								class="text-danger">*</small></label>
-						<div class="input-group input-group-merge">
-							<div class="input-group-prepend input-group-text" id="inputAmmountGroup">
-								Rp.
+						<label for="inputAmount" class="form-label">Amount <small class="text-danger">*</small></label>
+						<div class="row">
+							<div class="col-6">
+								<div class="input-group input-group-merge">
+									<div class="input-group-prepend input-group-text" id="inputAmountGroup">
+										Rp.
+									</div>
+									<input type="text" class="form-control" id="inputAmount" name="amount"
+										placeholder="Amount" aria-label="Mark Williams"
+										aria-describedby="inputAmountGroup">
+								</div>
 							</div>
-							<input type="text" class="form-control" id="inputAmmount" name="ammount"
-								placeholder="Ammount" aria-label="Mark Williams" aria-describedby="inputAmmountGroup">
+							<div class="col-6">
+								<div class="input-group input-group-merge">
+									<div class="input-group-prepend input-group-text" id="inputAmountGroup">
+										$
+									</div>
+									<input type="text" class="form-control" id="inputAmount" name="amount_usd"
+										placeholder="Amount" aria-label="Mark Williams"
+										aria-describedby="inputAmountGroup">
+								</div>
+							</div>
 						</div>
 					</div>
 
@@ -235,7 +267,7 @@
 	}
 
 	// Install input filters Tambah Hp Pegawai.
-	setInputFilter(document.getElementById("inputAmmount"), function (value) {
+	setInputFilter(document.getElementById("inputAmount"), function (value) {
 		return /^\d*$/.test(value);
 	});
 
