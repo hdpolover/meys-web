@@ -96,11 +96,13 @@ class M_admin extends CI_Model
 
     function get_statistik(){
         $total_pendaftar = $this->db->get_where('tb_auth', ['role' => 2])->num_rows();
+        $new_register = $this->db->get_where('tb_auth', ['role' => 2, 'created_at >=' => time(), 'created_at <=' => time()])->num_rows();
         $total_participants = $this->db->get_where('tb_participants', ['is_deleted' => 0])->num_rows();
 
         $arr = [
             'total' => $total_pendaftar,
             'participants' => $total_participants,
+            'register_today' => $new_register,
         ];
 
         return $arr;

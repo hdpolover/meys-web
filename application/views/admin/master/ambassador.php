@@ -24,7 +24,7 @@
 							<th width="15%">Action</th>
 							<th>Name</th>
 							<th>Referral Code</th>
-							<th>Affiliate Participans</th>
+							<th>Affiliate Participants</th>
 							<th>Status</th>
 						</tr>
 					</thead>
@@ -42,7 +42,7 @@
 							</td>
 							<td><?= $val->fullname;?></td>
 							<td><?= $val->referral_code;?></td>
-							<td><?= $val->affiliate;?> participans</td>
+							<td><?= $val->affiliate;?> participants</td>
 							<td>
 								<?php if($val->status == 1):?>
 								<span class="badge bg-success">active</span>
@@ -290,7 +290,7 @@
 						<div class="col">
 							<div class="mb-3">
 								<label for="validationValidInput1" class="form-label">Name</label>
-								<input type="text" id="inptName" name="fullname" class="form-control form-control-sm"
+								<input type="text" id="inptNameAdd" name="fullname" class="form-control form-control-sm"
 									id="validationValidInput1" placeholder="Name" required>
 							</div>
 						</div>
@@ -412,7 +412,7 @@
 
 <script>
 	function generateRC() {
-		const name = $('input[name="fullname"]').val()
+		var name = $('#inptNameAdd').val()
 		$.ajax({
 			url: "<?= site_url('api/master/ajxGenRC')?>",
 			method: 'POST',

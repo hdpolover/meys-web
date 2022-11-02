@@ -141,7 +141,7 @@
 							<?php endif;?>
 
 							<div class="mb-3">
-								<label for="poster-announcements" class="form-label">Evidance</label>
+								<label for="poster-announcements" class="form-label">Payment Proof</label>
 								<figure class="text-center">
 									<img src="#" id="imgthumbnail" class="img-thumbnail img-fluid mb-2"
 										alt="Thumbnail image"

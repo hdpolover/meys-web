@@ -4,17 +4,19 @@
 		<div class="card-header py-4 border-bottom">
 			<h4 class="card-header-title">Overview
 				<?php if(!empty($participants)):?>
-				<?php if($participants->status == 2):?>
+				<?php if($participants->status == 0 || $participants->status == 1):?>
+				<span class="badge bg-soft-danger text-danger float-end">Not Submitted</span>
+				<?php elseif($participants->status == 2):?>
 				<span class="badge bg-soft-info float-end">Submitted</span>
 				<?php elseif($participants->status == 3):?>
 				<span class="badge bg-soft-success text-danger float-end">Submission Accepted</span>
 				<?php elseif($participants->status == 4):?>
 				<span class="badge bg-soft-danger text-danger float-end">Submission Rejected</span>
 				<?php else:?>
-				<span class="badge bg-soft-danger text-danger float-end">Not Submitted</span>
+				<span class="badge bg-soft-danger text-danger float-end">Unknow</span>
 				<?php endif;?>
 				<?php else:?>
-				<span class="badge bg-soft-danger text-danger float-end">Not Submitted</span>
+				<span class="badge bg-soft-danger text-danger float-end">Fill submission first</span>
 				<?php endif;?>
 			</h4>
 		</div>
@@ -535,7 +537,8 @@
 									<div class="js-form-message">
 										<?php if($val->type == 'textarea'):?>
 										<textarea class="form-control form-control-sm formEssay"
-											name="essay[<?= $val->id;?>][]" <?= $val->required == 1 ? 'required' : '';?> maxlength="200"
+											name="essay[<?= $val->id;?>][]" <?= $val->required == 1 ? 'required' : '';?>
+											maxlength="200"
 											rows="5"><?= !empty($p_essay) && isset($p_essay[$val->id]->answer) ? $p_essay[$val->id]->answer : '';?></textarea>
 										<?php else:?>
 										<input class="form-control form-control-sm formEssay" maxlength="200"
@@ -749,6 +752,17 @@
 							</div>
 
 							<div id="formSubmission" style="display: none; min-height: 15rem;">
+								<?php if($participants->status == 2):?>
+								<!-- Form Group -->
+								<div class="mb-3">
+									<label for="validationFormPayment" class="form-label">Waiting for review</label>
+
+									<div class="alert alert-soft-info small">
+										Your submission is waiting for review, you can still update and resubmit your submission on this state.
+									</div>
+								</div>
+								<!-- End Form Group -->
+								<?php else:?>
 								<!-- Form Group -->
 								<div class="mb-3">
 									<label for="validationFormPayment" class="form-label">Payment</label>
@@ -784,6 +798,7 @@
 									</div>
 								</div>
 								<!-- End Form Group -->
+								<?php endif;?>
 								<!-- Footer -->
 								<div class="d-flex align-items-center mt-5">
 									<button type="button" class="btn btn-outline-secondary btn-sm me-2"
@@ -792,10 +807,14 @@
 									</button>
 
 									<div class="ms-auto">
+										<?php if(isset($participants->is_payment) && $participants->is_payment == 1):?>
 										<button type="button" class="btn btn-primary btn-sm" id="sendSubmission"
-											<?= isset($participants->is_payment) && $participants->is_payment == 1 ? '' : 'disabled';?>>
-											<?= isset($participants->is_payment) && $participants->is_payment == 1 ? 'Submit <i class="bi-check small"></i>' : 'Please make payment first <i class="bi-credit-card small"></i>';?>
-										</button>
+											onclick="stepSixSave()">Submit
+											<i class="bi-check small"></i></button>
+										<?php else:?>
+										<button type="button" class="btn btn-primary btn-sm" disabled>Please
+											make payment first <i class="bi-credit-card small"></i></button>
+										<?php endif;?>
 									</div>
 								</div>
 								<!-- End Footer -->
@@ -1191,6 +1210,53 @@
 					Toast.fire({
 						icon: 'success',
 						title: 'Successfuly save your self photo information'
+					})
+				}
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				var Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				})
+
+				Toast.fire({
+					icon: 'error',
+					title: xhr.status + ' - ' + thrownError
+				})
+			}
+		})
+	}
+
+	function stepSixSave() {
+
+		$.ajax({
+			url: "<?= site_url('api/user/ajxPostSubmission')?>",
+			method: 'POST',
+			success: function (res) {
+				var res = JSON.parse(res);
+				if (res.status == true) {
+					var Toast = Swal.mixin({
+						toast: true,
+						position: 'top-end',
+						showConfirmButton: false,
+						timer: 3000,
+						timerProgressBar: true,
+						didOpen: (toast) => {
+							toast.addEventListener('mouseenter', Swal.stopTimer)
+							toast.addEventListener('mouseleave', Swal.resumeTimer)
+						}
+					})
+
+					Toast.fire({
+						icon: 'success',
+						title: 'Successfuly submit your data'
 					})
 				}
 			},

@@ -108,7 +108,7 @@ class User extends CI_Controller
         $data['btn_sign_in']    = "btn-outline-light";
         
         $data['payment_detail']  = $this->M_payment->getUserPaymentDetail($payment_id);
-
+        
         $this->templatepayment->view('user/payments/payment_transaction', $data);
     }
 
@@ -127,7 +127,7 @@ class User extends CI_Controller
         $data['p_essay']        = $this->M_user->getUserParticipansEssay($this->session->userdata('user_id'), $participans_id);
         $data['m_essay']        = $this->M_master->getParticipansEssay();
         $data['countries']      = $this->M_user->getAllCountries();
-
+        
         $this->templateuser->view('user/submission', $data);
     }
 

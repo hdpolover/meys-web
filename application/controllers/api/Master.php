@@ -235,7 +235,7 @@ class Master extends CI_Controller
         $referral = strtoupper(substr($this->input->post('name'), 0, 3));
         $ambassador = $this->db->order_by('id', 'desc')->limit(1)->get('tb_ambassador')->row();
 
-        if(empty($ambassador->id_ambassador)){
+        if(empty($ambassador->id)){
             $referral .= '001';
         }else{
             $lastOrder = (int)strlen($ambassador->referral_code) - 3;

@@ -21,7 +21,7 @@
     						<dt class="col-sm-6">ID TRANSACTION</dt>
     						<dd class="col-sm-6 text-sm-end mb-0">#<?= $payment_detail->transaction_code?></dd>
     					</dl>
-    					<?php if($payment_detail->data !== "" || $payment_detail->data !== null):?>
+    					<?php if($payment_detail->data !== "" && $payment_detail->data !== null):?>
     					<dl class="row mb-4">
     						<dt class="col-sm-6">DATA </dt>
     						<dd class="col-sm-12 mb-0">
@@ -35,7 +35,7 @@
     					</dl>
     					<?php endif;?>
     					<dl class="row mt-4 mb-4">
-    						<dt class="col-sm-6">EVIDENCE</dt>
+    						<dt class="col-sm-6">PAYMENT PROOF</dt>
     						<dd class="col-sm-6 text-sm-end mb-0"><button class="btn btn-xs btn-soft-success"
     								data-bs-toggle="modal" data-bs-target="#showEvidance">Show</button></dd>
     					</dl>
@@ -114,7 +114,7 @@
     	<div class="modal-dialog modal-lg modal-dialog-centered">
     		<div class="modal-content">
     			<div class="modal-header">
-    				<h5 class="modal-title" id="mdlEvidenceLabel">Evidence</h5>
+    				<h5 class="modal-title" id="mdlEvidenceLabel">Payment Proof</h5>
     				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     			</div>
 

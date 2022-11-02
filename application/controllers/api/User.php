@@ -105,4 +105,18 @@ class User extends CI_Controller
             ]);
         }
     }
+
+    public function ajxPostSubmission(){
+        if($this->M_user->ajxPostSubmission() == true){
+            echo json_encode([
+                'status' => true,
+                'message' => 'success saved submission'
+            ]);
+        }else{
+            echo json_encode([
+                'status' => false,
+                'error' => 'error saved step submission'
+            ]);
+        }
+    }
 }

@@ -20,7 +20,7 @@ class M_user extends CI_Model
     }
 
     function getUserParticipans($user_id){
-        $this->db->select('a.*, b.*, c.*, d.fullname')
+        $this->db->select('a.*, b.*, c.email, d.fullname')
         ->from('tb_participants a')
         ->join('tb_user b', 'a.user_id = b.user_id')
         ->join('tb_auth c', 'a.user_id = c.user_id')
@@ -261,5 +261,26 @@ class M_user extends CI_Model
         }else{
             return true;
         }
+    }
+
+    function ajxPostSubmission(){
+        $participans = $this->getUserParticipans($this->session->userdata('user_id'));
+
+        $formData = [
+            'step'                  => $participans->step <= 6 ? 6 : $participans->step,
+            'terms_condition'       => 1,
+            'status'                => 2,
+            'modified_by'           => $this->session->userdata('user_id'),
+            'modified_at'           => time(),
+        ];
+
+        if(empty($participans)){
+            $this->db->insert('tb_participants', $formData);
+        }else{
+            $this->db->where('id', $participans->id);
+            $this->db->update('tb_participants', $formData);
+        }
+
+        return ($this->db->affected_rows() != 1) ? false : true;
     }
 }
