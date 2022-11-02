@@ -31,7 +31,7 @@
 						<!-- Step -->
 						<ul id="formParticipansProgress" class="js-step-progress step step-icon-sm mb-7">
 							<li
-								class="step-item <?= isset($participants->step) && $participants->step == 1 ? 'is-valid' : '';?>">
+								class="step-item <?= isset($participants->step) && $participants->step == 1 || $participants->step >= 1 ? 'is-valid' : '';?>">
 								<a class="step-content-wrapper" href="javascript:;"
 									data-hs-step-form-next-options='{"targetSelector": "#formBasic"}'>
 									<span class="step-icon step-icon-soft-dark">1</span>
@@ -102,8 +102,7 @@
 					<div class="col-lg-9">
 						<!-- Content Step Form -->
 						<div id="overviewParticipansContent">
-							<div id="formBasic" class="active" style="min-height: 15rem;">
-
+							<div id="formBasic" class="<?= isset($participants->step) && $participants->step == 1 ? 'active' : '';?>" style="<?= isset($participants->step) && $participants->step == 1 ? '' : 'display: none;';?> min-height: 15rem;">
 								<!-- Form Group -->
 								<div class="mb-3">
 									<label for="validationFormFullname" class="form-label">Full name</label>
@@ -450,7 +449,7 @@
 								<!-- End Footer -->
 							</div>
 
-							<div id="formOthers" style="display: none; min-height: 15rem;">
+							<div id="formOthers" class="<?= isset($participants->step) && $participants->step == 2 ? 'active' : '';?>" style="<?= isset($participants->step) && $participants->step == 2 ? '' : 'display: none;';?> min-height: 15rem;">
 								<!-- Form Group -->
 								<div class="mb-3">
 									<label for="validationFormUsernameLabel" class="form-label">Experience</label>
@@ -521,7 +520,7 @@
 								<!-- End Footer -->
 							</div>
 
-							<div id="formEssay" style="display: none; min-height: 15rem;">
+							<div id="formEssay" class="<?= isset($participants->step) && $participants->step == 3 ? 'active' : '';?>" style="<?= isset($participants->step) && $participants->step == 3 ? '' : 'display: none;';?> min-height: 15rem;">
 								<p>ANSWER EACH OF THE FOLLOWING QUESTIONS AND EXPLAIN YOUR ANALYSIS BRIEFLY. EACH ANSWER
 									CAN BE FILLED IN USING A MAXIMUM OF 200 WORDS.
 								</p>
@@ -567,7 +566,7 @@
 								<!-- End Footer -->
 							</div>
 
-							<div id="formProgram" style="display: none; min-height: 15rem;">
+							<div id="formProgram" class="<?= isset($participants->step) && $participants->step == 4 ? 'active' : '';?>" style="<?= isset($participants->step) && $participants->step == 4 ? '' : 'display: none;';?> min-height: 15rem;">
 								<!-- Form Group -->
 								<div class="mb-3">
 									<label for="validationFormUsernameLabel" class="form-label">How do you know about
@@ -705,7 +704,7 @@
 								<!-- End Footer -->
 							</div>
 
-							<div id="formSelfPhoto" style="display: none; min-height: 15rem;">
+							<div id="formSelfPhoto" class="<?= isset($participants->step) && $participants->step == 5 ? 'active' : '';?>" style="<?= isset($participants->step) && $participants->step == 5 ? '' : 'display: none;';?> min-height: 15rem;">
 
 								<div class="mb-3">
 									<label for="self-photo" class="form-label">Please upload your formal
@@ -748,7 +747,7 @@
 								<!-- End Footer -->
 							</div>
 
-							<div id="formSubmission" style="display: none; min-height: 15rem;">
+							<div id="formSubmission" class="<?= isset($participants->step) && $participants->step == 6 ? 'active' : '';?>" style="<?= isset($participants->step) && $participants->step == 6 ? '' : 'display: none;';?> min-height: 15rem;">
 								<!-- Form Group -->
 								<div class="mb-3">
 									<label for="validationFormPayment" class="form-label">Payment</label>
