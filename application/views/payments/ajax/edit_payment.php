@@ -21,7 +21,7 @@
 	</div>
 	<div class="mb-3">
 		<label for="inputPaymentData" class="form-label">Payment Data</label>
-		<textarea class="form-control form-control-sm" name="data" id="textJson" rows="10"
+		<textarea class="form-control form-control-sm bg-blue-dark text-white" name="data" id="textJson" rows="10"
 			required><?= $item->data;?></textarea>
 		<small class="text-primary">Payment data must be json format text. <a onclick="prettyJson()"
 				class="fw-bold text-dark cursor">click here</a> to format to json</small>

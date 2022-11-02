@@ -9,7 +9,7 @@
 
 		<div class="card-body">
 			<div class="row">
-				<table class="table table-borderless table-thead-bordered datatable">
+				<table class="table table-borderless table-thead-bordered datatable" id="table">
 					<thead class="thead-light">
 						<tr>
 							<th scope="col">Payment</th>
@@ -27,7 +27,7 @@
 							<td scope="col"><?= date('F d, Y H:i:s', $val->created_at);?></td>
 							<td scope="col"><?= $val->payment_method;?></td>
 							<td scope="col">
-								<img style="max-width: 75px;" src="<?= $val->img_method;?>" />
+								<img style="max-width: 75px;" src="<?= base_url();?><?= $val->img_method;?>" />
 							</td>
 							<td scope="col">
 								<?php if($val->status == 1):?>

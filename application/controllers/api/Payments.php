@@ -22,4 +22,39 @@ class Payments extends CI_Controller
             redirect($this->agent->referrer());
         }
     }
+
+    public function manualPayment()
+    {
+        if (isset($_FILES['image'])) {
+            $path = "berkas/user/{$this->session->userdata('user_id')}/payments/{$this->input->post('payment_batch')}/";
+            $upload = $this->uploader->uploadImage($_FILES['image'], $path);
+            
+            if ($upload['status'] == true) {
+                if ($this->M_payment->manualPayment($upload['filename']) == true) {
+                    $this->session->set_flashdata('notif_success', 'Succesfuly send your payment ');
+                    redirect(site_url('user/payment'));
+                } else {
+                    $this->session->set_flashdata('notif_warning', 'There is a problem when trying to send your payment, try again later');
+                    redirect($this->agent->referrer());
+                }
+            } else {
+                $this->session->set_flashdata('notif_warning', $upload['message']);
+                redirect($this->agent->referrer());
+            }
+        } else {
+            $this->session->set_flashdata('notif_warning', 'Please provide evidance that you already send payment !');
+            redirect($this->agent->referrer());
+        }
+    }
+
+    public function manualPaymentCancel()
+    {
+        if ($this->M_payment->manualPaymentCancel() == true) {
+            $this->session->set_flashdata('notif_success', 'Succesfuly cancel your current payment ');
+            redirect(site_url('user/payment'));
+        } else {
+            $this->session->set_flashdata('notif_warning', 'There is a problem when trying to cancel your current payment, try again later');
+            redirect($this->agent->referrer());
+        }
+    }
 }

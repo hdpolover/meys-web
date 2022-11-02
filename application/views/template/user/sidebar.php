@@ -86,7 +86,7 @@
     								<li class="nav-item">
     									<a class="nav-link <?= ($this->uri->segment(2) == "submission" ? "active" : "") ?>"
     										href="<?= site_url('user/submission'); ?>">
-    										<i class="bi-clipboard nav-icon"></i> Submission <span class="badge bg-soft-danger text-danger rounded-pill nav-link-badge"><i class="bi bi-exclamation-lg"></i></span>
+    										<i class="bi-clipboard nav-icon"></i> Submission</span>
     									</a>
     								</li>
     								<li class="nav-item">

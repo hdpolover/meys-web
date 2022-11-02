@@ -552,7 +552,7 @@ div.dataTables_wrapper {
 }
 
 .payments-height-user {
-	height: 150px !important;
+	height: 100px !important;
 	overflow: hidden !important;
 }
 
@@ -560,4 +560,12 @@ div.dataTables_wrapper {
     position: absolute;
     top: 8px;
     right: 8px;
+}
+
+.bg-blue-dark {
+	background-color: #142140 !important;
+}
+
+.form-label{
+	font-size: 1rem !important;
 }

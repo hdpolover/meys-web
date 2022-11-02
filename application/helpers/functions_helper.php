@@ -153,6 +153,23 @@ if (!function_exists('createPermalink')) {
     }
 }
 
+if (!function_exists('createCode')) {
+    function createCode($string){
+        $string = preg_replace('/[^a-z]/i', '', $string);
+
+        $vocal = ["a", "e", "i", "o", "u", "A", "E", "I", "O", "U", " "];
+        $scrap = str_replace($vocal, "", $string);
+        $begin = substr($scrap, 0, 5);
+        $uniqid = strtoupper($begin);
+
+        // CREATE KODE
+        $code = $uniqid . "-" . substr(md5(time()), 0, 6);
+
+
+        return $code;
+    }
+}
+
 if(!function_exists('base64ToImage')){
 
     function base64ToImage($path, $base64){   

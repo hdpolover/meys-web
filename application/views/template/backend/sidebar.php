@@ -67,7 +67,7 @@
   					<li class="nav-item" id="tour-payment-settings">
   						<a class="nav-link <?= ($this->uri->segment(2) == "payment-settings" ? "active" : "") ?>"
   							href="<?= site_url('admin/payment-settings'); ?>"><i
-  								class="bi bi-credit-card nav-icon"></i> Payment Settings</a>
+  								class="bi bi-credit-card nav-icon"></i> Payments Settings</a>
   					</li>
   					<li class="nav-item" id="tour-payment-xendit">
   						<a class="nav-link <?= ($this->uri->segment(2) == "xendit-settings" ? "active" : "") ?>"

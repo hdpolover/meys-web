@@ -77,13 +77,27 @@ class User extends CI_Controller
         $data['btn_sign_up']    = "btn-light";
         $data['btn_sign_in']    = "btn-outline-light";
 
-        $data['payment_settings']   = $this->M_payment->getPaymentSettings();
+        $data['payment_settings']   = $this->M_payment->getPaymentSettingsUser();
         $data['payment_batch']      = $this->M_payment->getUserPaymentBatch();
-
-        $this->templateuser->view('user/payment', $data);
+        $this->templateuser->view('user/payments/payment', $data);
+    }
+    
+    public function payments_history($batch_id = null)
+    {
+        $data['user'] = $this->M_auth->get_auth($this->session->userdata('email'));
+        
+        // style
+        $data['navbar_style']   = "navbar-dark";
+        $data['logo_style']     = 1;
+        $data['btn_sign_up']    = "btn-light";
+        $data['btn_sign_in']    = "btn-outline-light";
+        
+        $data['payment_history']  = $this->M_payment->getUserPaymentBatchHistory($this->session->userdata('user_id'), $batch_id);
+        
+        $this->templateuser->view('user/payments/payment_history', $data);
     }
 
-    public function payments_history($batch_id = null)
+    public function payments_transaction($payment_id = null)
     {
         $data['user'] = $this->M_auth->get_auth($this->session->userdata('email'));
 
@@ -92,10 +106,10 @@ class User extends CI_Controller
         $data['logo_style']     = 1;
         $data['btn_sign_up']    = "btn-light";
         $data['btn_sign_in']    = "btn-outline-light";
+        
+        $data['payment_detail']  = $this->M_payment->getUserPaymentDetail($payment_id);
 
-        $data['payment_batch']  = $this->M_payment->getUserPaymentBatchHistory($this->session->userdata('user_id'), $batch_id);
-
-        $this->templateuser->view('user/payment_history', $data);
+        $this->templatepayment->view('user/payments/payment_transaction', $data);
     }
 
     public function submission()

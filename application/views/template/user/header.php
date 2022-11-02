@@ -32,6 +32,7 @@
 	<link rel="stylesheet" href="<?= base_url();?>assets/vendor/swiper/swiper-bundle.min.css">
 	<link rel="stylesheet" href="<?= site_url();?>assets/css/flatpickr.min.css">
 	<link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/tom-select/dist/css/tom-select.bootstrap5.css">
+	<link rel="stylesheet" href="//cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
 
 	<!-- CSS Front Template -->
 	<link rel="stylesheet" href="<?= base_url();?>assets/css/theme.min.css">
