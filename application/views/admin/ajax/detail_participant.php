@@ -279,27 +279,197 @@
 						</div>
 
 						<div id="otherForm" class="" style="display: none; min-height: 15rem;">
-							<h4>Others</h4>
+							<!-- List Striped -->
+							<ul class="list-group list-group-lg">
+								<li class="list-group-item p-2 active">
+									<span style="margin-top: -20px; margin-left: 5px" class="fw-bold">Others</span>
+								</li>
+								<li class="list-group-item p-3">
+									<div class="row">
+										<div class="col-sm-4 mb-2 mb-sm-0">
+											<span class="h6">Experience</span>
+										</div>
+										<!-- End Col -->
 
-							<p>...</p>
+										<div class="col-sm-8 mb-2 mb-sm-0">
+											<span><?= $participants->experience;?></span>
+										</div>
+										<!-- End Col -->
+									</div>
+									<!-- End Row -->
+								</li>
+								<li class="list-group-item p-3">
+									<div class="row">
+										<div class="col-sm-4 mb-2 mb-sm-0">
+											<span class="h6">Achievements</span>
+										</div>
+										<!-- End Col -->
+
+										<div class="col-sm-8 mb-2 mb-sm-0">
+											<span><?= $participants->achievements;?></span>
+										</div>
+										<!-- End Col -->
+									</div>
+									<!-- End Row -->
+								</li>
+								<li class="list-group-item p-3">
+									<div class="row">
+										<div class="col-sm-4 mb-2 mb-sm-0">
+											<span class="h6">Social Projects</span>
+										</div>
+										<!-- End Col -->
+
+										<div class="col-sm-8 mb-2 mb-sm-0">
+											<span><?= $participants->social_projects;?></span>
+										</div>
+										<!-- End Col -->
+									</div>
+									<!-- End Row -->
+								</li>
+								<li class="list-group-item p-3">
+									<div class="row">
+										<div class="col-sm-4 mb-2 mb-sm-0">
+											<span class="h6">Talents</span>
+										</div>
+										<!-- End Col -->
+
+										<div class="col-sm-8 mb-2 mb-sm-0">
+											<span><?= $participants->talents;?></span>
+										</div>
+										<!-- End Col -->
+									</div>
+									<!-- End Row -->
+								</li>
+							</ul>
 						</div>
 
 						<div id="questionForm" class="" style="display: none; min-height: 15rem;">
-							<h4>Question</h4>
+							<!-- List Striped -->
+							<ul class="list-group list-group-lg">
+								<li class="list-group-item p-2 active">
+									<span style="margin-top: -20px; margin-left: 5px" class="fw-bold">Questions</span>
+								</li>
+								<?php if(!empty($m_essay)):?>
+								<?php foreach($m_essay as $key => $val):?>
+								<li class="list-group-item p-3">
+									<div class="row">
+										<div class="col-sm-12 mb-2 mb-sm-0">
+											<span class="h6"><?= $val->question;?></span>
+										</div>
+										<!-- End Col -->
 
-							<p>...</p>
+										<div class="col-sm-12 mb-2 mb-sm-0">
+											<span><?= $p_essay[$val->id]->answer;?></span>
+										</div>
+										<!-- End Col -->
+									</div>
+									<!-- End Row -->
+								</li>
+								<?php endforeach;?>
+								<?php endif;?>
+							</ul>
 						</div>
 
 						<div id="programsForm" class="" style="display: none; min-height: 15rem;">
-							<h4>Programs</h4>
+							<!-- List Striped -->
+							<ul class="list-group list-group-lg">
+								<li class="list-group-item p-2 active">
+									<span style="margin-top: -20px; margin-left: 5px" class="fw-bold">Programs</span>
+								</li>
+								<li class="list-group-item p-3">
+									<div class="row">
+										<div class="col-sm-4 mb-2 mb-sm-0">
+											<span class="h6">How do you know about this program?</span>
+										</div>
+										<!-- End Col -->
 
-							<p>...</p>
+										<div class="col-sm-8 mb-2 mb-sm-0">
+											<span><?= $participants->source;?></span>
+										</div>
+										<!-- End Col -->
+									</div>
+									<!-- End Row -->
+								</li>
+								<li class="list-group-item p-3">
+									<div class="row">
+										<div class="col-sm-4 mb-2 mb-sm-0">
+											<span class="h6">Source Account/Name</span>
+										</div>
+										<!-- End Col -->
+
+										<div class="col-sm-8 mb-2 mb-sm-0">
+											<span><?= $participants->achievements;?></span>
+										</div>
+										<!-- End Col -->
+									</div>
+									<!-- End Row -->
+								</li>
+								<li class="list-group-item p-3">
+									<div class="row">
+										<div class="col-sm-4 mb-2 mb-sm-0">
+											<span class="h6">Twibbon Link</span>
+										</div>
+										<!-- End Col -->
+
+										<div class="col-sm-8 mb-2 mb-sm-0">
+											<span><?= $participants->twibbon_link;?></span>
+										</div>
+										<!-- End Col -->
+									</div>
+									<!-- End Row -->
+								</li>
+								<li class="list-group-item p-3">
+									<div class="row">
+										<div class="col-sm-4 mb-2 mb-sm-0">
+											<span class="h6">Share Requirement Proof Link</span>
+										</div>
+										<!-- End Col -->
+
+										<div class="col-sm-8 mb-2 mb-sm-0">
+											<span><?= $participants->share_proof_link;?></span>
+										</div>
+										<!-- End Col -->
+									</div>
+									<!-- End Row -->
+								</li>
+								<li class="list-group-item p-3">
+									<div class="row">
+										<div class="col-sm-4 mb-2 mb-sm-0">
+											<span class="h6">Referral Code</span>
+										</div>
+										<!-- End Col -->
+
+										<div class="col-sm-8 mb-2 mb-sm-0">
+											<?php if(isset($participants->referral_code) && $participants->referral_code !== "" && !is_null($participants->referral_code)):?>
+											<span>affiliate with <b><?= $participants->fullname;?></b> !</span>
+											<?php endif;?>
+										</div>
+										<!-- End Col -->
+									</div>
+									<!-- End Row -->
+								</li>
+							</ul>
 						</div>
 
 						<div id="selfPhotoForm" class="" style="display: none; min-height: 15rem;">
-							<h4>Self Photo</h4>
-
-							<p>...</p>
+							<!-- List Striped -->
+							<ul class="list-group list-group-lg">
+								<li class="list-group-item p-2 active">
+									<span style="margin-top: -20px; margin-left: 5px" class="fw-bold">Self Photo</span>
+								</li>
+								<li class="list-group-item p-3">
+									<div class="row">
+										<div class="col-sm-12 mb-2 mb-sm-0">
+											<figure class="text-center mb-2">
+												<img id="imgthumbnail" class="img-thumbnail img-fluid"
+													alt="Thumbnail image" src="<?= base_url();?><?= isset($participants->self_photo) ? $participants->self_photo : 'assets/images/placeholder.jpg';?>">
+											</figure>
+										</div>
+										<!-- End Col -->
+									</div>
+									<!-- End Row -->
+								</li>
+							</ul>
 						</div>
 					</div>
 					<!-- End Content Step Form -->
