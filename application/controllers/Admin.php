@@ -8,7 +8,7 @@ class Admin extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model(['M_admin']);
+        $this->load->model(['M_admin', 'M_user', 'M_master']);
 
         // cek apakah user sudah login
         if ($this->session->userdata('logged_in') == false || !$this->session->userdata('logged_in')) {
@@ -133,43 +133,43 @@ class Admin extends CI_Controller
                 break;
         }
     }
+
+    public function getDetailParticipant(){
+
+        $user_id = $this->input->post('user_id');
+        
+		if (!is_null($this->M_user->getUserParticipans($user_id))) {
+        
+            $data['participants']   = $this->M_user->getUserParticipans($user_id);
+            $participans_id         = isset($data['participants']->id) ? $data['participants']->id : null;
+            $data['p_essay']        = $this->M_user->getUserParticipansEssay($user_id, $participans_id);
+            $data['m_essay']        = $this->M_master->getParticipansEssay();
+            $data['countries']      = $this->M_user->getAllCountries();
+
+            $this->load->view('admin/ajax/detail_participant', $data);
+
+		} else {
+			echo "<center class='py-5'><h4>There is an error when trying get user participant's data!</h4></center>";
+		}
+    }
     
     public function getAjaxParticipant(){
-        $participants   = $this->M_admin->getParticipansAll();
+        $participants       = $this->M_admin->getParticipansAll();
 
-        $draw           = $this->input->post('draw');
-        $search         = $this->input->post('search')['value'];
-        $arr            = [];
-        $no             = $this->input->post('start')+1;
-        
+        $draw               = $this->input->post('draw');
+        $search             = $this->input->post('search')['value'];
+        $arr                = [];
+        $no                 = $this->input->post('start')+1;
+        $submissionState    = 1;
         foreach ($participants['records'] as $key => $val) {
             
+            $btnDetail      = '<button onclick="showMdlParticipantDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2"><i class="bi-eye"></i></button>';
+            $btnPass        = '<button onclick="showMdlChangePassword(\''.$val->user_id.'\')" class="btn btn-soft-primary btn-icon btn-sm me-2"><i class="bi-key"></i></button>';
+            $btnCheck       = '<button onclick="showMdlChecked(\''.$val->user_id.'\')" class="btn btn-soft-success btn-icon btn-sm me-2"><i class="bi-check"></i></button>';
             $step           = '<span class="badge bg-soft-secondary">Not yet fill submission</span>';
             $statusAccount  = '<span class="badge bg-soft-danger">Unverivied</span>';
             $statusSubmit   = '<span class="badge bg-soft-danger">Not Submitted</span>';
             $statusCheck    = '<span class="badge bg-soft-danger">Not Checked</span>';
-
-            if($val->status_payment == true){
-                $val->submit_data->status = (int) $val->submit_data->status;
-                if($val->submit_data->status ==  0 || $val->submit_data->status == 1){
-                    $statusSubmit = '<span class="badge bg-soft-danger">Not Submitted</span>';
-                }
-                if($val->submit_data->status == 2){
-                    $statusSubmit = '<span class="badge bg-soft-info">Submitted</span>';
-                }
-                if($val->submit_data->status == 3){
-                    $statusCheck = '<span class="badge bg-soft-success">Accepted</span>';
-                }
-                if($val->submit_data->status == 4){
-                    $statusCheck = '<span class="badge bg-soft-warning">Rejected</span>';
-                }
-            }
-
-            if($val->status_account == 1){
-                $statusAccount  = '<span class="badge bg-soft-success">Verified</span>';
-            }elseif($val->status_account == 2){
-                $statusAccount  = '<span class="badge bg-soft-warning">Suspended</span>';
-            }
 
             if($val->status_submit == true){
                 if($val->step_status == 1){
@@ -189,12 +189,39 @@ class Admin extends CI_Controller
                 }
             }
 
+            if($val->status_payment == true){
+                $val->submit_data->status = (int) $val->submit_data->status;
+                if($val->submit_data->status ==  0 || $val->submit_data->status == 1){
+                    $statusSubmit   = '<span class="badge bg-soft-danger">Not Submitted</span>';
+                    $submissionState= 1;
+                }
+                if($val->submit_data->status == 2){
+                    $statusSubmit   = '<span class="badge bg-soft-info">Submitted</span>';
+                    $submissionState= 2;
+                }
+                if($val->submit_data->status == 3){
+                    $step           = '<span class="badge bg-soft-success">Reviewed</span>';
+                    $statusSubmit   = '<span class="badge bg-soft-info">Submitted</span>';
+                    $statusCheck    = '<span class="badge bg-soft-success">Accepted</span>';
+                    $submissionState= 3;
+                }
+                if($val->submit_data->status == 4){
+                    $step           = '<span class="badge bg-soft-success">Reviewed</span>';
+                    $statusSubmit   = '<span class="badge bg-soft-info">Submitted</span>';
+                    $statusCheck    = '<span class="badge bg-soft-warning">Rejected</span>';
+                    $submissionState= 4;
+                }
+            }
+
+            if($val->status_account == 1){
+                $statusAccount  = '<span class="badge bg-soft-success">Verified</span>';
+            }elseif($val->status_account == 2){
+                $statusAccount  = '<span class="badge bg-soft-warning">Suspended</span>';
+            }
+
             $arr[$key] = [
                 "no"            => $no++,
-                "action"        => '
-                            <a target="_blank" href="'.site_url('admin/participant/'.$val->user_id).'" class="btn btn-soft-info btn-icon btn-sm"><i class="bi-eye"></i></a>
-                            <button onclick="showMdlChangePassword(\''.$val->user_id.'\')" class="btn btn-soft-primary btn-icon btn-sm"><i class="bi-key"></i></button>
-                            ',
+                "action"        => ($submissionState == 2 ? $btnCheck : '').$btnDetail.$btnPass,
                 "name"          => $val->name,
                 "email"         => $val->email,
                 "step"          => $step,

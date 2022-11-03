@@ -254,8 +254,7 @@
 								<!-- End Form Group -->
 								<!-- Form Group -->
 								<div class="mb-3">
-									<label for="validationFormFieldOfStudy
-									class=" form-label">Field of Study</label>
+									<label for="validationFormFieldOfStudy" class="form-label">Field of Study</label>
 
 									<div class="js-form-message">
 										<input type="text" class="form-control form-control-sm" name="fieldofstudy"

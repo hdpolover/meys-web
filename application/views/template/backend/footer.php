@@ -35,11 +35,12 @@
 <script src="<?= base_url(); ?>assets/vendor/imask/dist/imask.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/hs-quantity-counter/dist/hs-quantity-counter.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/tom-select/dist/js/tom-select.complete.min.js"></script>
-<script src="<?= site_url(); ?>assets/vendor/hs-add-field/dist/hs-add-field.min.js"></script>
-<script src="<?= site_url(); ?>assets/js/flatpickr.min.js"></script>
+<script src="<?= base_url(); ?>assets/vendor/hs-add-field/dist/hs-add-field.min.js"></script>
+<script src="<?= base_url(); ?>assets/vendor/hs-step-form/dist/hs-step-form.min.js"></script>
+<script src="<?= base_url(); ?>assets/js/flatpickr.min.js"></script>
 <!-- JS Front -->
 <script src="<?= base_url(); ?>assets/js/theme.min.js"></script>
-<script type="text/javascript" src="<?= base_url();?>assets/js/custom.js?<?=time();?>"></script>
+<script src="<?= base_url(); ?>assets/js/custom.js?<?=time();?>"></script>
 
 <!-- JS Plugins Init. -->
 <script>
@@ -103,7 +104,7 @@
 				$('button[type=submit]').prop("disabled", true);
 				// add spinner to button
 				$('button[type=submit]').html(
-					`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+					`<span class="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true"></span> loading...`
 				);
 				return;
 			}
@@ -215,6 +216,19 @@
 		// INITIALIZATION OF SELECT
 		// =======================================================
 		HSCore.components.HSTomSelect.init('.js-select')
+
+		// INITIALIZATION OF STEP FORM
+		// =======================================================
+		new HSStepForm('.js-step-form', {
+			finish($el) {
+				const $successMessageTempalte = $el.querySelector('.js-success-message').cloneNode(true)
+
+				$successMessageTempalte.style.display = 'block'
+
+				$el.style.display = 'none'
+				$el.parentElement.appendChild($successMessageTempalte)
+			}
+		})
 	})()
 
 </script>

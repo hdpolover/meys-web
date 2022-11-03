@@ -93,7 +93,7 @@
 					</div>
 				</div>
 				<!-- End Row -->
-				<table id="dataTable" class="table table-borderless table-thead-bordered w-100">
+				<table id="dataTable" class="table table-borderless table-thead-bordered nowrap w-100">
 					<thead class="thead-light">
 						<tr>
 							<th scope="col">No</th>
@@ -114,6 +114,20 @@
 	</div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="mdlParticipantDetail" tabindex="-1" aria-labelledby="mdlDeleteLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-xl">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="mdlDeleteLabel">Participant Detail</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="modalParticipantContent">
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End Modal -->
 
 <!-- Modal -->
 <div class="modal fade" id="mdlChangePass" tabindex="-1" aria-labelledby="mdlDeleteLabel" aria-hidden="true">
@@ -143,12 +157,46 @@
 	</div>
 </div>
 <!-- End Modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="mdlChecked" tabindex="-1" aria-labelledby="mdlDeleteLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="mdlDeleteLabel">Checked/Accepted Participant</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+
+			<div class="modal-body text-center">
+				<div class="text-center">Are you sure to checked/accepted this participant submission?</div>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+				<form action="<?= site_url('api/admin/checkedParticipant')?> " method="post"
+					class="js-validate need-validate" novalidate>
+					<input type="hidden" name="id" class="mdlChecked_id">
+					<button type="submit" class="btn btn-soft-success btn-sm">Check</button>
+				</form>
+				<form action="<?= site_url('api/admin/rejectedParticipant')?> " method="post"
+					class="js-validate need-validate" novalidate>
+					<input type="hidden" name="id" class="mdlChecked_id">
+					<button type="submit" class="btn btn-soft-danger btn-sm">Rejected</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End Modal -->
+
 <script>
 	var table = $('#dataTable').DataTable({
 		'processing': true,
 		'serverSide': true,
 		'ordering': false,
 		'searching': false,
+		"scrollX": true,
+		'responsive': true,
 		'serverMethod': 'post',
 		'ajax': {
 			'url': "<?= site_url('admin/getAjaxParticipant')?>",
@@ -188,6 +236,27 @@
 			}
 		]
 	});
+	const showMdlParticipantDetail = id => {
+		$('#mdlChecked_id').val(id);
+
+		$("#modalParticipantContent").html(
+			`<center class="py-5"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sedang memuat ...</center>`
+		);
+
+		$('#mdlParticipantDetail').modal('show')
+
+		jQuery.ajax({
+			url: "<?= site_url('admin/getDetailParticipant') ?>",
+			type: 'POST',
+			data: {
+				user_id: id
+			},
+			success: function (data) {
+				$("#modalParticipantContent").html(data);
+			}
+		});
+	}
+
 	const showMdlChangePassword = id => {
 		const pass = Math.random().toString(36).slice(-8);
 		$('#mdlChangePass_id').val(id);
@@ -195,9 +264,9 @@
 		$('.mdlChangePass_passLabel').html(pass);
 		$('#mdlChangePass').modal('show')
 	}
+
 	const showMdlChecked = id => {
-		const pass = Math.random().toString(36).slice(-8);
-		$('#mdlChecked_id').val(id);
+		$('.mdlChecked_id').val(id);
 		$('#mdlChecked').modal('show')
 	}
 

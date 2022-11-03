@@ -302,4 +302,16 @@ class M_admin extends CI_Model
         return $models;
     }
 
+    function checkedParticipant(){
+        $this->db->where('user_id', $this->input->post('id'));
+        $this->db->update('tb_participants', ['status' => 3]);
+        return ($this->db->affected_rows() != 1) ? false : true;
+    }
+
+    function rejectedParticipant(){
+        $this->db->where('user_id', $this->input->post('id'));
+        $this->db->update('tb_participants', ['status' => 4]);
+        return ($this->db->affected_rows() != 1) ? false : true;
+    }
+
 }
