@@ -233,16 +233,14 @@ class Master extends CI_Controller
 
     public function ajxGenRC(){
         $referral = strtoupper(substr($this->input->post('name'), 0, 3));
-        $ambassador = $this->db->order_by('id', 'desc')->limit(1)->get('tb_ambassador')->row();
-
-        if(empty($ambassador->id)){
+        $ambassador = $this->db->get_where('tb_ambassador', ['is_deleted' => 1])->num_rows();
+        
+        if($ambassador == 0){
             $referral .= '001';
         }else{
-            $lastOrder = (int)strlen($ambassador->referral_code) - 3;
-            $lastOrder = sprintf('%03d', substr($ambassador->referral_code, $lastOrder, 3) + 1);
-            $referral .= $lastOrder;
+            $lastOrder = $ambassador+1;
+            $referral .= "00".$lastOrder;
         }
-
         echo json_encode(['referral_code' => $referral]);
     }
 

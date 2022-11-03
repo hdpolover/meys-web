@@ -605,7 +605,7 @@
 								<!-- End Form Group -->
 								<!-- Form Group -->
 								<div class="mb-3">
-									<label for="validationFormUsernameLabel" class="form-label">Souce
+									<label for="validationFormUsernameLabel" class="form-label">Source
 										Account/Name</label>
 
 									<div class="js-form-message">
@@ -682,7 +682,7 @@
 									<span class="form-text"><b>Note:</b> Enter a dash (-) if you don't have any
 										code.</span>
 									<div class="form-text mt-0" id="checkRCStatus"></div>
-									<?php if(isset($participants->fullname)):?>
+									<?php if(isset($participants->referral_code) && $participants->referral_code !== "" && !is_null($participants->referral_code)):?>
 									<div class="form-text mt-0" id="RCStatus"><span class="text-success">Your referral
 											code is valid, affiliate with <b><?= $participants->fullname;?></b> !</span>
 									</div>

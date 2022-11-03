@@ -86,12 +86,12 @@
 															<input type="text" name="referral_code"
 																class="form-control inptRC-<?= $val->id;?>"
 																id="validationValidInput1"
-																value="<?= $val->referral_code;?> Code" readonly
-																required>
+																value="<?= $val->referral_code;?> Code" required>
 															<button type="button" onclick="generateRCEdit()"
 																class="btn btn-sm btn-success input-group-text"
 																id="basic-addon2">Generate</button>
 														</div>
+														<small class="text-secondary">generate or make kustom</small>
 													</div>
 												</div>
 											</div>
@@ -299,11 +299,12 @@
 								<label for="validationValidInput1" class="form-label">Referral Code</label>
 								<div class="input-group input-group-sm">
 									<input type="text" name="referral_code" class="form-control inptRC"
-										id="validationValidInput1" placeholder="referral Code" readonly required>
+										id="validationValidInput1" placeholder="referral Code" required>
 									<button type="button" onclick="generateRC()"
 										class="btn btn-sm btn-success input-group-text"
 										id="basic-addon2">Generate</button>
 								</div>
+								<small class="text-secondary">generate or make kustom</small>
 							</div>
 						</div>
 					</div>
@@ -420,6 +421,7 @@
 				name
 			},
 			success: function (res) {
+				console.log(res);
 				res = JSON.parse(res)
 				$('.inptRC').val(res.referral_code)
 			}

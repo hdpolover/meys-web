@@ -28,59 +28,82 @@
 	<div class="col-12">
 		<div class="card">
 			<div class="card-body">
-				<div class="row mb-4">
+				<div class="row mb-3">
 					<div class="col-sm mb-2 mb-sm-0">
 						<label for="">Email</label>
-						<input type="text" id="filter_email" class="form-control" placeholder="Email Filter" />
+						<input type="text" id="filter_email" class="form-control form-control-sm"
+							placeholder="Email Filter" />
 					</div>
 
 					<div class="col-sm mb-2 mb-sm-0">
 						<label for="">Name</label>
-						<input type="text" id="filter_name" class="form-control" placeholder="Name Filter">
+						<input type="text" id="filter_name" class="form-control form-control-sm"
+							placeholder="Name Filter">
 					</div>
 
 					<div class="col-sm mb-2 mb-sm-0">
-						<label for="">Phone Number</label>
-						<input type="text" id="filter_number" class="form-control" placeholder="Phone Filter">
+						<label for="">Phone</label>
+						<input type="text" id="filter_number" class="form-control form-control-sm"
+							placeholder="Phone Filter">
 					</div>
-				</div>
-				<div class="row d-none">
 					<div class="col-sm mb-2 mb-sm-0">
-						<label for="">Verified</label>
-						<select id="filter_verified" class="form-control">
+						<label for="">Account</label>
+						<select id="filter_verified" class="form-control form-control-sm">
 							<option value="">All</option>
 							<option value="1">Verified</option>
 							<option value="0">Not Verified</option>
+							<option value="2">Suspend</option>
 						</select>
 					</div>
-
+				</div>
+				<div class="row mb-3">
+					<div class="col-sm mb-2 mb-sm-0">
+						<label for="">Steps</label>
+						<select id="filter_step" class="form-control form-control-sm">
+							<option value="">All</option>
+							<option value="1">(1) Personal Data</option>
+							<option value="2">(2) Others</option>
+							<option value="3">(3) Question</option>
+							<option value="4">(4) Programs</option>
+							<option value="5">(5) Self Photo</option>
+							<option value="6">(6) Payment & Agreement</option>
+							<option value="7">Waiting for review</option>
+						</select>
+					</div>
 					<div class="col-sm mb-2 mb-sm-0">
 						<label for="">Submited</label>
-						<select id="filter_submited" class="form-control">
+						<select id="filter_submited" class="form-control form-control-sm">
 							<option value="">All</option>
-							<option value="1">Submited</option>
-							<option value="0">Not Submited</option>
+							<option value="2">Submited</option>
+							<option value="1">Not Submited</option>
 						</select>
 					</div>
 					<div class="col-sm mb-2 mb-sm-0">
 						<label for="">Checked</label>
-						<select id="filter_checked" class="form-control">
+						<select id="filter_checked" class="form-control form-control-sm">
 							<option value="">All</option>
-							<option value="1">Checked</option>
-							<option value="0">Not Checked</option>
+							<option value="3">Checked/Accepted</option>
+							<option value="2">Not Checked</option>
+							<option value="4">Rejected</option>
 						</select>
 					</div>
+					<div class="col-sm mb-2 mb-sm-0">
+						<button class="btn btn-sm btn-primary mt-4" onclick="btnSearch()"><i
+								class="bi-search"></i>&nbsp&nbspSearch</button>
+					</div>
 				</div>
-				<button class="btn btn-sm btn-primary mb-4" onclick="btnSearch()"><i
-						class="bi-search"></i>&nbsp&nbspSearch</button>
 				<!-- End Row -->
 				<table id="dataTable" class="table table-borderless table-thead-bordered w-100">
 					<thead class="thead-light">
 						<tr>
 							<th scope="col">No</th>
+							<th scope="col">Action</th>
 							<th scope="col">Name</th>
 							<th scope="col">Email</th>
-							<th scope="col">Action</th>
+							<th scope="col">Step</th>
+							<th scope="col">Account Status</th>
+							<th scope="col">Submit Status</th>
+							<th scope="col">Check Status</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -133,13 +156,17 @@
 				d.filterEmail = $('#filter_email').val()
 				d.filterName = $('#filter_name').val()
 				d.filterNumber = $('#filter_number').val()
-				// d.filterVerified = $('#filter_verified').val()
-				// d.filterSubmited = $('#filter_submited').val()
-				// d.filterChecked = $('#filter_checked').val()
+				d.filterVerified = $('#filter_verified').val()
+				d.filterSubmited = $('#filter_submited').val()
+				d.filterChecked = $('#filter_checked').val()
+				d.filterStep = $('#filter_step').val()
 			}
 		},
 		'columns': [{
 				data: 'no'
+			},
+			{
+				data: 'action'
 			},
 			{
 				data: 'name'
@@ -147,17 +174,17 @@
 			{
 				data: 'email'
 			},
-			// {
-			// 	data: 'step'
-			// },
-			// {
-			// 	data: 'statusSubmit'
-			// },
-			// {
-			// 	data: 'statusCheck'
-			// },
 			{
-				data: 'action'
+				data: 'step'
+			},
+			{
+				data: 'accountStatus'
+			},
+			{
+				data: 'submitStatus'
+			},
+			{
+				data: 'checkStatus'
 			}
 		]
 	});
@@ -177,43 +204,5 @@
 	function btnSearch() {
 		table.ajax.reload();
 	}
-
-	$(".selectorDetail").click(function () {
-
-		var user_id = $(this).attr('id');
-		$("#modalUserContent").html(
-			`<center class="py-5"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sedang memuat ...</center>`
-		);
-
-		jQuery.ajax({
-			url: "<?= site_url('admin/getDetailUser') ?>",
-			type: 'POST',
-			data: {
-				user_id: user_id
-			},
-			success: function (data) {
-				$("#modalUserContent").html(data);
-			}
-		});
-	});
-
-	$(".selectorApplicant").click(function () {
-
-		var user_id = $(this).attr('id');
-		$("#modalApplicantContent").html(
-			`<center class="py-5"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sedang memuat ...</center>`
-		);
-
-		jQuery.ajax({
-			url: "<?= site_url('admin/getDetailApplicant') ?>",
-			type: 'POST',
-			data: {
-				user_id: user_id
-			},
-			success: function (data) {
-				$("#modalApplicantContent").html(data);
-			}
-		});
-	});
 
 </script>
