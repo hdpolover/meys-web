@@ -34,7 +34,7 @@
   						<img class="navbar-brand-logo" src="<?= base_url(); ?>assets/images/logo.png" alt="Logo">
   					</a>
   					<a class="navbar-brand-badge">
-  						<span class="badge bg-soft-primary text-primary ms-2">v1.0</span>
+  						<span class="badge bg-soft-primary text-primary ms-2">v2.0.9</span>
   					</a>
   				</div>
   				<!-- End Default Logo -->

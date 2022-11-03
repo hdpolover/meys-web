@@ -102,6 +102,8 @@ class M_admin extends CI_Model
         $models = $this->db->get()->result();
 
         foreach($models as $key => $val){
+            $strip_email                    = explode("@", $val->email);
+            $models[$key]->name             = is_null($val->name) || $val->name == "" ? $strip_email[0] : $val->name;
             $models[$key]->status_account   = $val->active == 0 ? 0 : $val->status;
             $models[$key]->status_payment   = $this->checkPaymentUserAll($val->user_id)['status'];
             $models[$key]->payment_data     = $this->checkPaymentUserAll($val->user_id)['data'];
