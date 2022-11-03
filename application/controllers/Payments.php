@@ -27,7 +27,8 @@ class Payments extends CI_Controller
 
     public function index()
     {
-        $this->templateback->view('payments/list');
+        $data['payments'] = $this->M_payment->getAllPayments();
+        $this->templateback->view('payments/list', $data);
     }
 
     public function settings()

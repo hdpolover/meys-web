@@ -162,6 +162,55 @@ class M_payment extends CI_Model
         return ($this->db->affected_rows() != 1) ? false : true;
     }
 
+    function getAllPayments(){
+        $this->db->select('a.*, b.summit, c.payment_method, c.img_method, d.email, e.name, f.institution_workplace as institution')
+        ->from('tb_payments a')
+        ->join('m_payments_batch b', 'a.payment_batch = b.id')
+        ->join('m_payments_settings c', 'a.payment_setting = c.id')
+        ->join('tb_auth d', 'a.user_id = d.user_id')
+        ->join('tb_user e', 'a.user_id = e.user_id')
+        ->join('tb_participants f', 'a.user_id = f.user_id')
+        ->where(['a.is_deleted' => 0, 'a.status <' => 3])
+        ->group_by('a.user_id')
+        ->order_by('a.created_at DESC');
 
+        $models = $this->db->get()->result();
+
+        foreach($models as $key => $val){
+            $models[$key]->payment_history = $this->getUserPaymentBatchHistory($val->user_id, 2);
+        }
+
+        return $models;
+    }
+
+    function verificationPayment()
+    {
+        $id = $this->input->post('id');
+
+        $data = [
+            'status' => 2,
+            'modified_at' => time(),
+            'modified_by' => $this->session->userdata('user_id')
+        ];
+
+        $this->db->where('id', $id);
+        $this->db->update('tb_payments', $data);
+        return ($this->db->affected_rows() != 1) ? false : true;
+    }
+
+    function rejectedPayment()
+    {
+        $id = $this->input->post('id');
+
+        $data = [
+            'status' => 4,
+            'modified_at' => time(),
+            'modified_by' => $this->session->userdata('user_id')
+        ];
+
+        $this->db->where('id', $id);
+        $this->db->update('tb_payments', $data);
+        return ($this->db->affected_rows() != 1) ? false : true;
+    }
 
 }

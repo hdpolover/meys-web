@@ -44,7 +44,8 @@
   				<ul id="navbarSettings" class="navbar-nav nav nav-vertical nav-tabs nav-tabs-borderless nav-sm">
   					<li class="nav-item" id="tour-dashboard">
   						<a class="nav-link <?= ($this->uri->segment(2) == "dashboard" ? "active" : "") ?>"
-  							href="<?= site_url('admin/dashboard'); ?>"><i class="bi bi-window nav-icon"></i> Dashboard</a>
+  							href="<?= site_url('admin/dashboard'); ?>"><i class="bi bi-window nav-icon"></i>
+  							Dashboard</a>
   					</li>
   					<li class="nav-item" id="tour-statistics">
   						<a class="nav-link <?= ($this->uri->segment(2) == "statistics" ? "active" : "") ?>"
@@ -59,10 +60,9 @@
   					</li>
 
   					<li class="nav-item" id="tour-payments">
-  						<a
-  							class="nav-link <?= ($this->uri->segment(2) == "payments" ? "active" : "") ?> text-secondary"><i
-  								class="bi bi-credit-card-2-back nav-icon"></i> Payments <span
-  								class="badge bg-warning ms-2">locked</span> </a>
+  						<a class="nav-link <?= ($this->uri->segment(2) == "payments" ? "active" : "") ?>"
+  							href="<?= site_url('admin/payments'); ?>"><i
+  								class="bi bi-credit-card-2-back nav-icon"></i> Payments</a>
   					</li>
   					<li class="nav-item" id="tour-payment-settings">
   						<a class="nav-link <?= ($this->uri->segment(2) == "payment-settings" ? "active" : "") ?>"
@@ -87,7 +87,8 @@
   					</li>
   					<li class="nav-item" id="tour-eligilibity-countries">
   						<a class="nav-link <?= ($this->uri->segment(2) == "eligilibity-countries" ? "active" : "") ?>"
-  							href="<?= site_url('master/eligilibity-countries'); ?>"><i class="bi bi-file-break nav-icon"></i>
+  							href="<?= site_url('master/eligilibity-countries'); ?>"><i
+  								class="bi bi-file-break nav-icon"></i>
   							Eligilibity Countries</a>
   					</li>
   					<li class="nav-item" id="tour-announcements">
@@ -127,9 +128,9 @@
   						<span class="nav-subtitle">Settings</span>
   					</li>
   					<li class="nav-item" id="tour-landing">
-  						<a class="nav-link dropdown-toggle <?= ($this->uri->segment(2) == "landing-page" ? "active" : "") ?>" href="#snippetsSidebarNavFeaturesCollapse2" role="button"
-  							data-bs-toggle="collapse" aria-expanded="false"
-  							aria-controls="snippetsSidebarNavFeaturesCollapse2"><i
+  						<a class="nav-link dropdown-toggle <?= ($this->uri->segment(2) == "landing-page" ? "active" : "") ?>"
+  							href="#snippetsSidebarNavFeaturesCollapse2" role="button" data-bs-toggle="collapse"
+  							aria-expanded="false" aria-controls="snippetsSidebarNavFeaturesCollapse2"><i
   								class="bi bi-arrow-up-right-square nav-icon"></i> Landing Page</a>
 
   						<div id="snippetsSidebarNavFeaturesCollapse2" class="nav-collapse collapse ms-2">

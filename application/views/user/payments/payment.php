@@ -25,7 +25,7 @@
 					<?php elseif($val->payments->status == 3):?>
 					<span class="badge bg-danger">canceled</span>
 					<?php elseif($val->payments->status == 4):?>
-					<span class="badge bg-warning">-</span>
+					<span class="badge bg-danger">rejected</span>
 					<?php else:?>
 					<span class="badge bg-warning">-</span>
 					<?php endif;?>
