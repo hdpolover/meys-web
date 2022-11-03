@@ -127,15 +127,17 @@
 									<div class="modal-footer">
 										<button type="button" class="btn btn-outline-secondary btn-sm"
 											data-bs-dismiss="modal">Cancel</button>
-										<form action="<?= site_url('api/payment/verificationPayment')?> " method="post"
+										<form action="<?= site_url('api/payments/verificationPayment')?> " method="post"
 											class="js-validate need-validate" novalidate>
 											<input type="hidden" name="id" value="<?= $val->id;?>">
+											<input type="hidden" name="user_id" value="<?= $val->user_id;?>">
 											<button type="submit"
 												class="btn btn-soft-success btn-sm">Verification</button>
 										</form>
-										<form action="<?= site_url('api/payment/rejectedPayment')?> " method="post"
+										<form action="<?= site_url('api/payments/rejectedPayment')?> " method="post"
 											class="js-validate need-validate" novalidate>
 											<input type="hidden" name="id" value="<?= $val->id;?>">
+											<input type="hidden" name="user_id" value="<?= $val->user_id;?>">
 											<button type="submit" class="btn btn-soft-danger btn-sm">Rejected</button>
 										</form>
 									</div>

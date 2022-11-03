@@ -185,7 +185,17 @@ class M_payment extends CI_Model
 
     function verificationPayment()
     {
+        $user_id = $this->input->post('user_id');
         $id = $this->input->post('id');
+
+        $data = [
+            'is_payment' => 1,
+            'modified_at' => time(),
+            'modified_by' => $this->session->userdata('user_id')
+        ];
+
+        $this->db->where('user_id', $user_id);
+        $this->db->update('tb_participants', $data);
 
         $data = [
             'status' => 2,
