@@ -25,6 +25,12 @@
 				</div>
 				<!-- End Heading -->
 
+				<?php if(isset($act) && $act == 'session-expired'):?>
+				<div class="alert alert-primary small">
+					Your session already expired, please sign in again to continue your activity
+				</div>
+				<?php endif;?>
+
 				<!-- Form -->
 				<form action="<?= site_url('authentication/proses_login'); ?>" method="POST"
 					class="js-validate needs-validation" novalidate>

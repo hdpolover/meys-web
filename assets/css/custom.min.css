@@ -557,15 +557,58 @@ div.dataTables_wrapper {
 }
 
 .payments-setting-badge {
-    position: absolute;
-    top: 8px;
-    right: 8px;
+	position: absolute;
+	top: 8px;
+	right: 8px;
 }
 
 .bg-blue-dark {
 	background-color: #142140 !important;
 }
 
-.form-label{
+.form-label {
 	font-size: 1rem !important;
+}
+
+.online-card {
+	position: fixed;
+	bottom: -45%;
+	right: 15px;
+	z-index: 9999;
+	border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 0px;
+	min-width: 15rem;
+	min-height: 20rem;
+	max-height: 30rem;
+	height: 30rem;
+	box-shadow: 0rem 0 1.5rem rgb(140 152 164 / 30%);
+	transition: all ease 1s;
+	-webkit-transition: all ease 1s;
+}
+
+.maximized {
+	bottom: 0% !important;
+}
+
+.dot {
+	height: 15px;
+	width: 15px;
+	background-color: #00c9a7;
+	border-radius: 50%;
+	display: inline-block;
+	margin-right: 5px;
+}
+
+.online-list {
+	max-height: 25rem;
+	max-width: 12rem;
+	overflow-y: auto;
+}
+
+.online-list-text {
+	overflow: hidden;
+	position: relative;
+	text-decoration: none;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }

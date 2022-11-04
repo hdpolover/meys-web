@@ -21,6 +21,15 @@ class User extends CI_Controller
             $this->session->set_flashdata('notif_warning', "Please login to continue");
             redirect('sign-in');
         }
+
+        // cek akun aktif
+        $user = $this->M_auth->get_userByID($this->session->userdata('user_id'));
+        if($user != false){
+            if($user->active == 0){
+                $this->session->set_flashdata('error', "Hi {$user->name}, please verified your email first");
+                redirect(site_url('verification-email'));
+            }
+        }
     }
 
     public function index()

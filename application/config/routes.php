@@ -15,6 +15,7 @@ $route['announcements/(:any)'] = 'announcements/detail/$1';
 $route['sign-in'] = 'authentication';
 $route['sign-up'] = 'authentication/signUp';
 $route['sign-out'] = 'authentication/logout';
+$route['offline'] = 'authentication/offline';
 $route['verification-email'] = 'authentication/verificationEmail';
 $route['forgot-password'] = 'authentication/forgotPassword';
 $route['reset-password/(:any)'] = 'authentication/ubah_password/$1';

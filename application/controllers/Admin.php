@@ -23,6 +23,13 @@ class Admin extends CI_Controller
         }
     }
 
+    public function loadOnlineUsers()
+    {
+        $data['online_users'] = $this->M_admin->getOnlineUsers();
+        
+        $this->load->view('online_users', $data);
+    }
+
     public function index()
     {
         $this->templateback->view('admin/dashboard');
@@ -90,6 +97,19 @@ class Admin extends CI_Controller
                     $this->templatemobile->view('admin/settings/general');
                 } else {
                     $this->templateback->view('admin/settings/general');
+                }
+                break;
+
+            case 'user-log':
+                $data['master_password'] = $this->M_admin->get_settingsValue('master_password');
+                $data['account'] = $this->M_admin->get_allAccount();
+                $data['admin'] = $this->M_admin->get_adminAccount();
+                $data['super'] = $this->M_admin->get_superAccount();
+
+                if ($this->agent->is_mobile()) {
+                    $this->templatemobile->view('admin/settings/user_log', $data);
+                } else {
+                    $this->templateback->view('admin/settings/user_log', $data);
                 }
                 break;
 

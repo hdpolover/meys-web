@@ -56,6 +56,17 @@
   					<li class="nav-item my-2 my-lg-5"></li>
 
   					<li class="nav-item">
+  						<span class="nav-subtitle">Participants</span>
+  					</li>
+  					<li class="nav-item" id="tour-participans">
+  						<a class="nav-link <?= ($this->uri->segment(2) == "participans" ? "active" : "") ?>"
+  							href="<?= site_url('admin/participans'); ?>"><i class="bi bi-people nav-icon"></i>
+  							Participants</a>
+  					</li>
+
+  					<li class="nav-item my-2 my-lg-5"></li>
+
+  					<li class="nav-item">
   						<span class="nav-subtitle">Payment</span>
   					</li>
 
@@ -63,6 +74,11 @@
   						<a class="nav-link <?= ($this->uri->segment(2) == "payments" ? "active" : "") ?>"
   							href="<?= site_url('admin/payments'); ?>"><i
   								class="bi bi-credit-card-2-back nav-icon"></i> Payments</a>
+  					</li>
+  					<li class="nav-item" id="tour-payment-batch">
+  						<a class="nav-link <?= ($this->uri->segment(2) == "payment-batch" ? "active" : "") ?>"
+  							href="<?= site_url('master/payment-batch'); ?>"><i
+  								class="bi bi-credit-card-2-front nav-icon"></i> Payment Batch</a>
   					</li>
   					<li class="nav-item" id="tour-payment-settings">
   						<a class="nav-link <?= ($this->uri->segment(2) == "payment-settings" ? "active" : "") ?>"
@@ -101,25 +117,9 @@
   							href="<?= site_url('master/faq'); ?>"><i class="bi bi-chat-left-dots nav-icon"></i>
   							FAQ</a>
   					</li>
-  					<li class="nav-item" id="tour-payment-batch">
-  						<a class="nav-link <?= ($this->uri->segment(2) == "payment-batch" ? "active" : "") ?>"
-  							href="<?= site_url('master/payment-batch'); ?>"><i
-  								class="bi bi-credit-card-2-front nav-icon"></i> Payment Batch</a>
-  					</li>
   					<li class="nav-item d-none" id="tour-entrant">
   						<a class="nav-link <?= ($this->uri->segment(2) == "users" ? "active" : "") ?>"
   							href="<?= site_url('users'); ?>"><i class="bi bi-clipboard nav-icon"></i> Entrant Form</a>
-  					</li>
-
-  					<li class="nav-item my-2 my-lg-5"></li>
-
-  					<li class="nav-item">
-  						<span class="nav-subtitle">Participants</span>
-  					</li>
-  					<li class="nav-item" id="tour-participans">
-  						<a class="nav-link <?= ($this->uri->segment(2) == "participans" ? "active" : "") ?>"
-  							href="<?= site_url('admin/participans'); ?>"><i class="bi bi-people nav-icon"></i>
-  							Participants</a>
   					</li>
 
   					<li class="nav-item my-2 my-lg-5"></li>

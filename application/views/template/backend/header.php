@@ -46,7 +46,7 @@
 	<!-- CSS Front Template -->
 	<link rel="stylesheet" href="<?= base_url(); ?>assets/css/theme.min.css">
 	<link rel="stylesheet" href="<?= base_url(); ?>assets/css/docs.min.css">
-	<link rel="stylesheet" href="<?= base_url(); ?>assets/css/custom.min.css">
+	<link rel="stylesheet" href="<?= base_url(); ?>assets/css/custom.min.css?<?= time();?>">
 
 	<!-- JS Global Compulsory  -->
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>

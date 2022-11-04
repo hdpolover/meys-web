@@ -24,6 +24,7 @@
 		</a>
 		<!-- End Card -->
 	</div>
+	<?php if($this->session->userdata('role') == 0):?>
 	<!-- End Col -->
 	<div class="col mb-4">
 		<!-- Card -->
@@ -34,6 +35,21 @@
 			<div class="card-body">
 				<h4 class="card-title text-inherit">Credentials</h4>
 				<p class="card-text small text-body">Manage admin & user credentials</p>
+			</div>
+		</a>
+		<!-- End Card -->
+	</div>
+	<!-- End Col -->
+	<?php endif;?>
+	<div class="col mb-4">
+		<!-- Card -->
+		<a class="card card-sm card-transition h-100" href="<?= site_url('admin/settings?p=user-log'); ?>"
+			data-aos="fade-up">
+			<img class="card-img p-2" src="<?= base_url(); ?>assets/svg/design-system/docs-divider.svg"
+				alt="Image Description">
+			<div class="card-body">
+				<h4 class="card-title text-inherit">User Log</h4>
+				<p class="card-text small text-body">Manage all user log</p>
 			</div>
 		</a>
 		<!-- End Card -->

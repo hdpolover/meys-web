@@ -259,4 +259,18 @@ class M_auth extends CI_Model
         $this->db->where('user_id', $user_id);
         $this->db->delete('tb_auth');
     }
+
+    public function makeOnline($user_id = null){
+        $this->db->where('user_id', $user_id);
+        $this->db->update('tb_auth', ['online' => 1]);
+    }
+
+    public function makeOffline($user_id = null){
+        $this->db->where('user_id', $user_id);
+        $this->db->update('tb_auth', ['online' => 0]);
+    }
+
+    public function getUsersOnline(){
+        return $this->db->get_where('tb_auth', ['is_deleted' => 0, 'online' => 1])->result();
+    }
 }

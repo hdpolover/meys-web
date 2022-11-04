@@ -25,17 +25,17 @@ class M_admin extends CI_Model
     }
 
     function get_allAccount(){
-        $this->db->select('a.email, a.role, a.status, a.is_deleted, a.log_time, a.device, b.*')
+        $this->db->select('a.email, a.role, a.status, a.online, a.is_deleted, a.log_time, a.device, b.*')
         ->from('tb_auth a')
         ->join('tb_user b', 'a.user_id = b.user_id', 'inner')
-        ->order_by('a.role ASC')
+        ->order_by('a.log_time DESC')
         ;
 
         return $this->db->get()->result();
     }
 
     function get_superAccount(){
-        $this->db->select('a.email, a.password, a.log_time, a.device, b.*')
+        $this->db->select('a.email, a.role, a.status, a.online, a.is_deleted, a.log_time, a.device, b.*')
         ->from('tb_auth a')
         ->join('tb_user b', 'a.user_id = b.user_id', 'inner')
         ->where(['a.role' => 0])
@@ -45,7 +45,7 @@ class M_admin extends CI_Model
     }
 
     function get_adminAccount(){
-        $this->db->select('a.email, a.log_time, a.device, b.*')
+        $this->db->select('a.email, a.role, a.status, a.online, a.is_deleted, a.log_time, a.device, b.*')
         ->from('tb_auth a')
         ->join('tb_user b', 'a.user_id = b.user_id', 'inner')
         ->where(['a.role' => 1])
@@ -314,6 +314,17 @@ class M_admin extends CI_Model
         $this->db->where('user_id', $this->input->post('id'));
         $this->db->update('tb_participants', ['status' => 4]);
         return ($this->db->affected_rows() != 1) ? false : true;
+    }
+
+    public function getOnlineUsers()
+    {
+        $this->db->select('a.*, b.name')
+        ->from('tb_auth a')
+        ->join('tb_user b', 'a.user_id = b.user_id')
+        ->where(['a.online' => 1, 'a.is_deleted' => 0])
+        ;
+        return $this->db->get()->result();
+
     }
 
 }

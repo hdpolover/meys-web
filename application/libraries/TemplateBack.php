@@ -16,6 +16,17 @@ class TemplateBack
         return $query->row()->value;
     }
 
+    public function getOnlineUsers()
+    {
+        $this->_ci->db->select('a.*, b.name')
+        ->from('tb_auth a')
+        ->join('tb_user b', 'a.user_id = b.user_id')
+        ->where(['a.online' => 1, 'a.is_deleted' => 0])
+        ;
+        return $this->_ci->db->get()->result();
+
+    }
+
     public function view($content, $data = null)
     {
         $data['web_title'] = $this->getSettingsValue('web_title');
@@ -33,6 +44,8 @@ class TemplateBack
         $data['sosmed_twitter'] = $this->getSettingsValue('sosmed_twitter');
         $data['sosmed_facebook'] = $this->getSettingsValue('sosmed_facebook');
         $data['sosmed_yt'] = $this->getSettingsValue('sosmed_yt');
+
+        $data['online_users'] = $this->getOnlineUsers();
 
         $this->_ci->load->view('template/backend/header', $data);
         $this->_ci->load->view('template/alert', $data);

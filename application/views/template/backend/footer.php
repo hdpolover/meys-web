@@ -1,5 +1,23 @@
 </div>
 <!-- End Content -->
+
+<div class="card online-card minimized">
+	<div class="card-header p-3 online-action cursor d-flex align-items-center">
+		<span class="dot"></span> online users
+	</div>
+	<div class="card-body p-3" id="online-users">
+		<ul class="list-checked list-checked-bg-success online-list">
+			<?php if(!empty($online_users)):?>
+			<?php foreach($online_users as $key => $val):?>
+			<li class="list-checked-item online-list-text"><?= $val->name;?></li>
+			<?php endforeach;?>
+			<?php else:?>
+			<li class="text-center">no users online</li>
+			<?php endif;?>
+		</ul>
+	</div>
+</div>
+
 </main>
 <!-- ========== END MAIN CONTENT ========== -->
 
@@ -44,6 +62,17 @@
 
 <!-- JS Plugins Init. -->
 <script>
+	$(document).ready(function () {
+		refreshTable();
+	});
+
+	function refreshTable() {
+		$("#online-users").empty();
+		$("#online-users").load("<?= site_url('admin/loadOnlineUsers')?>", function () {
+			setTimeout(refreshTable, 5000);
+		});
+	}
+
 	function tournow() {
 		introJs().setOptions({
 			disableInteraction: true,
@@ -59,8 +88,14 @@
 				element: document.querySelector('#tour-statistics'),
 				intro: "See all statistics of your website in here"
 			}, {
+				element: document.querySelector('#tour-participans'),
+				intro: "View and manage all participans information on this page"
+			}, {
 				element: document.querySelector('#tour-payments'),
 				intro: "Manage participans payments with ease on this page"
+			}, {
+				element: document.querySelector('#tour-payment-batch'),
+				intro: "Manage payments batch for participans at here"
 			}, {
 				element: document.querySelector('#tour-payment-settings'),
 				intro: "Manage payment settings with ease on this page"
@@ -76,12 +111,6 @@
 			}, {
 				element: document.querySelector('#tour-announcements'),
 				intro: "You can manage all announcements on here"
-			}, {
-				element: document.querySelector('#tour-payment-batch'),
-				intro: "Manage payments batch for participans at here"
-			}, {
-				element: document.querySelector('#tour-participans'),
-				intro: "View and manage all participans information on this page"
 			}, {
 				element: document.querySelector('#tour-landing'),
 				intro: "You can manage landing page setting from home to gallery in here"

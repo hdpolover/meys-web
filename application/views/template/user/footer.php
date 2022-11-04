@@ -167,6 +167,7 @@
          <!-- JS Front -->
          <script src="<?= base_url();?>assets/js/theme.min.js"></script>
          <script type="text/javascript" src="<?= base_url();?>assets/js/custom.js?<?=time();?>"></script>
+         <script type="text/javascript" src="<?= base_url();?>assets/js/online.js?<?=time();?>"></script>
 
          <!-- JS Plugins Init. -->
          <script>

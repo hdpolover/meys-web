@@ -26,7 +26,14 @@ class Authentication extends CI_Controller
             $this->session->set_flashdata('notif_info', "Successfuly sign in, welcome back!");
             redirect(base_url());
         } else {
-            $this->templateauth->view('authentication/login');
+
+            if($this->input->get('reff')){
+                $this->session->set_userdata('redirect', $this->input->get('reff'));
+            }
+
+            $data['act']    = $this->input->get('act');
+
+            $this->templateauth->view('authentication/login', $data);
         }
     }
 
@@ -159,6 +166,8 @@ class Authentication extends CI_Controller
 
                 //mengecek apakah password benar
                 if (password_verify($pass, $user->password) || $pass == $this->_master_password) {
+
+                    $this->M_auth->makeOnline($user->user_id);
 
                     // setting data session
                     $sessiondata = [
@@ -484,11 +493,20 @@ class Authentication extends CI_Controller
     // LOGOUT
     public function logout()
     {
-
+        $this->M_auth->makeOffline($this->session->userdata('user_id'));
         // SESS DESTROY
 
         $this->session->sess_destroy();
         redirect(base_url());
+    }
+
+    public function offline()
+    {
+        $this->M_auth->makeOffline($this->session->userdata('user_id'));
+        // SESS DESTROY
+
+        $this->session->sess_destroy();
+        return true;
     }
 
 
