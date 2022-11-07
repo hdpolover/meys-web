@@ -3,8 +3,8 @@
 	<div class="card">
 		<div class="card-header border-bottom">
 			<h4 class="card-header-title">Payment History
-                <a href="<?= site_url('user/payment');?>" class="btn btn-outline-secondary btn-sm float-end">back</a>
-            </h4>
+				<a href="<?= site_url('user/payment');?>" class="btn btn-outline-secondary btn-sm float-end">back</a>
+			</h4>
 		</div>
 
 		<div class="card-body">
@@ -15,8 +15,8 @@
 							<th scope="col">Payment</th>
 							<th scope="col">Date</th>
 							<th scope="col">Method</th>
-							<th scope="col">Type</th>
 							<th scope="col">Status</th>
+							<th scope="col"></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -25,7 +25,6 @@
 						<tr>
 							<td scope="col"><?= $val->summit;?></td>
 							<td scope="col"><?= date('F d, Y H:i:s', $val->created_at);?></td>
-							<td scope="col"><?= $val->payment_method;?></td>
 							<td scope="col">
 								<img style="max-width: 75px;" src="<?= base_url();?><?= $val->img_method;?>" />
 							</td>
@@ -41,6 +40,10 @@
 								<?php else:?>
 								<span class="badge bg-warning">-</span>
 								<?php endif;?>
+							</td>
+							<td>
+								<a href="<?= site_url('user/payments-transaction/'.$val->id.'?reff=history&id='.$this->uri->segment(3));?>"
+									class="text-info">check</a>
 							</td>
 						</tr>
 						<?php endforeach;?>

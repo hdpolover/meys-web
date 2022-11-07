@@ -28,9 +28,21 @@
     				</div>
     				<!-- End Heading -->
 
+    				<?php if(!is_null($referral_code)):?>
+    				<?php if(!empty($referral)):?>
+    				<div class="alert alert-success small">
+    					You register using <b><?= $referral->fullname;?>'s</b> affiliate code!
+    				</div>
+    				<?php else:?>
+    				<div class="alert alert-warning small">
+    					Your referral code is not affiliate with any ambassador
+    				</div>
+    				<?php endif;?>
+    				<?php endif;?>
     				<!-- Form -->
     				<form action="<?= site_url('authentication/proses_daftar'); ?>" method="POST"
     					class="js-validate needs-validation" autocomplete="on" novalidate>
+    					<input type="hidden" name="referral_code" value="<?= $referral_code;?>">
     					<!-- Form -->
     					<div class="mb-3">
     						<label class="form-label" for="signupModalFormSignupName">Your Full Name</label>
@@ -122,7 +134,8 @@
     					</div>
 
     					<div class="text-center">
-    						<p>Already had an account? <a class="link" href="<?= site_url('sign-in'); ?>">sign in here</a>
+    						<p>Already had an account? <a class="link" href="<?= site_url('sign-in'); ?>">sign in
+    								here</a>
     						</p>
     					</div>
     				</form>
@@ -146,4 +159,5 @@
     			}
     		});
     	});
+
     </script>

@@ -81,6 +81,7 @@ class M_auth extends CI_Model
 
         $email = htmlspecialchars($this->input->post('email'), true);
         $password = htmlspecialchars($this->input->post('password'), true);
+        $referral_code = $this->input->post('referral_code');
 
         // TB USER
         $name = htmlspecialchars($this->input->post('name'), true);
@@ -105,7 +106,8 @@ class M_auth extends CI_Model
             'user_id' => $user_id,
             'email' => $email,
             'password' => password_hash($password, PASSWORD_DEFAULT),
-            'created_at' => time()
+            'referral_code' => $referral_code,
+            'created_at' => time(),
         ];
 
         $this->db->insert('tb_auth', $auth);

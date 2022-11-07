@@ -31,6 +31,13 @@ class Payments extends CI_Controller
             
             if ($upload['status'] == true) {
                 if ($this->M_payment->manualPayment($upload['filename']) == true) {
+
+                    $subject = "Payment send - Middle East Youth Summit";
+                    $message = "Hi, your manual transfer payment for Middle East Yout Summit has been send to our system. Please wait for further notice until our Team verifed your payment proof";
+
+                    // mengirimemail
+                    sendMail(htmlspecialchars($this->session->userdata("email"), true), $subject, $message);
+
                     $this->session->set_flashdata('notif_success', 'Succesfuly send your payment ');
                     redirect(site_url('user/payment'));
                 } else {
@@ -50,6 +57,13 @@ class Payments extends CI_Controller
     public function manualPaymentCancel()
     {
         if ($this->M_payment->manualPaymentCancel() == true) {
+
+            $subject = "Payment cancel - Middle East Youth Summit";
+            $message = "Hi, you has been canceled your payment for Middle East Youth Summit. Please make payment as requested if you still not yet make payment";
+
+            // mengirimemail
+            sendMail(htmlspecialchars($this->session->userdata("email"), true), $subject, $message);
+
             $this->session->set_flashdata('notif_success', 'Succesfuly cancel your current payment ');
             redirect(site_url('user/payment'));
         } else {

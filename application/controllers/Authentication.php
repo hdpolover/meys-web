@@ -9,7 +9,7 @@ class Authentication extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model(['M_auth']);
+        $this->load->model(['M_auth', 'M_master']);
 
         $this->_master_password = $this->M_auth->getSetting('master_password') != false ? $this->M_auth->getSetting('master_password') : 'SU_MHND19';
     }
@@ -46,10 +46,17 @@ class Authentication extends CI_Controller
                 $uri = uri_string();
             }
             $this->session->set_userdata('redirect', $uri);
-            $this->session->set_flashdata('notif_info', "You already sign in");
+            $this->session->set_flashdata('notif_info', "You already sign in, please sign out first to register new account");
             redirect(base_url());
         } else {
-            $this->templateauth->view('authentication/register');
+            $referral_code = null;
+
+            $referral_code = $this->input->get('affiliate_code');
+            $ambassador = $this->M_master->getAmbasadorByReferral($referral_code);
+            $data['referral_code'] = $referral_code;
+            $data['referral'] = $ambassador;
+            // ej($data);
+            $this->templateauth->view('authentication/register', $data);
         }
     }
 

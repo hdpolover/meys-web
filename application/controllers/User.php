@@ -100,7 +100,6 @@ class User extends CI_Controller
         $data['logo_style']     = 1;
         $data['btn_sign_up']    = "btn-light";
         $data['btn_sign_in']    = "btn-outline-light";
-        
         $data['payment_history']  = $this->M_payment->getUserPaymentBatchHistory($this->session->userdata('user_id'), $batch_id);
         
         $this->templateuser->view('user/payments/payment_history', $data);
@@ -115,6 +114,8 @@ class User extends CI_Controller
         $data['logo_style']     = 1;
         $data['btn_sign_up']    = "btn-light";
         $data['btn_sign_in']    = "btn-outline-light";
+        $data['reff']['type']   = $this->input->get('reff');
+        $data['reff']['id']     = $this->input->get('id');
         
         $data['payment_detail']  = $this->M_payment->getUserPaymentDetail($payment_id);
         
@@ -124,7 +125,7 @@ class User extends CI_Controller
     public function submission()
     {
         $data['user'] = $this->M_auth->get_auth($this->session->userdata('email'));
-
+        
         // style
         $data['navbar_style']   = "navbar-dark";
         $data['logo_style']     = 1;

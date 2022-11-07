@@ -26,4 +26,20 @@ class Cronjob extends CI_Controller
 
         ej($arr);
     }
+
+    public function sendAnnouncementsUsers()
+    {
+        $users = $this->M_auth->getUsersAnnouncements();
+        $arr = [];
+        if(!empty($users)){
+            foreach ($users as $key => $val) {
+                if(strtotime("+6 minutes", $val->log_time) < time()){
+                    $this->M_auth->makeOffline($val->user_id);
+                    $arr[$key] = $val;
+                }
+            }
+        }
+
+        ej($arr);
+    }
 }

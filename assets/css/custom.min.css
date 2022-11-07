@@ -571,6 +571,7 @@ div.dataTables_wrapper {
 }
 
 .online-card {
+	display: none;
 	position: fixed;
 	bottom: -45%;
 	right: 15px;

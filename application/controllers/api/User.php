@@ -108,6 +108,13 @@ class User extends CI_Controller
 
     public function ajxPostSubmission(){
         if($this->M_user->ajxPostSubmission() == true){
+
+            $subject = "Submission submitted - Middle East Youth Summit";
+            $message = "Hi, your submission has been submitted to our system. You will receive further notice regarding your submission, or contact us if you had any question";
+
+            // mengirimemail
+            sendMail(htmlspecialchars($this->session->userdata("email"), true), $subject, $message);
+
             echo json_encode([
                 'status' => true,
                 'message' => 'success saved submission'

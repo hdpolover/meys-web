@@ -29,8 +29,33 @@ class M_user extends CI_Model
         ;
 
         $models = $this->db->get()->row();
-
+        $user   = $this->get_userByID($user_id);
+        if($models->referral_code == 0 && $user != false){
+            $models->referral_code = $user->referral_code;
+            $models->fullname = $this->getAmbasadorByReferral($models->referral_code)->fullname;
+        }
+        
         return $models;
+    }
+
+    public function get_userByID($user_id)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_auth a');
+        $this->db->join('tb_user b', 'a.user_id = b.user_id', 'left');
+        $this->db->where('a.user_id', $user_id);
+        $query = $this->db->get();
+
+        // jika hasil dari query diatas memiliki lebih dari 0 record
+        if ($query->num_rows() > 0) {
+            return $query->row();
+        } else {
+            return false;
+        }
+    }
+
+    function getAmbasadorByReferral($referral_code = null){
+        return $this->db->get_where('tb_ambassador', ['referral_code' => $referral_code, 'status' => 1, 'is_deleted' => 0])->row();
     }
 
     function getUserParticipansEssay($user_id, $participans_id){

@@ -672,7 +672,7 @@
 									<div class="js-form-message input-group">
 										<input type="text" class="form-control form-control-sm" name="referral"
 											id="referral_code" placeholder="Referral Code"
-											value="<?= isset($participants->referral_code) ? $participants->referral_code : '' ;?>"
+											value="<?= isset($participants->referral_code) && $participants->referral_code !== 0 ? $participants->referral_code : '' ;?>"
 											aria-label="sourceAccount" data-msg="Please enter your fullname."
 											onkeyup="checkReferral()">
 										<button class="btn btn-success btn-sm" onclick="checkReferral()" type="button"
@@ -681,7 +681,7 @@
 									<span class="form-text"><b>Note:</b> Enter a dash (-) if you don't have any
 										code.</span>
 									<div class="form-text mt-0" id="checkRCStatus"></div>
-									<?php if(isset($participants->referral_code) && $participants->referral_code !== "" && !is_null($participants->referral_code)):?>
+									<?php if(isset($participants->referral_code) && $participants->referral_code != "" && !is_null($participants->referral_code) && $participants->referral_code !== 0):?>
 									<div class="form-text mt-0" id="RCStatus"><span class="text-success">Your referral
 											code is valid, affiliate with <b><?= $participants->fullname;?></b> !</span>
 									</div>

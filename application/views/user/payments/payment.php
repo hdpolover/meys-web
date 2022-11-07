@@ -7,6 +7,11 @@
 	</div>
 	<!-- End Card -->
 
+	<div class="alert alert-soft-info mb-0">
+		If you use manual transfer. Please transfer money as requested! if you transfer less or more your
+		payment had high chances to be decline by our.
+	</div>
+
 	<div class="row">
 		<?php if(!empty($payment_batch)):?>
 		<?php foreach($payment_batch as $key => $val):?>
@@ -26,6 +31,8 @@
 					<span class="badge bg-danger">canceled</span>
 					<?php elseif($val->payments->status == 4):?>
 					<span class="badge bg-danger">rejected</span>
+					<p class="my-0"><small class="text-info">your payment is rejected, please contact us for more
+							info</small></p>
 					<?php else:?>
 					<span class="badge bg-warning">-</span>
 					<?php endif;?>
@@ -42,14 +49,17 @@
 					</div>
 					<div>
 						<span class="card-subtitle">Total (IDR)</span>
-						<h3 class="text-primary">Rp<?= number_format($val->amount)?></h3>
+						<h3 class="text-primary">Rp. <?= number_format($val->amount)?></h3>
 						<b>OR</b>
 						<span class="card-subtitle mt-1">Total (USD)</span>
 						<h3 class="text-primary">$<?= $val->amount_usd?></h3>
 					</div>
-					<?php if(is_null($val->payments)):?>
+					<div>
+						<span class="text-secondary small"><?= $val->description;?></span>
+					</div>
+					<?php if(is_null($val->payments) || $val->payments->status == 4):?>
 					<button type="button" class="btn btn-outline-secondary btn-sm purchase-button w-100 mt-2"
-						disabled>Pay (locked)</button>
+						disabled>Pay (auto) (locked)</button>
 					<button type="button" class="btn btn-warning btn-sm purchase-button w-100 mt-2"
 						data-bs-toggle="modal" data-bs-target="#manual-transfer-<?= $val->id;?>">Manual
 						Transfer</button>
@@ -120,6 +130,9 @@
 									<p>There is not yet payment data for this method</p>
 									<?php else:?>
 									<ul class="list-pointer list-pointer-sm list-pointer-primary">
+										<li class="list-pointer-item text-danger"><b>Payment FEE need to tranfser</b>:
+											<b>Rp. <?= number_format($val->amount)?> (IDR)</b> /
+											<b>$<?= number_format($val->amount_usd)?> (USD)</b></li>
 										<?php foreach($v->data as $kk => $vv):?>
 										<li class="list-pointer-item"><b><?= ucwords(str_replace("_", " ", $kk));?></b>:
 											<?= $vv;?></li>
@@ -149,9 +162,11 @@
 								</figure>
 								<div class="input-group">
 									<input type="file" class="form-control form-control-sm imgprev" name="image"
-										accept="image/*" id="poster-announcements">
+										accept="image/*" id="poster-announcements" required>
 								</div>
-								<small class="text-muted">Max file size 1Mb</small>
+								<small class="text-muted">Max file size 1Mb. <span class="text-danger">Upload proof that
+										you already transfer money as
+										requested for this payment!</span></small>
 							</div>
 
 							<div class="form-group mt-2">

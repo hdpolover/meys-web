@@ -10,9 +10,15 @@
     							<h3>Payment Status</h3>
     						</div>
     						<div class="col col-md-3" style="text-align: right;">
+    							<?php if($reff['type'] == 'history'):?>
+    							<a class="link link-sm link-secondary" href="<?= site_url('user/payments-history/'.$reff['id'])?>">
+    								<i class="bi-chevron-left small ms-1"></i> Go back
+    							</a>
+    							<?php else:?>
     							<a class="link link-sm link-secondary" href="<?= site_url('user/payment')?>">
     								<i class="bi-chevron-left small ms-1"></i> Go back
     							</a>
+    							<?php endif;?>
     						</div>
     					</div>
     					<div id="boxStatus" class="text-center mt-4 mb-4">

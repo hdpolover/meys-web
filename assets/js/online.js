@@ -16,7 +16,7 @@ jQuery(function ($) {
 
 	$(window).on('mousemove', function () {
 		clearInterval(timer);
-		timer = setInterval(update, (5 *60*1000));
+		// timer = setInterval(update, (5 *60*1000));
 	}).trigger('mousemove');
 
 	function update() {

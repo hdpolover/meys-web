@@ -92,19 +92,19 @@
     								<li class="nav-item">
     									<a class="nav-link <?= ($this->uri->segment(2) == "payment" ? "active" : "") ?>"
     										href="<?= site_url('user/payment'); ?>">
-    										<i class="bi-credit-card nav-icon"></i> Payment
+    										<i class="bi-credit-card nav-icon"></i> Payment <span class="badge bg-soft-danger text-danger rounded-pill nav-link-badge">!</span>
     									</a>
     								</li>
     								<li class="nav-item">
     									<a class="nav-link <?= ($this->uri->segment(2) == "announcements" ? "active" : "") ?>"
     										href="<?= site_url('user/announcements'); ?>">
-    										<i class="bi-app-indicator nav-icon"></i> Announcements <span class="badge bg-soft-danger text-danger rounded-pill nav-link-badge"><?= $countAnnouncements;?></span>
+    										<i class="bi-app-indicator nav-icon"></i> Announcements <span class="badge bg-soft-info text-info rounded-pill nav-link-badge"><?= $countAnnouncements;?></span>
     									</a>
     								</li>
     								<li class="nav-item">
     									<a class="nav-link <?= ($this->uri->segment(2) == "documents" ? "active" : "") ?>"
     										href="<?= site_url('user/documents'); ?>">
-    										<i class="bi-file nav-icon"></i> Documents <span class="badge bg-soft-danger text-danger rounded-pill nav-link-badge"><?= $countDocuments;?></span>
+    										<i class="bi-file nav-icon"></i> Documents <span class="badge bg-soft-info text-info rounded-pill nav-link-badge"><?= $countDocuments;?></span>
     									</a>
     								</li>
     								<li class="nav-item">

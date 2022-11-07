@@ -17,7 +17,8 @@
 						</div>
 
 						<div class="col-md-auto">
-							<a class="btn btn-primary btn-sm btn-transition" href="<?= site_url('user/submission');?>">Submit it now</a>
+							<a class="btn btn-primary btn-sm btn-transition"
+								href="<?= site_url('user/submission');?>">Submit it now</a>
 						</div>
 					</div>
 
@@ -40,7 +41,7 @@
 				<!-- End Card -->
 			</div>
 			<!-- End CTA -->
-			<?php endif;?>
+			<?php else:?>
 			<?php if (isset($participants->is_payment) && $participants->is_payment == 0):?>
 			<div class="alert alert-soft-info small" role="alert">
 				Your not yet make payment for your submission to be submitted. Please make payment at "Payment" menu or
@@ -66,6 +67,7 @@
 			<div class="alert alert-soft-danger small" role="alert">
 				Your submission has been <b>REJECTED !</b>
 			</div>
+			<?php endif;?>
 			<?php endif;?>
 		</div>
 		<div class="card-footer pt-0">

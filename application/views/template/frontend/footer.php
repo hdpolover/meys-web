@@ -193,7 +193,7 @@
   				$('button[type=submit]').prop("disabled", true);
   				// add spinner to button
   				$('button[type=submit]').html(
-  					`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+  					`<span class="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true"></span> Loading...`
   				);
   				return;
   			}
