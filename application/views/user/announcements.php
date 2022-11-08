@@ -54,6 +54,17 @@
 					<!-- End Modal -->
 
 					<?php endforeach;?>
+					<?php else:?>
+					<div class="w-sm-75 w-lg-50 text-center mx-sm-auto">
+						<div class="mb-7">
+							<img class="img-fluid" src="<?= base_url();?>assets/svg/illustrations/oc-relaxing.svg"
+								alt="SVG Illustration">
+						</div>
+
+						<h1 class="h2">No announcements yet.</h1>
+						<p> Stay tuned for announcements at the Middle East Youth Summit. Immediately complete your
+							personal data!</p>
+					</div>
 					<?php endif;?>
 				</tbody>
 			</table>

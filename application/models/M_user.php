@@ -30,9 +30,15 @@ class M_user extends CI_Model
 
         $models = $this->db->get()->row();
         $user   = $this->get_userByID($user_id);
-        if($models->referral_code == 0 && $user != false){
-            $models->referral_code = $user->referral_code;
-            $models->fullname = $this->getAmbasadorByReferral($models->referral_code)->fullname;
+        if(!is_null($models)){
+            if($models->referral_code == 0 && $user != false){
+                $models->referral_code = $user->referral_code;
+                if(($this->getAmbasadorByReferral($models->referral_code))){
+                    $models->fullname = $this->getAmbasadorByReferral($models->referral_code)->fullname;
+                }else{
+                    $models->fullname = "unknow";
+                }
+            }
         }
         
         return $models;
