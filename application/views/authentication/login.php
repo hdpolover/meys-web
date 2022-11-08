@@ -85,6 +85,8 @@
 					<div class="text-center">
 						<p>Don't had an account? <a class="link" href="<?= site_url('sign-up'); ?>">Sign up here</a>
 						</p>
+						<p>Part of our ambassador? <a class="link" href="<?= site_url('ambassador'); ?>">Sign in here</a>
+						</p>
 					</div>
 				</form>
 				<!-- End Form -->

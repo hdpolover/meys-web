@@ -27,18 +27,6 @@
     					<p>Fill out the form to get started.</p>
     				</div>
     				<!-- End Heading -->
-
-    				<?php if(!is_null($referral_code)):?>
-    				<?php if(!empty($referral)):?>
-    				<div class="alert alert-success small">
-    					You register using <b><?= $referral->fullname;?>'s</b> affiliate code!
-    				</div>
-    				<?php else:?>
-    				<div class="alert alert-warning small">
-    					Your referral code is not affiliate with any ambassador
-    				</div>
-    				<?php endif;?>
-    				<?php endif;?>
     				<!-- Form -->
     				<form action="<?= site_url('authentication/proses_daftar'); ?>" method="POST"
     					class="js-validate needs-validation" autocomplete="on" novalidate>
