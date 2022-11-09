@@ -8,7 +8,7 @@ class Admin extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model(['M_admin', 'M_user', 'M_master']);
+        $this->load->model(['M_admin', 'M_user', 'M_master', 'M_payment']);
 
         // cek apakah user sudah login
         if ($this->session->userdata('logged_in') == false || !$this->session->userdata('logged_in')) {
@@ -261,8 +261,23 @@ class Admin extends CI_Controller
         echo json_encode($response);
     }
 
+    public function getDetailPayment(){
+
+        $user_id = $this->input->post('user_id');
+        
+		if (!is_null($this->M_payment->getUserPaymenHistory($user_id))) {
+        
+            $data['payment_history']   = $this->M_payment->getUserPaymenHistory($user_id);
+
+            $this->load->view('payments/ajax/detail_payment', $data);
+
+		} else {
+			echo "<center class='py-5'><h4>There is an error when trying get user payment's data!</h4></center>";
+		}
+    }
+
     function getAjaxPayment(){
-        $payments       = $this->M_payment->getAllPayments();
+        $payments           = $this->M_payment->getAllPayments();
 
         $draw               = $this->input->post('draw');
         $search             = $this->input->post('search')['value'];
@@ -270,71 +285,38 @@ class Admin extends CI_Controller
         $no                 = $this->input->post('start')+1;
         
         foreach ($payments['records'] as $key => $val) {
-            $btnDetail      = '<button onclick="showMdlParticipantDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2"><i class="bi-eye"></i></button>';
-            $btnPass        = '<button onclick="showMdlChangePassword(\''.$val->user_id.'\')" class="btn btn-soft-primary btn-icon btn-sm me-2"><i class="bi-key"></i></button>';
-            $btnCheck       = '<button onclick="showMdlChecked(\''.$val->user_id.'\')" class="btn btn-soft-success btn-icon btn-sm me-2"><i class="bi-check"></i></button>';
-            $step           = '<span class="badge bg-soft-secondary">Not yet fill submission</span>';
-            $statusAccount  = '<span class="badge bg-soft-danger">Unverivied</span>';
-            $statusSubmit   = '<span class="badge bg-soft-danger">Not Submitted</span>';
-            $statusCheck    = '<span class="badge bg-soft-danger">Not Checked</span>';
+            $btnDetail      = '<button onclick="mdlPaymentDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2"><i class="bi-eye"></i></button>';
+            $btnCheck       = '<button onclick="mdlPaymentDetailVerif(\''.$val->user_id.'\', \''.$val->id.'\', \''.base_url().$val->evidance.'\')" class="btn btn-soft-success btn-icon btn-sm me-2"><i class="bi-check"></i></button>';
+            $status         = '<span class="badge bg-soft-secondary">New</span>';
 
-            if ($val->status_submit == true) {
-                if ($val->step_status == 1) {
-                    $step = '<span class="badge bg-soft-info">(1) Personal Data</span>';
-                } elseif ($val->step_status == 2) {
-                    $step = '<span class="badge bg-soft-warning">(2) Others</span>';
-                } elseif ($val->step_status == 3) {
-                    $step = '<span class="badge bg-soft-danger">(3) Question</span>';
-                } elseif ($val->step_status == 4) {
-                    $step = '<span class="badge bg-soft-primary">(4) Programs</span>';
-                } elseif ($val->step_status == 5) {
-                    $step = '<span class="badge bg-blue-dark">(5) Self Photo</span>';
-                } elseif ($val->step_status == 6) {
-                    $step = '<span class="badge bg-soft-success">(6) Payment & Agreement</span>';
-                } elseif ($val->step_status == 7) {
-                    $step = '<span class="badge bg-soft-success">Waiting for review</span>';
-                }
+            if ($val->status == 1) {
+                $status = '<span class="badge bg-soft-secondary">pending</span>';
+            } elseif ($val->status == 2) {
+                $status = '<span class="badge bg-soft-success">success</span>';
+            } elseif ($val->status == 3) {
+                $status = '<span class="badge bg-soft-warning">canceled</span>';
+            } elseif ($val->status == 4) {
+                $status = '<span class="badge bg-soft-danger">rejected</span>';
+            } elseif ($val->status == 5) {
+                $status = '<span class="badge bg-soft-danger">expired</span>';
+            } else {
+                $status = '<span class="badge bg-blue-dark">Haven`t make any payment</span>';
             }
 
-            if ($val->status_payment == true) {
-                $val->submit_data->status = (int) $val->submit_data->status;
-                if ($val->submit_data->status ==  0 || $val->submit_data->status == 1) {
-                    $statusSubmit   = '<span class="badge bg-soft-danger">Not Submitted</span>';
-                    $submissionState= 1;
-                }
-                if ($val->submit_data->status == 2) {
-                    $statusSubmit   = '<span class="badge bg-soft-info">Submitted</span>';
-                    $submissionState= 2;
-                }
-                if ($val->submit_data->status == 3) {
-                    $step           = '<span class="badge bg-soft-success">Reviewed</span>';
-                    $statusSubmit   = '<span class="badge bg-soft-info">Submitted</span>';
-                    $statusCheck    = '<span class="badge bg-soft-success">Accepted</span>';
-                    $submissionState= 3;
-                }
-                if ($val->submit_data->status == 4) {
-                    $step           = '<span class="badge bg-soft-success">Reviewed</span>';
-                    $statusSubmit   = '<span class="badge bg-soft-info">Submitted</span>';
-                    $statusCheck    = '<span class="badge bg-soft-warning">Rejected</span>';
-                    $submissionState= 4;
-                }
+            $btn = "";
+            if($val->status <= 1){
+                $btn .= $btnCheck;
             }
-
-            if ($val->status_account == 1) {
-                $statusAccount  = '<span class="badge bg-soft-success">Verified</span>';
-            } elseif ($val->status_account == 2) {
-                $statusAccount  = '<span class="badge bg-soft-warning">Suspended</span>';
-            }
+            $btn .= $btnDetail;
 
             $arr[$key] = [
                 "no"            => $no++,
-                "action"        => ($submissionState == 2 ? $btnCheck : '').$btnDetail.$btnPass,
+                "action"        => $btn,
                 "name"          => $val->name,
                 "email"         => $val->email,
-                "step"          => $step,
-                "accountStatus" => $statusAccount,
-                "submitStatus"  => $statusSubmit,
-                "checkStatus"   => $statusCheck,
+                "institution"   => $val->institution,
+                "paymentState"  => $val->summit,
+                "status"        => $status,
             ];
         }
 

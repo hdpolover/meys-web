@@ -86,10 +86,10 @@ class Payments extends CI_Controller
     public function rejectedPayment()
     {
         if ($this->M_payment->rejectedPayment() == true) {
-            $this->session->set_flashdata('notif_success', 'Succesfuly verification payment ');
+            $this->session->set_flashdata('notif_success', 'Succesfuly rejected payment ');
             redirect(site_url('admin/payments'));
         } else {
-            $this->session->set_flashdata('notif_warning', 'There is a problem when trying to verification payment, try again later');
+            $this->session->set_flashdata('notif_warning', 'There is a problem when trying to rejected payment, try again later');
             redirect($this->agent->referrer());
         }
     }

@@ -77,12 +77,12 @@ class M_admin extends CI_Model
         if($this->input->post('filterEmail') != null || $this->input->post('filterEmail') != '') $filter[] = "a.email like '%".$this->input->post('filterEmail')."%'";
         if($this->input->post('filterName') != null || $this->input->post('filterName') != '') $filter[] = "b.name like '%".$this->input->post('filterName')."%'";
         if($this->input->post('filterNumber') != null || $this->input->post('filterNumber') != '') $filter[] = "b.phone like '%".$this->input->post('filterNumber')."%'";
-        if($this->input->post('filterVerified') != null || $this->input->post('filterVerified') != '') $filter[] = ($this->input->post('filterVerified') == 2 ? "a.status like '%".$this->input->post('filterVerified')."%'" : "a.active like '%".$this->input->post('filterVerified')."%'");
+        if($this->input->post('filterVerified') != null && $this->input->post('filterVerified') > 0) $filter[] = ($this->input->post('filterVerified') == 2 ? "a.status like '%".$this->input->post('filterVerified')."%'" : "a.active like '%".$this->input->post('filterVerified')."%'");
 
         
-        if($this->input->post('filterSubmited') != null || $this->input->post('filterSubmited') != '') $filter_other['submit'] = $this->input->post('filterSubmited');
-        if($this->input->post('filterChecked') != null || $this->input->post('filterChecked') != '') $filter_other['check'] = $this->input->post('filterChecked');
-        if($this->input->post('filterStep') != null || $this->input->post('filterStep') != '') $filter_other['step'] = $this->input->post('filterStep');
+        if($this->input->post('filterSubmited') != null && $this->input->post('filterSubmited') > 0) $filter_other['submit'] = $this->input->post('filterSubmited');
+        if($this->input->post('filterChecked') != null && $this->input->post('filterChecked') > 0) $filter_other['check'] = $this->input->post('filterChecked');
+        if($this->input->post('filterStep') != null && $this->input->post('filterStep') > 0) $filter_other['step'] = $this->input->post('filterStep');
 
         if($filter != null){
             $filter = implode(' AND ', $filter);

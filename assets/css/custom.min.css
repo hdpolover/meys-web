@@ -613,3 +613,7 @@ div.dataTables_wrapper {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
+
+/* .form-select-sm {
+	padding: 0.2rem .75rem !important;
+} */

@@ -100,6 +100,18 @@ class M_payment extends CI_Model
         return $this->db->get()->result();
     }
 
+    function getUserPaymenHistory($user_id){
+        $this->db->select('a.*, b.summit, c.payment_method, c.img_method')
+        ->from('tb_payments a')
+        ->join('m_payments_batch b', 'a.payment_batch = b.id')
+        ->join('m_payments_settings c', 'a.payment_setting = c.id')
+        ->where(['a.user_id' => $user_id, 'a.is_deleted' => 0])
+        ->order_by('a.created_at DESC');
+        ;
+
+        return $this->db->get()->result();
+    }
+
     function savePaymentSettings(){
         
         $id = $this->input->post('id');
@@ -163,16 +175,37 @@ class M_payment extends CI_Model
     }
 
     function getAllPayments(){
-        $this->db->select('a.*, b.summit, c.payment_method, c.img_method, d.email, e.name, f.institution_workplace as institution')
+
+        $offset = $this->input->post('start');
+        $limit  = $this->input->post('length'); // Rows display per page
+        
+        $filter = [];
+
+        if($this->input->post('filterEmail') != null || $this->input->post('filterEmail') != '') $filter[] = "d.email like '%".$this->input->post('filterEmail')."%'";
+        if($this->input->post('filterName') != null || $this->input->post('filterName') != '') $filter[] = "e.name like '%".$this->input->post('filterName')."%'";
+
+        if($this->input->post('filterInstitution') != null || $this->input->post('filterInstitution') != '') $filter[] = "f.institution_workplace like '%".$this->input->post('filterInstitution')."%'";
+        if($this->input->post('filterBatch') != null && $this->input->post('filterBatch') > 0) $filter[] = "a.payment_batch = ".$this->input->post('filterBatch');
+        if($this->input->post('filterStatus') != null && $this->input->post('filterStatus') > 0) $filter[] = "a.status = ".$this->input->post('filterStatus');
+
+        if($filter != null){
+            $filter = implode(' AND ', $filter);
+        }  
+
+        $this->db->select('a.*, b.summit, c.payment_method, c.img_method, d.email, e.name, e.phone, f.institution_workplace as institution')
         ->from('tb_payments a')
         ->join('m_payments_batch b', 'a.payment_batch = b.id')
         ->join('m_payments_settings c', 'a.payment_setting = c.id')
         ->join('tb_auth d', 'a.user_id = d.user_id')
         ->join('tb_user e', 'a.user_id = e.user_id')
         ->join('tb_participants f', 'a.user_id = f.user_id')
-        ->where(['a.is_deleted' => 0, 'a.status <' => 3])
+        ->where(['a.is_deleted' => 0])
+        ;
+
+
+        $this->db->where($filter)
         ->group_by('a.user_id')
-        ->order_by('a.created_at DESC');
+        ->order_by('a.status ASC');
 
         $models = $this->db->get()->result();
 
@@ -180,7 +213,11 @@ class M_payment extends CI_Model
             $models[$key]->payment_history = $this->getUserPaymentBatchHistory($val->user_id, 2);
         }
 
-        return $models;
+        $totalRecords = count($models);
+
+        $models = array_slice($models, $offset, $limit);
+
+        return ['records' => array_values($models), 'totalDisplayRecords' => count($models), 'totalRecords' => $totalRecords];
     }
 
     function verificationPayment()

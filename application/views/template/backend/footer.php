@@ -56,6 +56,7 @@
 <script src="<?= base_url(); ?>assets/vendor/hs-add-field/dist/hs-add-field.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/hs-step-form/dist/hs-step-form.min.js"></script>
 <script src="<?= base_url(); ?>assets/js/flatpickr.min.js"></script>
+<script src="<?= base_url(); ?>assets/vendor/fslightbox/index.js"></script>
 <!-- JS Front -->
 <script src="<?= base_url(); ?>assets/js/theme.min.js"></script>
 <script src="<?= base_url(); ?>assets/js/custom.js?<?=time();?>"></script>

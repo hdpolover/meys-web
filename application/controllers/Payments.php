@@ -8,7 +8,7 @@ class Payments extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model(['M_payment']);
+        $this->load->model(['M_payment', 'M_master']);
     }
 
     public function getDetailPaymentSetting(){
@@ -27,8 +27,9 @@ class Payments extends CI_Controller
 
     public function index()
     {
-        $data['payments'] = $this->M_payment->getAllPayments();
-        $this->templateback->view('payments/list', $data);
+        $data['payments']       = $this->M_payment->getAllPayments();
+        $data['payments_batch'] = $this->M_master->get_paymentsBatch();
+        $this->templateback->view('payments/list-ajax', $data);
     }
 
     public function settings()

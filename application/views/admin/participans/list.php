@@ -48,47 +48,59 @@
 					</div>
 					<div class="col-sm mb-2 mb-sm-0">
 						<label for="">Account</label>
-						<select id="filter_verified" class="form-control form-control-sm">
-							<option value="">All</option>
-							<option value="1">Verified</option>
-							<option value="0">Not Verified</option>
-							<option value="2">Suspend</option>
-						</select>
+						<div class="tom-select-custom">
+							<select class="js-select form-select form-select-sm" id="filter_verified" autocomplete="off"
+								data-hs-tom-select-options='{"placeholder": "All Account Status", "hideSearch": true}'>
+								<option value="0">All Account Status</option>
+								<option value="1">Verified</option>
+								<option value="0">Not Verified</option>
+								<option value="2">Suspend</option>
+							</select>
+						</div>
 					</div>
 				</div>
 				<div class="row mb-3">
 					<div class="col-sm mb-2 mb-sm-0">
 						<label for="">Steps</label>
-						<select id="filter_step" class="form-control form-control-sm">
-							<option value="">All</option>
-							<option value="1">(1) Personal Data</option>
-							<option value="2">(2) Others</option>
-							<option value="3">(3) Question</option>
-							<option value="4">(4) Programs</option>
-							<option value="5">(5) Self Photo</option>
-							<option value="6">(6) Payment & Agreement</option>
-							<option value="7">Waiting for review</option>
-						</select>
+						<div class="tom-select-custom">
+							<select class="js-select form-select form-select-sm" id="filter_step" autocomplete="off"
+								data-hs-tom-select-options='{"placeholder": "All Steps Status", "hideSearch": true}'>
+								<option value="0">All Steps Status</option>
+								<option value="1">(1) Personal Data</option>
+								<option value="2">(2) Others</option>
+								<option value="3">(3) Question</option>
+								<option value="4">(4) Programs</option>
+								<option value="5">(5) Self Photo</option>
+								<option value="6">(6) Payment & Agreement</option>
+								<option value="7">Waiting for review</option>
+							</select>
+						</div>
 					</div>
 					<div class="col-sm mb-2 mb-sm-0">
 						<label for="">Submited</label>
-						<select id="filter_submited" class="form-control form-control-sm">
-							<option value="">All</option>
-							<option value="2">Submited</option>
-							<option value="1">Not Submited</option>
-						</select>
+						<div class="tom-select-custom">
+							<select class="js-select form-select form-select-sm" id="filter_submited" autocomplete="off"
+								data-hs-tom-select-options='{"placeholder": "All Submited Status", "hideSearch": true}'>
+								<option value="0">All Submited Status</option>
+								<option value="2">Submited</option>
+								<option value="1">Not Submited</option>
+							</select>
+						</div>
 					</div>
 					<div class="col-sm mb-2 mb-sm-0">
 						<label for="">Checked</label>
-						<select id="filter_checked" class="form-control form-control-sm">
-							<option value="">All</option>
-							<option value="3">Checked/Accepted</option>
-							<option value="2">Not Checked</option>
-							<option value="4">Rejected</option>
-						</select>
+						<div class="tom-select-custom">
+							<select class="js-select form-select form-select-sm" id="filter_checked" autocomplete="off"
+								data-hs-tom-select-options='{"placeholder": "All Checked Status", "hideSearch": true}'>
+								<option value="0">All Checked Status</option>
+								<option value="3">Checked/Accepted</option>
+								<option value="2">Not Checked</option>
+								<option value="4">Rejected</option>
+							</select>
+						</div>
 					</div>
 					<div class="col-sm mb-2 mb-sm-0">
-						<button class="btn btn-sm btn-primary mt-4" onclick="btnSearch()"><i
+						<button class="btn btn-sm btn-primary mt-4" type="button" id="search" onclick="btnSearch()"><i
 								class="bi-search"></i>&nbsp&nbspSearch</button>
 					</div>
 				</div>
@@ -193,9 +205,10 @@
 	var table = $('#dataTable').DataTable({
 		'processing': true,
 		'serverSide': true,
+		'destroy': true,
 		'ordering': false,
 		'searching': false,
-		"scrollX": true,
+		'scrollX': true,
 		'responsive': true,
 		'serverMethod': 'post',
 		'ajax': {
@@ -207,7 +220,7 @@
 				d.filterVerified = $('#filter_verified').val()
 				d.filterSubmited = $('#filter_submited').val()
 				d.filterChecked = $('#filter_checked').val()
-				d.filterStep = $('#filter_step').val()
+				d.filterStep = $('#filter_step').val();
 			}
 		},
 		'columns': [{

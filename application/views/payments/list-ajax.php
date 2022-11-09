@@ -26,12 +26,6 @@
 						<input type="text" id="filter_name" class="form-control form-control-sm"
 							placeholder="Name Filter">
 					</div>
-
-					<div class="col-sm mb-2 mb-sm-0">
-						<label for="">Phone</label>
-						<input type="text" id="filter_number" class="form-control form-control-sm"
-							placeholder="Phone Filter">
-					</div>
 					<div class="col-sm mb-2 mb-sm-0">
 						<label for="">Institution</label>
 						<input type="text" id="filter_institution" class="form-control form-control-sm"
@@ -41,27 +35,36 @@
 				<div class="row mb-3">
 					<div class="col-sm mb-2 mb-sm-0">
 						<label for="">Payment Batch/Summit</label>
-						<select id="filter_batch" class="form-control form-control-sm">
-							<option value="">All</option>
-							<option value="1">(1) Personal Data</option>
-						</select>
+						<div class="tom-select-custom">
+							<select class="js-select form-select form-select-sm" id="filter_batch" autocomplete="off"
+								data-hs-tom-select-options='{"placeholder": "All Status"}'>
+								<option value="0">All Payment batch</option>
+								<?php if(!empty($payments_batch)):?>
+								<?php foreach($payments_batch as $key => $val):?>
+								<option value="<?= $val->id;?>"><?= $val->summit;?></option>
+								<?php endforeach;?>
+								<?php endif;?>
+							</select>
+						</div>
 					</div>
 					<div class="col-sm mb-2 mb-sm-0">
 						<label for="">Payment Status</label>
-						<select id="filter_status" class="form-control form-control-sm">
-							<option value="">All</option>
-							<option value="1">Pending</option>
-							<option value="2">Success</option>
-							<option value="3">Cancel</option>
-							<option value="4">Expired</option>
-							<option value="5">Deny</option>
-						</select>
+						<!-- Select -->
+						<div class="tom-select-custom">
+							<select class="js-select form-select form-select-sm" id="filter_status" autocomplete="off"
+								data-hs-tom-select-options='{"placeholder": "All Status", "hideSearch": true}'>
+								<option value="0">All Status</option>
+								<option value="1">Pending</option>
+								<option value="2">Success</option>
+								<option value="3">Cancel</option>
+								<option value="4">Rejected</option>
+								<option value="5">Expired</option>
+							</select>
+						</div>
 					</div>
 					<div class="col-sm mb-2 mb-sm-0">
 						<button class="btn btn-sm btn-primary mt-4" onclick="btnSearch()"><i
 								class="bi-search"></i>&nbsp&nbspSearch</button>
-					</div>
-					<div class="col-sm mb-2 mb-sm-0">
 					</div>
 				</div>
 				<!-- End Row -->
@@ -73,6 +76,7 @@
 							<th scope="col">Name</th>
 							<th scope="col">Email</th>
 							<th scope="col">Institution</th>
+							<th scope="col">Payment State</th>
 							<th scope="col">Status</th>
 						</tr>
 					</thead>
@@ -110,7 +114,7 @@
 
 			<div class="modal-body">
 				<h5>Payment proff</h5>
-				<img src="<?= base_url();?>assets/images/placeholder.jpg" class="img-thumbnail w-100 mb-3" alt="">
+				<img src="<?= base_url();?>assets/images/placeholder.jpg" class="img-thumbnail w-100 mb-3" alt="" id="evidance">
 				<div class="text-center">Are you sure to verification this payment?</div>
 			</div>
 
@@ -118,12 +122,14 @@
 				<button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
 				<form action="<?= site_url('api/payments/verificationPayment')?> " method="post"
 					class="js-validate need-validate" novalidate>
-					<input type="hidden" name="id" id="mdlVerif_id">
+					<input type="hidden" name="id" class="mdlVerif_id">
+					<input type="hidden" name="user_id" class="mdlVerif_userid">
 					<button type="submit" class="btn btn-soft-success btn-sm">Verification</button>
 				</form>
 				<form action="<?= site_url('api/payments/rejectedPayment')?> " method="post"
 					class="js-validate need-validate" novalidate>
 					<input type="hidden" name="id" class="mdlVerif_id">
+					<input type="hidden" name="user_id" class="mdlVerif_userid">
 					<button type="submit" class="btn btn-soft-danger btn-sm">Rejected</button>
 				</form>
 			</div>
@@ -146,7 +152,6 @@
 			'data': function (d) {
 				d.filterEmail = $('#filter_email').val()
 				d.filterName = $('#filter_name').val()
-				d.filterNumber = $('#filter_number').val()
 				d.filterInstitution = $('#filter_institution').val()
 				d.filterBatch = $('#filter_batch').val()
 				d.filterStatus = $('#filter_status').val()
@@ -168,11 +173,14 @@
 				data: 'institution'
 			},
 			{
+				data: 'paymentState'
+			},
+			{
 				data: 'status'
 			}
 		]
 	});
-	const showMdlPaymentDetail = id => {
+	const mdlPaymentDetail = id => {
 		$('#mdlChecked_id').val(id);
 
 		$("#modalPaymentContent").html(
@@ -192,9 +200,11 @@
 			}
 		});
 	}
-
-	const showMdlVerif = id => {
-		$('#mdlVerif_id').val(id);
+	
+	const mdlPaymentDetailVerif = function (user_id, id, img) {
+		$('#evidance').prop('src', img);
+		$('.mdlVerif_id').val(id);
+		$('.mdlVerif_userid').val(user_id);
 		$('#mdlPaymentDetailVerif').modal('show')
 	}
 

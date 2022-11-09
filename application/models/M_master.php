@@ -223,6 +223,10 @@ class M_master extends CI_Model
             $val->affiliate = $this->countAffiliateAmbassador($val->referral_code);
         }
 
+        usort($models, function ($data1, $data2) {
+            return $data2->affiliate <=> $data1->affiliate;
+        });
+
         return $models;
     }
 
