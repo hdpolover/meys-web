@@ -23,10 +23,84 @@
 	</div>
 </div>
 <!-- End Page Header -->
+<div class="row">
+	<h3>Summary participants</h3>
+	<div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+		<!-- Card -->
+		<div class="card">
+			<div class="card-body">
+				<h6 class="card-subtitle mb-2">Total checked</h6>
+
+				<div class="row align-items-center gx-2">
+					<div class="col">
+						<span class="counterChecked display-5 text-dark" id="totalChecked">0</span>
+					</div>
+					<!-- End Col -->
+				</div>
+				<!-- End Row -->
+			</div>
+		</div>
+		<!-- End Card -->
+	</div>
+	<div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+		<!-- Card -->
+		<div class="card">
+			<div class="card-body">
+				<h6 class="card-subtitle mb-2">Total submited</h6>
+
+				<div class="row align-items-center gx-2">
+					<div class="col">
+						<span class="js-counter display-5 text-dark" id="totalSubmitted">0</span>
+					</div>
+					<!-- End Col -->
+				</div>
+				<!-- End Row -->
+			</div>
+		</div>
+		<!-- End Card -->
+	</div>
+	<div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+		<!-- Card -->
+		<div class="card">
+			<div class="card-body">
+				<h6 class="card-subtitle mb-2">Total verifed</h6>
+
+				<div class="row align-items-center gx-2">
+					<div class="col">
+						<span class="js-counter display-5 text-dark" id="totalVerif">0</span>
+					</div>
+					<!-- End Col -->
+				</div>
+				<!-- End Row -->
+			</div>
+		</div>
+		<!-- End Card -->
+	</div>
+	<div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+		<!-- Card -->
+		<div class="card">
+			<div class="card-body">
+				<h6 class="card-subtitle mb-2">Total user</h6>
+
+				<div class="row align-items-center gx-2">
+					<div class="col">
+						<span class="js-counter display-5 text-dark" id="totalUser">0</span>
+					</div>
+					<!-- End Col -->
+				</div>
+				<!-- End Row -->
+			</div>
+		</div>
+		<!-- End Card -->
+	</div>
+</div>
 
 <div class="row">
 	<div class="col-12">
 		<div class="card">
+			<div class="card-header py-3">
+				<h4 class="card-header-title">Filter Participants Data</h4>
+			</div>
 			<div class="card-body">
 				<div class="row mb-3">
 					<div class="col-sm mb-2 mb-sm-0">
@@ -100,10 +174,15 @@
 						</div>
 					</div>
 					<div class="col-sm mb-2 mb-sm-0">
-						<button class="btn btn-sm btn-primary mt-4" type="button" id="search" onclick="btnSearch()"><i
-								class="bi-search"></i>&nbsp&nbspSearch</button>
+						<button class="btn btn-sm btn-primary mt-4" type="button" id="searchBtn"
+							onclick="btnSearch()"><i class="bi-search"></i>&nbsp&nbspSearch</button>
 					</div>
 				</div>
+			</div>
+			<div class="card-header py-3">
+				<h4 class="card-header-title">Participans Data</h4>
+			</div>
+			<div class="card-body">
 				<!-- End Row -->
 				<table id="dataTable" class="table table-borderless table-thead-bordered nowrap w-100">
 					<thead class="thead-light">
@@ -221,6 +300,15 @@
 				d.filterSubmited = $('#filter_submited').val()
 				d.filterChecked = $('#filter_checked').val()
 				d.filterStep = $('#filter_step').val();
+			},
+			'dataSrc': function (json) {
+				$('#totalChecked').html(json.totalChecked);
+				$('#totalSubmitted').html(json.totalSubmitted);
+				$('#totalVerif').html(json.totalVerif);
+				$('#totalUser').html(json.totalUser);
+
+				doneLoading();
+				return json.data;
 			}
 		},
 		'columns': [{
@@ -283,7 +371,21 @@
 		$('#mdlChecked').modal('show')
 	}
 
+	function doneLoading() {
+		$('#searchBtn').prop("disabled", false);
+		// add spinner to button
+		$('#searchBtn').html(
+			`<i class="bi-search"></i>&nbsp&nbspSearch`
+		);
+	}
+
 	function btnSearch() {
+		$('#searchBtn').prop("disabled", true);
+		// add spinner to button
+		$('#searchBtn').html(
+			`<span class="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true"></span> loading...`
+		);
+
 		table.ajax.reload();
 	}
 

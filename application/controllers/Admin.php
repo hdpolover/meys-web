@@ -181,6 +181,14 @@ class Admin extends CI_Controller
         $arr                = [];
         $no                 = $this->input->post('start')+1;
         $submissionState    = 1;
+        $summary            = [
+            'totalChecked' => 0,
+            'totalSubmitted' => 0,
+            'totalVerif' => 0,
+            'totalUser' => 0,
+
+        ];
+
         foreach ($participants['records'] as $key => $val) {
             
             $btnDetail      = '<button onclick="showMdlParticipantDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2"><i class="bi-eye"></i></button>';
@@ -216,10 +224,14 @@ class Admin extends CI_Controller
                     $submissionState= 1;
                 }
                 if($val->submit_data->status == 2){
+                    $summary['totalSubmitted'] += 1;
+
                     $statusSubmit   = '<span class="badge bg-soft-info">Submitted</span>';
                     $submissionState= 2;
                 }
                 if($val->submit_data->status == 3){
+                    $summary['totalChecked'] += 1;
+
                     $step           = '<span class="badge bg-soft-success">Reviewed</span>';
                     $statusSubmit   = '<span class="badge bg-soft-info">Submitted</span>';
                     $statusCheck    = '<span class="badge bg-soft-success">Accepted</span>';
@@ -234,10 +246,13 @@ class Admin extends CI_Controller
             }
 
             if($val->status_account == 1){
+                $summary['totalVerif'] += 1;
                 $statusAccount  = '<span class="badge bg-soft-success">Verified</span>';
             }elseif($val->status_account == 2){
                 $statusAccount  = '<span class="badge bg-soft-warning">Suspended</span>';
             }
+            
+            $summary['totalUser'] += 1;
 
             $arr[$key] = [
                 "no"            => $no++,
@@ -256,6 +271,10 @@ class Admin extends CI_Controller
             "recordsTotal" => $participants['totalRecords'],
             "recordsFiltered" => ($search != "" ? $participants['totalDisplayRecords'] : $participants['totalRecords']),
             "data" => $arr,
+            'totalChecked' => number_format($summary['totalChecked']),
+            'totalSubmitted' => number_format($summary['totalSubmitted']),
+            'totalVerif' => number_format($summary['totalVerif']),
+            'totalUser' => number_format($summary['totalUser']),
         );
 
         echo json_encode($response);
@@ -283,7 +302,19 @@ class Admin extends CI_Controller
         $search             = $this->input->post('search')['value'];
         $arr                = [];
         $no                 = $this->input->post('start')+1;
-        
+        $summary            = [
+            'totalIncome' => 0,
+            'manualIncome' => 0,
+            'paypalIncome' => 0,
+            'xenditIncome' => 0,
+
+            'paymentSuccess' => 0,
+            'paymentPending' => 0,
+            'paymentFailed' => 0,
+            'paymentExpired' => 0,
+
+        ];
+
         foreach ($payments['records'] as $key => $val) {
             $btnDetail      = '<button onclick="mdlPaymentDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2"><i class="bi-eye"></i></button>';
             $btnCheck       = '<button onclick="mdlPaymentDetailVerif(\''.$val->user_id.'\', \''.$val->id.'\', \''.base_url().$val->evidance.'\')" class="btn btn-soft-success btn-icon btn-sm me-2"><i class="bi-check"></i></button>';
@@ -291,17 +322,25 @@ class Admin extends CI_Controller
 
             if ($val->status == 1) {
                 $status = '<span class="badge bg-soft-secondary">pending</span>';
+                $summary['paymentPending'] += 1;
             } elseif ($val->status == 2) {
                 $status = '<span class="badge bg-soft-success">success</span>';
+                $summary['paymentSuccess'] += 1;
             } elseif ($val->status == 3) {
                 $status = '<span class="badge bg-soft-warning">canceled</span>';
+                $summary['paymentFailed'] += 1;
             } elseif ($val->status == 4) {
                 $status = '<span class="badge bg-soft-danger">rejected</span>';
+                $summary['paymentFailed'] += 1;
             } elseif ($val->status == 5) {
                 $status = '<span class="badge bg-soft-danger">expired</span>';
+                $summary['paymentExpired'] += 1;
             } else {
                 $status = '<span class="badge bg-blue-dark">Haven`t make any payment</span>';
             }
+
+            $summary['totalIncome'] += $val->amount;
+            $summary['manualIncome'] += $val->amount;
 
             $btn = "";
             if($val->status <= 1){
@@ -325,6 +364,15 @@ class Admin extends CI_Controller
             "recordsTotal" => $payments['totalRecords'],
             "recordsFiltered" => ($search != "" ? $payments['totalDisplayRecords'] : $payments['totalRecords']),
             "data" => $arr,
+            'totalIncome' => "Rp. ".number_format($summary['totalIncome']),
+            'manualIncome' => "Rp. ".number_format($summary['manualIncome']),
+            'paypalIncome' => "Rp. ".number_format($summary['paypalIncome']),
+            'xenditIncome' => "Rp. ".number_format($summary['xenditIncome']),
+
+            'paymentSuccess' => number_format($summary['paymentSuccess']),
+            'paymentPending' => number_format($summary['paymentPending']),
+            'paymentFailed' => number_format($summary['paymentFailed']),
+            'paymentExpired' => number_format($summary['paymentExpired'])
         );
 
         echo json_encode($response);

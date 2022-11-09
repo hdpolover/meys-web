@@ -199,13 +199,14 @@ class M_payment extends CI_Model
         ->join('tb_auth d', 'a.user_id = d.user_id')
         ->join('tb_user e', 'a.user_id = e.user_id')
         ->join('tb_participants f', 'a.user_id = f.user_id')
-        ->where(['a.is_deleted' => 0])
+        ->where(['a.is_deleted' => 0, 'b.active' => 1])
         ;
 
 
-        $this->db->where($filter)
-        ->group_by('a.user_id')
-        ->order_by('a.status ASC');
+        $this->db->where($filter);
+
+        // ->group_by('a.user_id, a.payment_batch')
+        $this->db->order_by('a.status ASC');
 
         $models = $this->db->get()->result();
 
