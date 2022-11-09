@@ -240,7 +240,7 @@
 		$('#mdlChecked_id').val(id);
 
 		$("#modalParticipantContent").html(
-			`<center class="py-5"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sedang memuat ...</center>`
+			`<center class="py-5"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading ...</center>`
 		);
 
 		$('#mdlParticipantDetail').modal('show')

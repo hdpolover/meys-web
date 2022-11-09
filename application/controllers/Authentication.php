@@ -49,12 +49,25 @@ class Authentication extends CI_Controller
             $this->session->set_flashdata('notif_info', "You already sign in, please sign out first to register new account");
             redirect(base_url());
         } else {
-            $referral_code = null;
 
-            $referral_code = $this->input->get('affiliate_code');
-            $ambassador = $this->M_master->getAmbasadorByReferral($referral_code);
+            $referral_code = null;
+            $ambassador = null;
+
+            if($this->input->get('affiliate_code')){
+                $this->session->unset_userdata('referral_code');
+                
+                $referral_code = $this->input->get('affiliate_code');
+                $ambassador = $this->M_master->getAmbasadorByReferral($referral_code);
+
+                $this->session->set_userdata(['referral_code' => $referral_code]);
+            }elseif($this->session->has_userdata('referral_code')){
+                $referral_code = $this->session->userdata('referral_code');
+                $ambassador = $this->M_master->getAmbasadorByReferral($referral_code);
+            }
+            
             $data['referral_code'] = $referral_code;
             $data['referral'] = $ambassador;
+            
             // ej($data);
             $this->templateauth->view('authentication/register', $data);
         }
@@ -283,6 +296,7 @@ class Authentication extends CI_Controller
 
                         // mengambil data user dengan param email
                         $user = $this->M_auth->get_auth($email);
+                        $this->session->unset_userdata('referral_code');
 
                         // mengatur data session
                         $sessiondata = [

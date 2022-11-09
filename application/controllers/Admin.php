@@ -260,4 +260,92 @@ class Admin extends CI_Controller
 
         echo json_encode($response);
     }
+
+    function getAjaxPayment(){
+        $payments       = $this->M_payment->getAllPayments();
+
+        $draw               = $this->input->post('draw');
+        $search             = $this->input->post('search')['value'];
+        $arr                = [];
+        $no                 = $this->input->post('start')+1;
+        
+        foreach ($payments['records'] as $key => $val) {
+            $btnDetail      = '<button onclick="showMdlParticipantDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2"><i class="bi-eye"></i></button>';
+            $btnPass        = '<button onclick="showMdlChangePassword(\''.$val->user_id.'\')" class="btn btn-soft-primary btn-icon btn-sm me-2"><i class="bi-key"></i></button>';
+            $btnCheck       = '<button onclick="showMdlChecked(\''.$val->user_id.'\')" class="btn btn-soft-success btn-icon btn-sm me-2"><i class="bi-check"></i></button>';
+            $step           = '<span class="badge bg-soft-secondary">Not yet fill submission</span>';
+            $statusAccount  = '<span class="badge bg-soft-danger">Unverivied</span>';
+            $statusSubmit   = '<span class="badge bg-soft-danger">Not Submitted</span>';
+            $statusCheck    = '<span class="badge bg-soft-danger">Not Checked</span>';
+
+            if ($val->status_submit == true) {
+                if ($val->step_status == 1) {
+                    $step = '<span class="badge bg-soft-info">(1) Personal Data</span>';
+                } elseif ($val->step_status == 2) {
+                    $step = '<span class="badge bg-soft-warning">(2) Others</span>';
+                } elseif ($val->step_status == 3) {
+                    $step = '<span class="badge bg-soft-danger">(3) Question</span>';
+                } elseif ($val->step_status == 4) {
+                    $step = '<span class="badge bg-soft-primary">(4) Programs</span>';
+                } elseif ($val->step_status == 5) {
+                    $step = '<span class="badge bg-blue-dark">(5) Self Photo</span>';
+                } elseif ($val->step_status == 6) {
+                    $step = '<span class="badge bg-soft-success">(6) Payment & Agreement</span>';
+                } elseif ($val->step_status == 7) {
+                    $step = '<span class="badge bg-soft-success">Waiting for review</span>';
+                }
+            }
+
+            if ($val->status_payment == true) {
+                $val->submit_data->status = (int) $val->submit_data->status;
+                if ($val->submit_data->status ==  0 || $val->submit_data->status == 1) {
+                    $statusSubmit   = '<span class="badge bg-soft-danger">Not Submitted</span>';
+                    $submissionState= 1;
+                }
+                if ($val->submit_data->status == 2) {
+                    $statusSubmit   = '<span class="badge bg-soft-info">Submitted</span>';
+                    $submissionState= 2;
+                }
+                if ($val->submit_data->status == 3) {
+                    $step           = '<span class="badge bg-soft-success">Reviewed</span>';
+                    $statusSubmit   = '<span class="badge bg-soft-info">Submitted</span>';
+                    $statusCheck    = '<span class="badge bg-soft-success">Accepted</span>';
+                    $submissionState= 3;
+                }
+                if ($val->submit_data->status == 4) {
+                    $step           = '<span class="badge bg-soft-success">Reviewed</span>';
+                    $statusSubmit   = '<span class="badge bg-soft-info">Submitted</span>';
+                    $statusCheck    = '<span class="badge bg-soft-warning">Rejected</span>';
+                    $submissionState= 4;
+                }
+            }
+
+            if ($val->status_account == 1) {
+                $statusAccount  = '<span class="badge bg-soft-success">Verified</span>';
+            } elseif ($val->status_account == 2) {
+                $statusAccount  = '<span class="badge bg-soft-warning">Suspended</span>';
+            }
+
+            $arr[$key] = [
+                "no"            => $no++,
+                "action"        => ($submissionState == 2 ? $btnCheck : '').$btnDetail.$btnPass,
+                "name"          => $val->name,
+                "email"         => $val->email,
+                "step"          => $step,
+                "accountStatus" => $statusAccount,
+                "submitStatus"  => $statusSubmit,
+                "checkStatus"   => $statusCheck,
+            ];
+        }
+
+        $response = array(
+            "draw" => intval($draw),
+            "recordsTotal" => $payments['totalRecords'],
+            "recordsFiltered" => ($search != "" ? $payments['totalDisplayRecords'] : $payments['totalRecords']),
+            "data" => $arr,
+        );
+
+        echo json_encode($response);
+
+    }
 }

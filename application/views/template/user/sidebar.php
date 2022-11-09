@@ -57,7 +57,7 @@
     								<div class="avatar avatar-xxl avatar-circle mb-3">
     									<img class="avatar-img"
     										src="<?= !isset($user_profil->self_photo) ? 'https://i.stack.imgur.com/ZQT8Z.png' : base_url(). '/' . $user_profil->self_photo; ?>"
-    										alt="<?= $user->name; ?>">
+    										alt="<?= $user->name; ?>" style="height: 110px; width: 110px;">
     									<img class="avatar-status avatar-lg-status"
     										src="<?= base_url(); ?>assets/svg/illustrations/top-vendor.svg"
     										alt="Image Description" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -92,19 +92,22 @@
     								<li class="nav-item">
     									<a class="nav-link <?= ($this->uri->segment(2) == "payment" ? "active" : "") ?>"
     										href="<?= site_url('user/payment'); ?>">
-    										<i class="bi-credit-card nav-icon"></i> Payment <span class="badge bg-soft-danger text-danger rounded-pill nav-link-badge">!</span>
+    										<i class="bi-credit-card nav-icon"></i> Payment <span
+    											class="badge bg-soft-danger text-danger rounded-pill nav-link-badge">!</span>
     									</a>
     								</li>
     								<li class="nav-item">
     									<a class="nav-link <?= ($this->uri->segment(2) == "announcements" ? "active" : "") ?>"
     										href="<?= site_url('user/announcements'); ?>">
-    										<i class="bi-app-indicator nav-icon"></i> Announcements <span class="badge bg-soft-info text-info rounded-pill nav-link-badge"><?= $countAnnouncements;?></span>
+    										<i class="bi-app-indicator nav-icon"></i> Announcements <span
+    											class="badge bg-soft-info text-info rounded-pill nav-link-badge"><?= $countAnnouncements;?></span>
     									</a>
     								</li>
     								<li class="nav-item">
     									<a class="nav-link <?= ($this->uri->segment(2) == "documents" ? "active" : "") ?>"
     										href="<?= site_url('user/documents'); ?>">
-    										<i class="bi-file nav-icon"></i> Documents <span class="badge bg-soft-info text-info rounded-pill nav-link-badge"><?= $countDocuments;?></span>
+    										<i class="bi-file nav-icon"></i> Documents <span
+    											class="badge bg-soft-info text-info rounded-pill nav-link-badge"><?= $countDocuments;?></span>
     									</a>
     								</li>
     								<li class="nav-item">
