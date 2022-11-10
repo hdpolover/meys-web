@@ -24,6 +24,35 @@ class Cronjob extends CI_Controller
             }
         }
 
+        $webhook = "https://discord.com/api/webhooks/1040091929729302569/D6kb3xoe96IG88xWtfPWJtLZz9AsF_ewTBBFvgVB3kT_TkqFpZVROFs37FUyAEnkwxN9"; 
+        $timestamp = date("c", strtotime("now"));
+        $msg = json_encode([
+            "username" => "MEYS 2022",
+            
+            "tts" => false,
+        
+            "embeds" => [
+                [
+                    // Title
+                    "title" => "Cronjob updated online users",
+        
+                    // Embed Type, do not change.
+                    "type" => "rich",
+        
+                    // Description
+                    "description" => !empty($arr) ? json_encode($arr) : 'No online users',
+        
+                    // Timestamp, only ISO8601
+                    "timestamp" => $timestamp,
+        
+                    // Left border color, in HEX
+                    "color" => hexdec( "3366ff" ),
+                ]
+            ]
+        
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+    
+        discordmsg($msg, $webhook);
         ej($arr);
     }
 

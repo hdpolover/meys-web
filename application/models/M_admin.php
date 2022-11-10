@@ -73,6 +73,13 @@ class M_admin extends CI_Model
         $filter_other['submit'] = null;
         $filter_other['check']  = null;
         $filter_other['step']   = null;
+        $summary            = [
+            'totalChecked' => 0,
+            'totalSubmitted' => 0,
+            'totalVerif' => 0,
+            'totalUser' => 0,
+
+        ];
 
         if($this->input->post('filterEmail') != null || $this->input->post('filterEmail') != '') $filter[] = "a.email like '%".$this->input->post('filterEmail')."%'";
         if($this->input->post('filterName') != null || $this->input->post('filterName') != '') $filter[] = "b.name like '%".$this->input->post('filterName')."%'";
@@ -199,9 +206,37 @@ class M_admin extends CI_Model
 
         $totalRecords = count($models);
 
+        foreach($models as $key => $val){
+            if($val->status_payment == true){
+                
+                $val->submit_data->status = (int) $val->submit_data->status;
+
+                if($val->submit_data->status == 2){
+                    $summary['totalSubmitted'] += 1;
+                }
+                if($val->submit_data->status == 3){
+                    $summary['totalChecked'] += 1;
+                }
+            }
+
+            if($val->status_account == 1){
+                $summary['totalVerif'] += 1;
+            }
+            
+            $summary['totalUser'] += 1;
+            
+        }
+        
+        $summary = [
+            'totalChecked' => number_format($summary['totalChecked']),
+            'totalSubmitted' => number_format($summary['totalSubmitted']),
+            'totalVerif' => number_format($summary['totalVerif']),
+            'totalUser' => number_format($summary['totalUser']),
+        ];
+
         $models = array_slice($models, $offset, $limit);
 
-        return ['records' => array_values($models), 'totalDisplayRecords' => count($models), 'totalRecords' => $totalRecords];
+        return ['records' => array_values($models), 'totalDisplayRecords' => count($models), 'totalRecords' => $totalRecords, 'summary' => $summary];
     }
 
     function get_statistik(){

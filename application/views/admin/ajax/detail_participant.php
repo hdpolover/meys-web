@@ -349,7 +349,7 @@
 								<li class="list-group-item p-2 active">
 									<span style="margin-top: -20px; margin-left: 5px" class="fw-bold">Questions</span>
 								</li>
-								<?php if(!empty($m_essay)):?>
+								<?php if(!empty($m_essay) && !empty($p_essay)):?>
 								<?php foreach($m_essay as $key => $val):?>
 								<li class="list-group-item p-3">
 									<div class="row">
@@ -366,6 +366,8 @@
 									<!-- End Row -->
 								</li>
 								<?php endforeach;?>
+								<?php else:?>
+									<h4 class="mt-5 pt-5">This participant not yet fill this part, please contact participant</h4>
 								<?php endif;?>
 							</ul>
 						</div>

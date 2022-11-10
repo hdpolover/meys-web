@@ -178,6 +178,18 @@ class M_payment extends CI_Model
 
         $offset = $this->input->post('start');
         $limit  = $this->input->post('length'); // Rows display per page
+        $summary            = [
+            'totalIncome' => 0,
+            'manualIncome' => 0,
+            'paypalIncome' => 0,
+            'xenditIncome' => 0,
+
+            'paymentSuccess' => 0,
+            'paymentPending' => 0,
+            'paymentFailed' => 0,
+            'paymentExpired' => 0,
+
+        ];
         
         $filter = [];
 
@@ -203,10 +215,10 @@ class M_payment extends CI_Model
         ;
 
 
-        $this->db->where($filter);
+        $this->db->where($filter)
 
-        // ->group_by('a.user_id, a.payment_batch')
-        $this->db->order_by('a.status ASC');
+        ->group_by('a.user_id')
+        ->order_by('a.status ASC');
 
         $models = $this->db->get()->result();
 
@@ -216,9 +228,40 @@ class M_payment extends CI_Model
 
         $totalRecords = count($models);
 
+        foreach ($models as $key => $val) {
+
+            if ($val->status == 1) {
+                $summary['paymentPending'] += 1;
+            } elseif ($val->status == 2) {
+                $summary['paymentSuccess'] += 1;
+            } elseif ($val->status == 3) {
+                $summary['paymentFailed'] += 1;
+            } elseif ($val->status == 4) {
+                $summary['paymentFailed'] += 1;
+            } elseif ($val->status == 5) {
+                $summary['paymentExpired'] += 1;
+            }
+
+            $summary['totalIncome'] += $val->amount;
+            $summary['manualIncome'] += $val->amount;
+
+        }
+
+        $summary = [
+            'totalIncome' => "Rp. ".number_format($summary['totalIncome']),
+            'manualIncome' => "Rp. ".number_format($summary['manualIncome']),
+            'paypalIncome' => "Rp. ".number_format($summary['paypalIncome']),
+            'xenditIncome' => "Rp. ".number_format($summary['xenditIncome']),
+
+            'paymentSuccess' => number_format($summary['paymentSuccess']),
+            'paymentPending' => number_format($summary['paymentPending']),
+            'paymentFailed' => number_format($summary['paymentFailed']),
+            'paymentExpired' => number_format($summary['paymentExpired'])
+        ];
+
         $models = array_slice($models, $offset, $limit);
 
-        return ['records' => array_values($models), 'totalDisplayRecords' => count($models), 'totalRecords' => $totalRecords];
+        return ['records' => array_values($models), 'totalDisplayRecords' => count($models), 'totalRecords' => $totalRecords, 'summary' => $summary];
     }
 
     function verificationPayment()
