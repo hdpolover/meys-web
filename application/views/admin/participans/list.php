@@ -315,6 +315,32 @@
 </div>
 <!-- End Modal -->
 
+<!-- Modal -->
+<div class="modal fade" id="mdlVerified" tabindex="-1" aria-labelledby="mdlDeleteLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="mdlDeleteLabel">Verified Participant account</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+
+			<div class="modal-body text-center">
+				<div class="text-center">Are you sure to Verified this participant email?</div>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+				<form action="<?= site_url('api/admin/activatedParticipant')?> " method="post"
+					class="js-validate need-validate" novalidate>
+					<input type="hidden" name="id" class="mdlVerified_id">
+					<button type="submit" class="btn btn-soft-success btn-sm">Check</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End Modal -->
+
 <script>
 	var table = $('#dataTable').DataTable({
 		'processing': true,
@@ -409,6 +435,11 @@
 	const showMdlChecked = id => {
 		$('.mdlChecked_id').val(id);
 		$('#mdlChecked').modal('show')
+	}
+
+	const showMdlVerified = id => {
+		$('.mdlVerified_id').val(id);
+		$('#mdlVerified').modal('show')
 	}
 
 	function doneLoading() {

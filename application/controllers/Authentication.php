@@ -113,7 +113,7 @@ class Authentication extends CI_Controller
                         if (sendMail($email, $subject, $message) == true) {
                             $this->session->set_flashdata('success', 'Registration is successful, please enter the activation code that we have sent to your email !');
                         } else {
-                            $this->session->set_flashdata('notif_error', 'There is something wrong, when try to send you an email !');
+                            $this->session->set_flashdata('notif_error', 'We had a problem when try to send verification to your email. Please contact our team with code 422-1 !');
                             redirect(site_url('verification-email'));
                         }
                     } elseif ($this->input->get('act') == "resend-email") {
@@ -124,7 +124,7 @@ class Authentication extends CI_Controller
                         if (sendMail($email, $subject, $message) == true) {
                             $this->session->set_flashdata('success', 'Successfuly send an email to ' . $email . ' !');
                         } else {
-                            $this->session->set_flashdata('notif_error', 'There is something wrong, when try to send you an email !');
+                            $this->session->set_flashdata('notif_error', 'We had a problem when try to send verification to your email. Please contact our team with code 422-1 !');
                             redirect(site_url('verification-email'));
                         }
                     }

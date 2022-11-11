@@ -225,8 +225,8 @@ class Master extends CI_Controller
 
     function changeParticipanEmail(){
         if ($this->M_auth->cek_auth(htmlspecialchars($this->input->post("email"), true)) == false) {
+            $user = $this->M_auth->get_userByID($this->input->post("id"));
             if ($this->M_master->changeParticipanEmail() == true) {
-                $user = $this->M_auth->get_userByID($this->input->post("id"));
                 // atur dataemailperubahan email
                 $now = date("d F Y - H:i");
                 $email = htmlspecialchars($user->email, true);

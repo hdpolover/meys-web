@@ -62,7 +62,7 @@ class Mailer
           $mail->addAddress($data['to']);
 
           // Email subject
-          $mail->Subject = $data['subject'];
+          $mail->Subject = "DO NOT REPLY - ".$data['subject'];
 
           // Set email format to HTML
           $data['web_logo'] = $this->get_settingsValue('web_logo');

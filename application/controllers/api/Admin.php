@@ -12,6 +12,24 @@ class Admin extends CI_Controller
         $this->load->library('uploader');
     }
 
+    function activatedParticipant()
+    {
+        if ($this->M_admin->activatedParticipant() == true) {
+            $user = $this->M_auth->get_userByID($this->input->post("id"));
+            // mengirimkan email selamat bergabung
+            $subject = "Welcome to Middle East Youth Summit";
+            $message = "Hi {$user->name}, Your email has been verified directly by our TEAM. Welcome to Middle East Youth Summit !";
+
+            sendMail($user->email, $subject, $message);
+
+            $this->session->set_flashdata('notif_success', 'Succesfuly verified participant email ');
+            redirect(site_url('admin/participans'));
+        } else {
+            $this->session->set_flashdata('notif_warning', 'There is a problem when trying to verified participant email, try again later');
+            redirect($this->agent->referrer());
+        }
+    }
+
     function checkedParticipant()
     {
         if ($this->M_admin->checkedParticipant() == true) {

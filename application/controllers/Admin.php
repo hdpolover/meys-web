@@ -186,7 +186,8 @@ class Admin extends CI_Controller
             
             $btnDetail      = '<button onclick="showMdlParticipantDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2"><i class="bi-eye"></i></button>';
             $btnPass        = '<button onclick="showMdlChangePassword(\''.$val->user_id.'\')" class="btn btn-soft-primary btn-icon btn-sm me-2"><i class="bi-key"></i></button>';
-            $btnEmail        = '<button onclick="showMdlChangeEmail(\''.$val->user_id.'\')" class="btn btn-soft-danger btn-icon btn-sm me-2"><i class="bi-envelope"></i></button>';
+            $btnEmail       = '<button onclick="showMdlChangeEmail(\''.$val->user_id.'\')" class="btn btn-soft-danger btn-icon btn-sm me-2"><i class="bi-envelope"></i></button>';
+            $btnVerified    = '<button onclick="showMdlVerified(\''.$val->user_id.'\')" class="btn btn-soft-secondary btn-icon btn-sm me-2"><i class="bi-envelope"></i></button>';
             $btnCheck       = '<button onclick="showMdlChecked(\''.$val->user_id.'\')" class="btn btn-soft-success btn-icon btn-sm me-2"><i class="bi-check"></i></button>';
             $step           = '<span class="badge bg-soft-secondary">Not yet fill submission</span>';
             $statusAccount  = '<span class="badge bg-soft-danger">Unverified</span>';
@@ -243,7 +244,7 @@ class Admin extends CI_Controller
 
             $arr[$key] = [
                 "no"            => $no++,
-                "action"        => ($submissionState == 2 ? $btnCheck : '').$btnDetail.$btnPass.$btnEmail,
+                "action"        => ($submissionState == 2 ? $btnCheck : '').$btnDetail.$btnPass.($val->status_account > 0 ? $btnEmail : '').($val->status_account == 0 ? $btnVerified : ''),
                 "name"          => $val->name,
                 "email"         => $val->email,
                 "step"          => $step,
