@@ -155,6 +155,9 @@
 <div class="row">
 	<div class="col-12">
 		<div class="card">
+			<div class="alert alert-soft-primary">
+
+			</div>
 			<div class="card-header py-3">
 				<h4 class="card-header-title">Filter Payments Data</h4>
 			</div>
@@ -223,11 +226,11 @@
 						<tr>
 							<th scope="col">No</th>
 							<th scope="col">Action</th>
+							<th scope="col">Payment State</th>
+							<th scope="col">Status</th>
 							<th scope="col">Name</th>
 							<th scope="col">Email</th>
 							<th scope="col">Institution</th>
-							<th scope="col">Payment State</th>
-							<th scope="col">Status</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -329,6 +332,12 @@
 				data: 'action'
 			},
 			{
+				data: 'paymentState'
+			},
+			{
+				data: 'status'
+			},
+			{
 				data: 'name'
 			},
 			{
@@ -336,12 +345,6 @@
 			},
 			{
 				data: 'institution'
-			},
-			{
-				data: 'paymentState'
-			},
-			{
-				data: 'status'
 			}
 		]
 	});

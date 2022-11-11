@@ -37,7 +37,7 @@
 			</div>
 		</div>
 		<div class="card-footer pt-0">
-			<div class="card-footer">
+			<div class="card-footer ps-0 pb-0">
 				<p><b>Note:</b></p>
 				<p>For further information, you can contact: <a href="mailto:<?= $web_email;?>"><?= $web_email;?></a>
 				</p>

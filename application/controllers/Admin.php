@@ -290,8 +290,8 @@ class Admin extends CI_Controller
         $no                 = $this->input->post('start')+1;
 
         foreach ($payments['records'] as $key => $val) {
-            $btnDetail      = '<button onclick="mdlPaymentDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2"><i class="bi-eye"></i></button>';
-            $btnCheck       = '<button onclick="mdlPaymentDetailVerif(\''.$val->user_id.'\', \''.$val->id.'\', \''.base_url().$val->evidance.'\')" class="btn btn-soft-success btn-icon btn-sm me-2"><i class="bi-check"></i></button>';
+            $btnDetail      = '<button onclick="mdlPaymentDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2" data-bs-toggle="tooltip" data-bs-html="true" title="See history of this user"><i class="bi-card-list"></i></button>';
+            $btnCheck       = '<button onclick="mdlPaymentDetailVerif(\''.$val->user_id.'\', \''.$val->id.'\', \''.base_url().$val->evidance.'\')" class="btn btn-soft-success btn-icon btn-sm me-2" data-bs-toggle="tooltip" data-bs-html="true" title="Change status of this payment"><i class="bi-check"></i></button>';
             $status         = '<span class="badge bg-soft-secondary">New</span>';
 
             if ($val->status == 1) {
@@ -309,7 +309,7 @@ class Admin extends CI_Controller
             }
 
             $btn = "";
-            if($val->status <= 1){
+            if($val->status <= 1 || $val->status == 4  || $val->status == 3){
                 $btn .= $btnCheck;
             }
             $btn .= $btnDetail;
@@ -317,11 +317,11 @@ class Admin extends CI_Controller
             $arr[$key] = [
                 "no"            => $no++,
                 "action"        => $btn,
+                "paymentState"  => $val->summit,
+                "status"        => $status,
                 "name"          => $val->name,
                 "email"         => $val->email,
                 "institution"   => $val->institution,
-                "paymentState"  => $val->summit,
-                "status"        => $status,
             ];
         }
 

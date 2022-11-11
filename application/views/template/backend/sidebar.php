@@ -73,7 +73,7 @@
   					<li class="nav-item" id="tour-payments">
   						<a class="nav-link <?= ($this->uri->segment(2) == "payments" ? "active" : "") ?>"
   							href="<?= site_url('admin/payments'); ?>"><i
-  								class="bi bi-credit-card-2-back nav-icon"></i> Payments</a>
+  								class="bi bi-cash-stack nav-icon"></i> Payments</a>
   					</li>
   					<li class="nav-item" id="tour-payment-batch">
   						<a class="nav-link <?= ($this->uri->segment(2) == "payment-batch" ? "active" : "") ?>"
@@ -83,7 +83,7 @@
   					<li class="nav-item" id="tour-payment-settings">
   						<a class="nav-link <?= ($this->uri->segment(2) == "payment-settings" ? "active" : "") ?>"
   							href="<?= site_url('admin/payment-settings'); ?>"><i
-  								class="bi bi-credit-card nav-icon"></i> Payments Settings</a>
+  								class="bi bi-wallet2 nav-icon"></i> Payments Settings</a>
   					</li>
   					<li class="nav-item" id="tour-payment-xendit">
   						<a class="nav-link <?= ($this->uri->segment(2) == "xendit-settings" ? "active" : "") ?>"

@@ -233,6 +233,9 @@ class M_payment extends CI_Model
             if ($val->status == 1) {
                 $summary['paymentPending'] += 1;
             } elseif ($val->status == 2) {
+                $summary['totalIncome'] += $val->amount;
+                $summary['manualIncome'] += $val->amount;
+                
                 $summary['paymentSuccess'] += 1;
             } elseif ($val->status == 3) {
                 $summary['paymentFailed'] += 1;
@@ -241,9 +244,7 @@ class M_payment extends CI_Model
             } elseif ($val->status == 5) {
                 $summary['paymentExpired'] += 1;
             }
-
-            $summary['totalIncome'] += $val->amount;
-            $summary['manualIncome'] += $val->amount;
+            
 
         }
 

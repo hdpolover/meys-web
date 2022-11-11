@@ -300,6 +300,19 @@
          		}
          	})
 
+			// INITIALIZATION OF STEP FORM
+			// =======================================================
+			new HSStepForm('.js-step-form', {
+				finish($el) {
+					const $successMessageTempalte = $el.querySelector('.js-success-message').cloneNode(true)
+
+					$successMessageTempalte.style.display = 'block'
+
+					$el.style.display = 'none'
+					$el.parentElement.appendChild($successMessageTempalte)
+				}
+			})
+
          </script>
          </body>
 

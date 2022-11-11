@@ -212,7 +212,7 @@
 										<!-- End Col -->
 
 										<div class="col-sm-8 mb-2 mb-sm-0">
-											<span><?= $participants->instagram;?></span>
+											<span><a href="https://www.instagram.com/<?= $participants->instagram;?>" target="_blank">@<?= $participants->instagram;?></a></span>
 										</div>
 										<!-- End Col -->
 									</div>
@@ -414,7 +414,7 @@
 										<!-- End Col -->
 
 										<div class="col-sm-8 mb-2 mb-sm-0">
-											<span><?= $participants->twibbon_link;?></span>
+											<span><a href="<?= $participants->twibbon_link;?>" target="_blank"><?= $participants->twibbon_link;?></a></span>
 										</div>
 										<!-- End Col -->
 									</div>
@@ -428,7 +428,7 @@
 										<!-- End Col -->
 
 										<div class="col-sm-8 mb-2 mb-sm-0">
-											<span><?= $participants->share_proof_link;?></span>
+											<span><a href="<?= $participants->share_proof_link;?>" target="_blank"><?= $participants->share_proof_link;?></a></span>
 										</div>
 										<!-- End Col -->
 									</div>

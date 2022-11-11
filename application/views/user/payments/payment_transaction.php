@@ -11,7 +11,8 @@
     						</div>
     						<div class="col col-md-3" style="text-align: right;">
     							<?php if($reff['type'] == 'history'):?>
-    							<a class="link link-sm link-secondary" href="<?= site_url('user/payments-history/'.$reff['id'])?>">
+    							<a class="link link-sm link-secondary"
+    								href="<?= site_url('user/payments-history/'.$reff['id'])?>">
     								<i class="bi-chevron-left small ms-1"></i> Go back
     							</a>
     							<?php else:?>
@@ -40,6 +41,25 @@
     						</dd>
     					</dl>
     					<?php endif;?>
+    					<dl class="row mt-4 mb-4">
+    						<dt class="col-sm-6">PAYMENT STATUS</dt>
+    						<dd class="col-sm-6 text-sm-end mb-0">
+    							<?php if($payment_detail->status == 1):?>
+    							<span class="badge bg-secondary">pending</span>
+    							<?php elseif($payment_detail->status == 2):?>
+    							<span class="badge bg-success">success</span>
+    							<?php elseif($payment_detail->status == 3):?>
+    							<span class="badge bg-danger">canceled</span>
+    							<?php elseif($payment_detail->status == 4):?>
+    							<span class="badge bg-danger">rejected</span>
+    							<p class="my-0"><small class="text-info">your payment is rejected, please contact us for
+    									more
+    									info</small></p>
+    							<?php else:?>
+    							<span class="badge bg-warning">-</span>
+    							<?php endif;?>
+    						</dd>
+    					</dl>
     					<dl class="row mt-4 mb-4">
     						<dt class="col-sm-6">PAYMENT PROOF</dt>
     						<dd class="col-sm-6 text-sm-end mb-0"><button class="btn btn-xs btn-soft-success"
@@ -74,10 +94,12 @@
     					<p class="mb-4">- If there is an error, please reload your browser, if still send an email to <a
     							href="mailto:<?= $web_email;?>"><?= $web_email;?></a></p>
     					<div class="row mt-4">
+    						<?php if($payment_detail->status <= 1):?>
     						<div class="col">
     							<button class="btn btn-soft-danger w-100 mt-4 btn-sm" data-bs-toggle="modal"
     								data-bs-target="#cancelPayment">Cancel Payment</button>
     						</div>
+    						<?php endif;?>
     					</div>
     				</div>
     				<!-- End Body -->

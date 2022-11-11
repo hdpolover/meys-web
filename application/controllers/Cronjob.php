@@ -40,7 +40,7 @@ class Cronjob extends CI_Controller
                     "type" => "rich",
         
                     // Description
-                    "description" => !empty($arr) ? json_encode($arr) : 'No online users',
+                    "description" => !empty($arr) ? "```".json_encode($arr)."```" : 'No online users',
         
                     // Timestamp, only ISO8601
                     "timestamp" => $timestamp,

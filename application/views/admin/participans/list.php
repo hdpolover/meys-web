@@ -229,9 +229,10 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 
-			<div class="modal-body text-center">
+			<div class="modal-body">
 				<div class="text-center">Are you sure to change the password? new passwords: <span
 						class="mdlChangePass_passLabel" style="font-weight: bold;"></span></div>
+				<small class="text-secondary">Participants will receive email, regarding of these password changaes</small>
 			</div>
 
 			<div class="modal-footer">

@@ -92,22 +92,23 @@
     								<li class="nav-item">
     									<a class="nav-link <?= ($this->uri->segment(2) == "payment" ? "active" : "") ?>"
     										href="<?= site_url('user/payment'); ?>">
-    										<i class="bi-credit-card nav-icon"></i> Payment <span
-    											class="badge bg-soft-danger text-danger rounded-pill nav-link-badge">!</span>
+    										<i class="bi-credit-card nav-icon"></i> Payment
     									</a>
     								</li>
     								<li class="nav-item">
     									<a class="nav-link <?= ($this->uri->segment(2) == "announcements" ? "active" : "") ?>"
     										href="<?= site_url('user/announcements'); ?>">
-    										<i class="bi-app-indicator nav-icon"></i> Announcements <span
-    											class="badge bg-soft-info text-info rounded-pill nav-link-badge"><?= $countAnnouncements;?></span>
+    										<i class="bi-app-indicator nav-icon"></i> Announcements
+    										<?php if($countAnnouncements > 0):?><span
+    											class="badge bg-soft-info text-info rounded-pill nav-link-badge"><?= $countAnnouncements;?></span><?php endif;?>
     									</a>
     								</li>
     								<li class="nav-item">
     									<a class="nav-link <?= ($this->uri->segment(2) == "documents" ? "active" : "") ?>"
     										href="<?= site_url('user/documents'); ?>">
-    										<i class="bi-file nav-icon"></i> Documents <span
-    											class="badge bg-soft-info text-info rounded-pill nav-link-badge"><?= $countDocuments;?></span>
+    										<i class="bi-file nav-icon"></i> Documents
+    										<?php if($countDocuments > 0):?><span
+    											class="badge bg-soft-info text-info rounded-pill nav-link-badge"><?= $countDocuments;?></span><?php endif;?>
     									</a>
     								</li>
     								<li class="nav-item">
