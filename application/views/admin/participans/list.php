@@ -232,7 +232,8 @@
 			<div class="modal-body">
 				<div class="text-center">Are you sure to change the password? new passwords: <span
 						class="mdlChangePass_passLabel" style="font-weight: bold;"></span></div>
-				<small class="text-secondary">Participants will receive email, regarding of these password changaes</small>
+				<small class="text-secondary">Participants will receive email, regarding of these password
+					changaes</small>
 			</div>
 
 			<div class="modal-footer">
@@ -243,6 +244,39 @@
 					<button type="button" class="btn btn-outline-secondary btn-sm"
 						data-bs-dismiss="modal">Cancel</button>
 					<button type="submit" class="btn btn-soft-success btn-sm">Save</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End Modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="mdlChangeEmail" tabindex="-1" aria-labelledby="mdlDeleteLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="mdlDeleteLabel">Change Email</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+
+				<form action="<?= site_url('api/master/changeParticipanEmail')?> " method="post"
+					class="js-validate need-validate" novalidate>
+					<input type="hidden" name="id" id="mdlChangeEmail_id">
+					<div class="mb-3">
+						<label for="inputEmailChange" class="form-label">New participants email</label>
+						<input type="email" class="form-control form-control-sm" name="email" id="inputEmailChange"
+							placeholder="New email" required>
+						<small class="text-secondary">Participants will receive email, regarding of these password
+							changaes on his/her new email</small>
+					</div>
+
+					<div class="modal-footer px-0 mb-0 pb-0">
+						<button type="button" class="btn btn-outline-secondary btn-sm"
+							data-bs-dismiss="modal">Cancel</button>
+						<button type="submit" class="btn btn-soft-success btn-sm">Save</button>
+					</div>
 				</form>
 			</div>
 		</div>
@@ -365,6 +399,11 @@
 		$('#mdlChangePass_pass').val(pass);
 		$('.mdlChangePass_passLabel').html(pass);
 		$('#mdlChangePass').modal('show')
+	}
+
+	const showMdlChangeEmail = id => {
+		$('#mdlChangeEmail_id').val(id);
+		$('#mdlChangeEmail').modal('show')
 	}
 
 	const showMdlChecked = id => {

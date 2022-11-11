@@ -190,6 +190,15 @@ class M_master extends CI_Model
         return ($this->db->affected_rows() != 1) ? false : true;
     }
 
+    function changeParticipanEmail(){
+        $user_id = $this->input->post('id');
+        $email = $this->input->post('email');
+
+        $this->db->where(['user_id' => $user_id]);
+        $this->db->update('tb_auth', ['email' => $email]);
+        return ($this->db->affected_rows() != 1) ? false : true;
+    }
+
     function getDocuments(){
         $this->db->select('*')
         ->from('m_documents')

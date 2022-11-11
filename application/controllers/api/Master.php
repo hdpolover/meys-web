@@ -210,7 +210,7 @@ class Master extends CI_Controller
             $email = htmlspecialchars($user->email, true);
 
             $subject = "Password change - Middle East Youth Summit";
-            $message = "Hi, password for Middle East Youth Summit account with email <b>{$email}</b> has been changed at {$now}. <br> <br>Your new password is: <b>{$this->input->post('pass')}</b> <br><br> If you feel you did not make these changes, please contact our admin immediately.";
+            $message = "Hi, password for Middle East Youth Summit account with email <b>{$email}</b> has been changed at {$now}. <br> <br>Your new password is: <b>{$this->input->post('pass')}</b> <br><br> If you feel not requested this changes, please contact our admin immediately.";
 
             // mengirimemailperubahan password
             sendMail(htmlspecialchars($user->email, true), $subject, $message);
@@ -219,6 +219,38 @@ class Master extends CI_Controller
             redirect(site_url('admin/participans'));
         } else {
             $this->session->set_flashdata('notif_warning', 'There is a problem when trying to changes participans password, try again later');
+            redirect($this->agent->referrer());
+        }
+    }
+
+    function changeParticipanEmail(){
+        if ($this->M_auth->cek_auth(htmlspecialchars($this->input->post("email"), true)) == false) {
+            if ($this->M_master->changeParticipanEmail() == true) {
+                $user = $this->M_auth->get_userByID($this->input->post("id"));
+                // atur dataemailperubahan email
+                $now = date("d F Y - H:i");
+                $email = htmlspecialchars($user->email, true);
+
+                $subject = "Email change - Middle East Youth Summit";
+                $message = "Hi, email for Middle East Youth Summit account with email <b>{$email}</b> has been changed at {$now}. <br> <br>Your new email is: <b>{$this->input->post('email')}</b> <br><br> If you feel not requested this changes, please contact our admin immediately.";
+
+                // mengirimemailperubahan email
+                sendMail(htmlspecialchars($user->email, true), $subject, $message);
+
+                $subject = "Email change - Middle East Youth Summit";
+                $message = "Hi, email for Middle East Youth Summit account with email <b>{$email}</b> has been changed at {$now}. <br> <br>Your new email is: <b>{$this->input->post('email')}</b> <br><br> If you feel not requested this changes, please contact our admin immediately.";
+
+                // mengirimemailperubahan email
+                sendMail(htmlspecialchars($this->input->post('email'), true), $subject, $message);
+
+                $this->session->set_flashdata('notif_success', 'Succesfuly changes participans email ');
+                redirect(site_url('admin/participans'));
+            } else {
+                $this->session->set_flashdata('notif_warning', 'There is a problem when trying to changes participans email, try again later');
+                redirect($this->agent->referrer());
+            }
+        } else {
+            $this->session->set_flashdata('notif_warning', 'There is already an account related to this email!');
             redirect($this->agent->referrer());
         }
     }
