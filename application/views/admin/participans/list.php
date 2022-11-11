@@ -253,7 +253,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="mdlChangeEmail" tabindex="-1" aria-labelledby="mdlDeleteLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered modal-sm">
+	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="mdlDeleteLabel">Change Email</h5>
