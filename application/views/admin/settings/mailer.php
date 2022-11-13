@@ -15,7 +15,7 @@
 			<div class="card-body">
 				<form action="<?= site_url('api/website/ubahMailer');?>" method="post"
 					class="js-validate needs-validation" novalidate enctype="multipart/form-data">
-					<?php if($this->session->userdata('role') == 1):?>
+					<?php if($this->session->userdata('role') == 0):?>
 					<div class="mb-3 justify-content-between align-items-center row">
 						<div class="col-8">
 							<div class="input-group input-group-sm mb-3">

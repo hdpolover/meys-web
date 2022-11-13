@@ -117,10 +117,15 @@
 											aria-label="Close"></button>
 									</div>
 
-									<div class="modal-body">
+									<div class="modal-body pb-2">
 										<h5>Payment proff</h5>
-										<img src="<?= base_url();?><?= $val->evidance;?>"
-											class="img-thumbnail w-100 mb-3" alt="">
+										<!-- Media Viewer -->
+										<a class="media-viewer" href="<?= base_url();?><?= $val->evidance;?>"
+											data-fslightbox="gallery">
+											<!-- End Media Viewer -->
+											<img src="<?= base_url();?><?= $val->evidance;?>"
+												class="img-thumbnail w-100 mb-3" alt="">
+										</a>
 										<div class="text-center">Are you sure to verification this payment?</div>
 									</div>
 
