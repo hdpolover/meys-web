@@ -169,7 +169,7 @@ class Admin extends CI_Controller
             $this->load->view('admin/ajax/detail_participant', $data);
 
 		} else {
-			echo "<center class='py-5'><h4>There is an error when trying get user participant's data!</h4></center>";
+			echo "<center class='py-5'><h4>this participant's not yet make any progress at submission!</h4></center>";
 		}
     }
     

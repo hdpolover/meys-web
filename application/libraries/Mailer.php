@@ -46,7 +46,7 @@ class Mailer
             )
           );
 
-          $mail->SMTPDebug      = $this->get_settingsValue('mailer_mode');
+          $mail->SMTPDebug      = 1;
           $mail->SMTPAuth       = true;
           $mail->SMTPKeepAlive  = true;
           $mail->SMTPSecure     = $this->get_settingsValue('mailer_connection');

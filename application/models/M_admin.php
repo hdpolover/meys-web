@@ -112,11 +112,12 @@ class M_admin extends CI_Model
             $strip_email                    = explode("@", $val->email);
             $models[$key]->name             = is_null($val->name) || $val->name == "" ? $strip_email[0] : $val->name;
             $models[$key]->status_account   = $val->active == 0 ? 0 : $val->status;
-            $models[$key]->status_payment   = $this->checkPaymentUserAll($val->user_id)['status'];
-            $models[$key]->payment_data     = $this->checkPaymentUserAll($val->user_id)['data'];
-            $models[$key]->status_submit    = $this->checkSubmitUserStatus($val->user_id)['status'];
-            $models[$key]->submit_data      = $this->checkSubmitUserStatus($val->user_id)['data'];
-            $models[$key]->essay            = $this->getEssayUser($val->user_id);
+            $payment                        = $this->checkPaymentUserAll($val->user_id);
+            $models[$key]->status_payment   = $payment['status'];
+            $models[$key]->payment_data     = $payment['data'];
+            $submit                         = $this->checkSubmitUserStatus($val->user_id);
+            $models[$key]->status_submit    = $submit['status'];
+            $models[$key]->submit_data      = $submit['data'];
         
             if($val->status_submit == true){
                 if($val->submit_data->step == 1){

@@ -314,7 +314,7 @@ class Authentication extends CI_Controller
                         $subject = "Welcome to Middle East Youth Summit";
                         $message = "Hi {$user->name}, Congratulations on joining us at the Middle East Youth Summit. Please activate your account with the activation code that we have sent to your email";
 
-                        sendMail($email, $subject, $message);
+                        // sendMail($email, $subject, $message);
 
                         // $this->session->set_flashdata('error', 'Registration is successful, we have sent an activation code to your email. Please enter the code to activate your account!');
                         // mengirimkan user untuk verifikasi email

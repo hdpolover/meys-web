@@ -457,7 +457,8 @@
 											<!-- End Col -->
 
 											<div class="col-sm-8 mb-2 mb-sm-0">
-												<span><a href="<?= $participants->twibbon_link;?>" target="_blank"><?= $participants->twibbon_link;?></a></span>
+												<span><a href="<?= $participants->twibbon_link;?>"
+														target="_blank"><?= $participants->twibbon_link;?></a></span>
 											</div>
 											<!-- End Col -->
 										</div>
@@ -471,7 +472,8 @@
 											<!-- End Col -->
 
 											<div class="col-sm-8 mb-2 mb-sm-0">
-												<span><a href="<?= $participants->share_proof_link;?>" target="_blank"><?= $participants->share_proof_link;?></a></span>
+												<span><a href="<?= $participants->share_proof_link;?>"
+														target="_blank"><?= $participants->share_proof_link;?></a></span>
 											</div>
 											<!-- End Col -->
 										</div>
@@ -1041,12 +1043,12 @@
 
 									<div class="js-form-message">
 										<?php if($val->type == 'textarea'):?>
-										<textarea class="form-control form-control-sm formEssay"
-											name="essay[<?= $val->id;?>][]" <?= $val->required == 1 ? 'required' : '';?>
-											maxlength="200"
+										<span class="show" id="showtext<?= $val->id;?>">0 words</span>
+										<textarea class="form-control form-control-sm formEssay" name="essay[<?= $val->id;?>][]"
+											<?= $val->required == 1 ? 'required' : '';?> id="text<?= $val->id;?>"
 											rows="5"><?= !empty($p_essay) && isset($p_essay[$val->id]->answer) ? $p_essay[$val->id]->answer : '';?></textarea>
 										<?php else:?>
-										<input class="form-control form-control-sm formEssay" maxlength="200"
+										<input class="form-control form-control-sm formEssay"
 											name="essay[<?= $val->id;?>][]" <?= $val->required == 1 ? 'required' : '';?>
 											rows="5">
 										<?php endif;?>
@@ -1054,10 +1056,47 @@
 										<span class="invalid-feedback">Please enter a achievements.</span>
 									</div>
 								</div>
+
 								<!-- End Form Group -->
 								<?php endforeach;?>
 								<?php endif;?>
+								<script>
+									$(document).ready(function () {
+										$('textarea.formEssay').each(function () {
+											$('#' + $(this).attr('id')).keydown(function(e) {
+												// Get the input text value
+												var text = document.getElementById($(this).attr('id')).value;
+												// Initialize the word counter
+												var numWords = 0;
 
+												// Loop through the text
+												// and count spaces in it
+												for (var i = 0; i < text.length; i++) {
+													var currentCharacter = text[i];
+
+													// Check if the character is a space
+													if (currentCharacter == " ") {
+														numWords += 1;
+													}
+												}
+
+												// Add 1 to make the count equal to
+												// the number of words
+												// (count of words = count of spaces + 1)
+												// numWords += 1;
+
+												if(numWords >= 200){
+													e.preventDefault();
+												}
+
+												console.log("show"+$(this).attr('id'));
+												// Display it as output
+												$("#show"+$(this).attr('id')).html(numWords+ " words");
+											});
+										});
+									});
+
+								</script>
 								<!-- Footer -->
 								<div class="d-flex align-items-center mt-5">
 									<button type="button" class="btn btn-outline-secondary btn-sm me-2"
