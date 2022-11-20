@@ -21,6 +21,11 @@ class Admin extends CI_Controller
             $this->session->set_flashdata('notif_warning', "Please login to continue");
             redirect('sign-in');
         }
+
+        if ($this->session->userdata('role') > 1) {
+            $this->session->set_flashdata('warning', "You don`t have access to this page");
+            redirect(base_url());
+        }
     }
 
     public function loadOnlineUsers()
@@ -50,6 +55,8 @@ class Admin extends CI_Controller
         endforeach;
 
         // daiily chart
+        $data['arrChartDaily']['created_at'] = [];
+        $data['arrChartDaily']['jmlPeserta'] = [];
         $statChartDaily = $this->M_admin->getChartDaily();
         foreach ($statChartDaily as $val):
             // $data['arrChartDaily']['created_at'][] = "'".date("Y-m-d\TH:i:s\.v\Z", $val->created_at)."'";
@@ -64,7 +71,11 @@ class Admin extends CI_Controller
             $data['arrChartDailyAccount']['created_at'][] = "'".$val->created_at."'";
             $data['arrChartDailyAccount']['jmlPeserta'][] = $val->count;
         endforeach;
-        $data['arrChartDailyDate'] = array_unique(array_merge($data['arrChartDailyAccount']['created_at'], $data['arrChartDaily']['created_at']), SORT_REGULAR);
+        if(!empty($data['arrChartDaily'])){
+            $data['arrChartDailyDate'] = array_unique(array_merge($data['arrChartDailyAccount']['created_at'], $data['arrChartDaily']['created_at']), SORT_REGULAR);
+        }else{
+            $data['arrChartDailyDate'] = array_unique($data['arrChartDailyAccount']['created_at'], SORT_REGULAR);
+        }
         
         $this->templateback->view('admin/statistics', $data);
     }
@@ -76,9 +87,9 @@ class Admin extends CI_Controller
 
     public function participans()
     {
-        $data['participans'] = $this->M_admin->getParticipansAll();
+        // $data['participans'] = $this->M_admin->getParticipansAll();
         // ej($data);
-        $this->templateback->view('admin/participans/list', $data);
+        $this->templateback->view('admin/participans/list');
     }
 
     public function participans_detail($participans_id = null)
@@ -174,89 +185,24 @@ class Admin extends CI_Controller
     }
     
     public function getAjaxParticipant(){
-        $participants       = $this->M_admin->getParticipansAll();
-
+        $participants       = $this->M_admin->getParticipansAll_v2();
+        
         $draw               = $this->input->post('draw');
         $search             = $this->input->post('search')['value'];
         $arr                = [];
         $no                 = $this->input->post('start')+1;
-        $submissionState    = 1;
 
         foreach ($participants['records'] as $key => $val) {
-            
-            $btnDetail      = '<button onclick="showMdlParticipantDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2"><i class="bi-eye"></i></button>';
-            $btnPass        = '<button onclick="showMdlChangePassword(\''.$val->user_id.'\')" class="btn btn-soft-primary btn-icon btn-sm me-2"><i class="bi-key"></i></button>';
-            $btnEmail       = '<button onclick="showMdlChangeEmail(\''.$val->user_id.'\')" class="btn btn-soft-danger btn-icon btn-sm me-2"><i class="bi-envelope"></i></button>';
-            $btnVerified    = '<button onclick="showMdlVerified(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-									class="bi bi-envelope-check" viewBox="0 0 16 16">
-									<path
-										d="M2 2a2 2 0 0 0-2 2v8.01A2 2 0 0 0 2 14h5.5a.5.5 0 0 0 0-1H2a1 1 0 0 1-.966-.741l5.64-3.471L8 9.583l7-4.2V8.5a.5.5 0 0 0 1 0V4a2 2 0 0 0-2-2H2Zm3.708 6.208L1 11.105V5.383l4.708 2.825ZM1 4.217V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v.217l-7 4.2-7-4.2Z" />
-									<path
-										d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-1.993-1.679a.5.5 0 0 0-.686.172l-1.17 1.95-.547-.547a.5.5 0 0 0-.708.708l.774.773a.75.75 0 0 0 1.174-.144l1.335-2.226a.5.5 0 0 0-.172-.686Z" />
-								</svg></button>';
-            $btnCheck       = '<button onclick="showMdlChecked(\''.$val->user_id.'\')" class="btn btn-soft-success btn-icon btn-sm me-2"><i class="bi-check"></i></button>';
-            $step           = '<span class="badge bg-soft-secondary">Not yet fill submission</span>';
-            $statusAccount  = '<span class="badge bg-soft-danger">Unverified</span>';
-            $statusSubmit   = '<span class="badge bg-soft-danger">Not Submitted</span>';
-            $statusCheck    = '<span class="badge bg-soft-danger">Not Checked</span>';
-
-            if($val->status_submit == true){
-                if($val->step_status == 1){
-                    $step = '<span class="badge bg-soft-info">(1) Personal Data</span>';
-                }elseif($val->step_status == 2){
-                    $step = '<span class="badge bg-soft-warning">(2) Others</span>';
-                }elseif($val->step_status == 3){
-                    $step = '<span class="badge bg-soft-danger">(3) Question</span>';
-                }elseif($val->step_status == 4){
-                    $step = '<span class="badge bg-soft-primary">(4) Programs</span>';
-                }elseif($val->step_status == 5){
-                    $step = '<span class="badge bg-blue-dark">(5) Self Photo</span>';
-                }elseif($val->step_status == 6){
-                    $step = '<span class="badge bg-soft-success">(6) Payment & Agreement</span>';
-                }elseif($val->step_status == 7){
-                    $step = '<span class="badge bg-soft-success">Waiting for review</span>';
-                }
-            }
-
-            if($val->status_payment == true){
-                $val->submit_data->status = (int) $val->submit_data->status;
-                if($val->submit_data->status ==  0 || $val->submit_data->status == 1){
-                    $statusSubmit   = '<span class="badge bg-soft-danger">Not Submitted</span>';
-                    $submissionState= 1;
-                }
-                if($val->submit_data->status == 2){
-                    $statusSubmit   = '<span class="badge bg-soft-info">Submitted</span>';
-                    $submissionState= 2;
-                }
-                if($val->submit_data->status == 3){
-                    $step           = '<span class="badge bg-soft-success">Reviewed</span>';
-                    $statusSubmit   = '<span class="badge bg-soft-info">Submitted</span>';
-                    $statusCheck    = '<span class="badge bg-soft-success">Accepted</span>';
-                    $submissionState= 3;
-                }
-                if($val->submit_data->status == 4){
-                    $step           = '<span class="badge bg-soft-success">Reviewed</span>';
-                    $statusSubmit   = '<span class="badge bg-soft-info">Submitted</span>';
-                    $statusCheck    = '<span class="badge bg-soft-warning">Rejected</span>';
-                    $submissionState= 4;
-                }
-            }
-
-            if($val->status_account == 1){
-                $statusAccount  = '<span class="badge bg-soft-success">Verified</span>';
-            }elseif($val->status_account == 2){
-                $statusAccount  = '<span class="badge bg-soft-warning">Suspended</span>';
-            }
 
             $arr[$key] = [
                 "no"            => $no++,
-                "action"        => ($submissionState == 2 ? $btnCheck : '').$btnDetail.$btnPass.($val->status_account > 0 ? $btnEmail : '').($val->status_account == 0 ? $btnVerified : ''),
+                "action"        => $val->action,
                 "name"          => $val->name,
                 "email"         => $val->email,
-                "step"          => $step,
-                "accountStatus" => $statusAccount,
-                "submitStatus"  => $statusSubmit,
-                "checkStatus"   => $statusCheck,
+                "step"          => $val->step,
+                "accountStatus" => $val->statusAccount,
+                "submitStatus"  => $val->statusSubmit,
+                "checkStatus"   => $val->statusCheck,
             ];
         }
 
@@ -298,6 +244,7 @@ class Admin extends CI_Controller
         $no                 = $this->input->post('start')+1;
 
         foreach ($payments['records'] as $key => $val) {
+            $btnParticipant = '<button onclick="showMdlParticipantDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2"><i class="bi-eye"></i></button>';
             $btnDetail      = '<button onclick="mdlPaymentDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2" data-bs-toggle="tooltip" data-bs-html="true" title="See history of this user"><i class="bi-card-list"></i></button>';
             $btnCheck       = '<button onclick="mdlPaymentDetailVerif(\''.$val->user_id.'\', \''.$val->id.'\', \''.base_url().$val->evidance.'\')" class="btn btn-soft-success btn-icon btn-sm me-2" data-bs-toggle="tooltip" data-bs-html="true" title="Change status of this payment"><i class="bi-check"></i></button>';
             $status         = '<span class="badge bg-soft-secondary">New</span>';
@@ -316,7 +263,7 @@ class Admin extends CI_Controller
                 $status = '<span class="badge bg-blue-dark">Haven`t make any payment</span>';
             }
 
-            $btn = "";
+            $btn = $btnParticipant;
             if($val->status <= 1 || $val->status == 4  || $val->status == 3){
                 $btn .= $btnCheck;
             }

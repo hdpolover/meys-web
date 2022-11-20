@@ -274,7 +274,10 @@
 
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-				<form action="<?= site_url('api/payments/verificationPayment')?> " method="post"
+				<input type="hidden" name="id" class="mdlVerif_id">
+				<button type="button" class="btn btn-soft-success btn-sm" id="verifBtn" onclick="verifData()">Verified</button>
+				<button type="button" class="btn btn-soft-danger btn-sm" id="rejectBtn" onclick="rejectData()">Reject</button>
+				<!-- <form action="<?= site_url('api/payments/verificationPayment')?> " method="post"
 					class="js-validate need-validate" novalidate>
 					<input type="hidden" name="id" class="mdlVerif_id">
 					<input type="hidden" name="user_id" class="mdlVerif_userid">
@@ -285,7 +288,22 @@
 					<input type="hidden" name="id" class="mdlVerif_id">
 					<input type="hidden" name="user_id" class="mdlVerif_userid">
 					<button type="submit" class="btn btn-soft-danger btn-sm">Rejected</button>
-				</form>
+				</form> -->
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End Modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="mdlParticipantDetail" tabindex="-1" aria-labelledby="mdlDeleteLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-xl">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="mdlDeleteLabel">Participant Detail</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="modalParticipantContent">
 			</div>
 		</div>
 	</div>
@@ -315,7 +333,7 @@
 				$('#manualIncome').html(json.manualIncome);
 				$('#paypalIncome').html(json.paypalIncome);
 				$('#xenditIncome').html(json.xenditIncome);
-				
+
 				$('#paymentSuccess').html(json.paymentSuccess);
 				$('#paymentPending').html(json.paymentPending);
 				$('#paymentFailed').html(json.paymentFailed);
@@ -368,6 +386,26 @@
 			}
 		});
 	}
+	const showMdlParticipantDetail = id => {
+		$('#mdlChecked_id').val(id);
+
+		$("#modalParticipantContent").html(
+			`<center class="py-5"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading ...</center>`
+		);
+
+		$('#mdlParticipantDetail').modal('show')
+
+		jQuery.ajax({
+			url: "<?= site_url('admin/getDetailParticipant') ?>",
+			type: 'POST',
+			data: {
+				user_id: id
+			},
+			success: function (data) {
+				$("#modalParticipantContent").html(data);
+			}
+		});
+	}
 
 	function doneLoading() {
 		$('#searchBtn').prop("disabled", false);
@@ -392,6 +430,134 @@
 		);
 
 		table.ajax.reload();
+	}
+
+	function verifData() {
+		var id = $('.mdlVerif_id').val();
+
+		$('#verifBtn').prop("disabled", true);
+		// add spinner to button
+		$('#verifBtn').html(
+			`<span class="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true"></span> loading...`
+		);
+
+		jQuery.ajax({
+			url: "<?= site_url('api/payments/verificationPayment') ?>",
+			type: 'POST',
+			data: {
+				id: id
+			},
+			success: function (data) {
+				$('#verifBtn').prop("disabled", false);
+				$('#verifBtn').html(`Verified`);
+
+				$('#mdlPaymentDetailVerif').modal('hide');
+
+				var Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				})
+
+				Toast.fire({
+					icon: 'success',
+					title: "Succesfuly verification payment"
+				})
+
+				table.ajax.reload();
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+
+				table.ajax.reload();
+
+				var Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				})
+
+				Toast.fire({
+					icon: 'error',
+					title: thrownError
+				})
+			}
+		});
+	}
+
+	function rejectData() {
+		var id = $('.mdlVerif_id').val();
+
+		$('#rejectBtn').prop("disabled", true);
+		// add spinner to button
+		$('#rejectBtn').html(
+			`<span class="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true"></span> loading...`
+		);
+
+		jQuery.ajax({
+			url: "<?= site_url('api/payments/rejectedPayment') ?>",
+			type: 'POST',
+			data: {
+				id: id
+			},
+			success: function (data) {
+				$('#rejectBtn').prop("disabled", false);
+				$('#rejectBtn').html(`Reject`);
+
+				$('#mdlPaymentDetailVerif').modal('hide');
+
+				var Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				})
+
+				Toast.fire({
+					icon: 'success',
+					title: "Succesfuly rejected payment"
+				})
+
+				table.ajax.reload();
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+
+				table.ajax.reload();
+
+				var Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				})
+
+				Toast.fire({
+					icon: 'error',
+					title: thrownError
+				})
+			}
+		});
 	}
 
 </script>

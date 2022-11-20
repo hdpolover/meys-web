@@ -74,23 +74,25 @@ class Payments extends CI_Controller
 
     public function verificationPayment()
     {
-        if ($this->M_payment->verificationPayment() == true) {
-            $this->session->set_flashdata('notif_success', 'Succesfuly verification payment ');
-            redirect(site_url('admin/payments'));
-        } else {
-            $this->session->set_flashdata('notif_warning', 'There is a problem when trying to verification payment, try again later');
-            redirect($this->agent->referrer());
-        }
+        return $this->M_payment->verificationPayment();
+        // if ($this->M_payment->verificationPayment() == true) {
+        //     $this->session->set_flashdata('notif_success', 'Succesfuly verification payment ');
+        //     redirect(site_url('admin/payments'));
+        // } else {
+        //     $this->session->set_flashdata('notif_warning', 'There is a problem when trying to verification payment, try again later');
+        //     redirect($this->agent->referrer());
+        // }
     }
 
     public function rejectedPayment()
     {
-        if ($this->M_payment->rejectedPayment() == true) {
-            $this->session->set_flashdata('notif_success', 'Succesfuly rejected payment ');
-            redirect(site_url('admin/payments'));
-        } else {
-            $this->session->set_flashdata('notif_warning', 'There is a problem when trying to rejected payment, try again later');
-            redirect($this->agent->referrer());
-        }
+        return $this->M_payment->rejectedPayment();
+        // if ($this->M_payment->rejectedPayment() == true) {
+        //     $this->session->set_flashdata('notif_success', 'Succesfuly rejected payment ');
+        //     redirect(site_url('admin/payments'));
+        // } else {
+        //     $this->session->set_flashdata('notif_warning', 'There is a problem when trying to rejected payment, try again later');
+        //     redirect($this->agent->referrer());
+        // }
     }
 }

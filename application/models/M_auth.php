@@ -107,6 +107,8 @@ class M_auth extends CI_Model
             'email' => $email,
             'password' => password_hash($password, PASSWORD_DEFAULT),
             'referral_code' => $referral_code,
+            'active' => 1,
+            'status' => 1,
             'created_at' => time(),
         ];
 

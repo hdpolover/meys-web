@@ -188,8 +188,8 @@
 						<li><i class="bi bi-envelope me-2 text-danger"></i> Change participants email (<span
 								class="text-danger">Don't change email without reaching participant</span>)</li>
 						<li>
-							<span class="text-info me-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-									class="bi bi-envelope-check" viewBox="0 0 16 16">
+							<span class="text-info me-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+									fill="currentColor" class="bi bi-envelope-check" viewBox="0 0 16 16">
 									<path
 										d="M2 2a2 2 0 0 0-2 2v8.01A2 2 0 0 0 2 14h5.5a.5.5 0 0 0 0-1H2a1 1 0 0 1-.966-.741l5.64-3.471L8 9.583l7-4.2V8.5a.5.5 0 0 0 1 0V4a2 2 0 0 0-2-2H2Zm3.708 6.208L1 11.105V5.383l4.708 2.825ZM1 4.217V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v.217l-7 4.2-7-4.2Z" />
 									<path
@@ -320,7 +320,11 @@
 
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
-				<form action="<?= site_url('api/admin/checkedParticipant')?> " method="post"
+				<input type="hidden" name="id" class="mdlChecked_id">
+				<button type="button" id="checkBtn" class="btn btn-soft-success btn-sm" onclick="checkData()">Check</button>
+				<button type="button" id="rejectBtn" class="btn btn-soft-danger btn-sm" onclick="rejectData()">Reject</button>
+
+				<!-- <form action="<?= site_url('api/admin/checkedParticipant')?> " method="post"
 					class="js-validate need-validate" novalidate>
 					<input type="hidden" name="id" class="mdlChecked_id">
 					<button type="submit" class="btn btn-soft-success btn-sm">Check</button>
@@ -329,7 +333,7 @@
 					class="js-validate need-validate" novalidate>
 					<input type="hidden" name="id" class="mdlChecked_id">
 					<button type="submit" class="btn btn-soft-danger btn-sm">Rejected</button>
-				</form>
+				</form> -->
 			</div>
 		</div>
 	</div>
@@ -479,6 +483,134 @@
 		);
 
 		table.ajax.reload();
+	}
+
+	function checkData() {
+		var id = $('.mdlChecked_id').val();
+
+		$('#checkBtn').prop("disabled", true);
+		// add spinner to button
+		$('#checkBtn').html(
+			`<span class="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true"></span> loading...`
+		);
+
+		jQuery.ajax({
+			url: "<?= site_url('api/admin/checkedParticipant') ?>",
+			type: 'POST',
+			data: {
+				id: id
+			},
+			success: function (data) {
+				$('#checkBtn').prop("disabled", false);
+				$('#checkBtn').html(`Check`);
+
+				$('#mdlChecked').modal('hide');
+
+				var Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				})
+
+				Toast.fire({
+					icon: 'success',
+					title: "Succesfuly checked/accepted participant submission"
+				})
+
+				table.ajax.reload();
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+
+                table.ajax.reload();
+
+				var Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				})
+
+				Toast.fire({
+					icon: 'error',
+					title: thrownError
+				})
+			}
+		});
+	}
+
+	function rejectData() {
+		var id = $('.mdlChecked_id').val();
+
+		$('#rejectBtn').prop("disabled", true);
+		// add spinner to button
+		$('#rejectBtn').html(
+			`<span class="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true"></span> loading...`
+		);
+
+		jQuery.ajax({
+			url: "<?= site_url('api/admin/rejectedParticipant') ?>",
+			type: 'POST',
+			data: {
+				id: id
+			},
+			success: function (data) {
+				$('#rejectBtn').prop("disabled", false);
+				$('#rejectBtn').html(`Reject`);
+
+				$('#mdlChecked').modal('hide');
+
+				var Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				})
+
+				Toast.fire({
+					icon: 'success',
+					title: "Succesfuly rejected participant submission"
+				})
+
+				table.ajax.reload();
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+
+                table.ajax.reload();
+
+				var Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				})
+
+				Toast.fire({
+					icon: 'error',
+					title: thrownError
+				})
+			}
+		});
 	}
 
 </script>

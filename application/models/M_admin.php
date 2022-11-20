@@ -240,10 +240,163 @@ class M_admin extends CI_Model
         return ['records' => array_values($models), 'totalDisplayRecords' => count($models), 'totalRecords' => $totalRecords, 'summary' => $summary];
     }
 
+    public function getParticipansAll_v2(){
+
+        $offset = $this->input->post('start');
+        $limit  = $this->input->post('length'); // Rows display per page
+        
+        $filter = [];
+        $filter_other['check']  = null;
+        $summary            = [
+            'totalChecked' => 0,
+            'totalSubmitted' => 0,
+            'totalVerif' => 0,
+            'totalUser' => 0,
+
+        ];
+
+        $filterEmail = $this->input->post('filterEmail');  
+        $filterName = $this->input->post('filterName');  
+        $filterNumber = $this->input->post('filterNumber');  
+        $filterVerified = $this->input->post('filterVerified');  
+        $filterSubmited = $this->input->post('filterSubmited');  
+        $filterChecked = $this->input->post('filterChecked');  
+        $filterStep = $this->input->post('filterStep');  
+
+        if($filterEmail != null || $filterEmail != '') $filter[] = "a.email like '%{$filterEmail}%'";
+        if($filterName != null || $filterName != '') $filter[] = "b.name like '%{$filterName}%'";
+        if($filterNumber != null || $filterNumber != '') $filter[] = "b.phone like '%{$filterNumber}%'";
+        if($filterVerified != null && $filterVerified > 0) $filter[] = ($filterVerified == 2 ? "a.status like '%{$filterVerified}%'" : ($filterVerified == 3 ? "a.active = 0" : "a.active like '%{$filterVerified}%'"));
+        $null = NULL;
+        if($filterSubmited != null && $filterSubmited > 0) $filter[] = $filterSubmited == 2 ? "c.status >= {$filterSubmited}" : "c.status <= {$filterSubmited} or c.status = {$null}";
+        if($filterChecked != null && $filterChecked > 0) $filter[] = $filterChecked == 2 ? "c.status < 2" : "c.status = {$filterChecked}";
+        if($filterStep != null && $filterStep > 0) $filter[] = $filterStep == 1 ? "c.step = 0 or c.step = 1" : "c.step = {$filterStep}";
+
+        if($filter != null){
+            $filter = implode(' AND ', $filter);
+        }  
+
+        $this->db->select('a.active, a.status as auth_status, a.email, b.*, c.step as status_step, c.status, c.id as participant_id')
+        ->from('tb_auth a')
+        ->join('tb_user b', 'a.user_id = b.user_id', 'inner')
+        ->join('tb_participants c', 'a.user_id = c.user_id', 'left')
+        ->where(['a.role' => 2])
+        ;
+
+        $this->db->where($filter);
+        $this->db->order_by('b.name ASC');
+
+        // $this->db->limit($limit)->offset($offset);
+
+        $models = $this->db->get()->result();
+        foreach($models as $key => $val){
+
+            $models[$key]->step                 = '<span class="badge bg-soft-secondary">Not yet fill submission</span>';
+            $models[$key]->statusAccount        = '<span class="badge bg-soft-danger">Unverified</span>';
+            $models[$key]->statusSubmit         = '<span class="badge bg-soft-danger">Not Submitted</span>';
+            $models[$key]->statusCheck          = '<span class="badge bg-soft-danger">Not Checked</span>';
+            $models[$key]->submissionState      = 1;
+            
+            $btnDetail      = '<button onclick="showMdlParticipantDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2"><i class="bi-eye"></i></button>';
+            $btnPass        = '<button onclick="showMdlChangePassword(\''.$val->user_id.'\')" class="btn btn-soft-primary btn-icon btn-sm me-2"><i class="bi-key"></i></button>';
+            $btnEmail       = '<button onclick="showMdlChangeEmail(\''.$val->user_id.'\')" class="btn btn-soft-danger btn-icon btn-sm me-2"><i class="bi-envelope"></i></button>';
+            $btnVerified    = '<button onclick="showMdlVerified(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+									class="bi bi-envelope-check" viewBox="0 0 16 16">
+									<path
+										d="M2 2a2 2 0 0 0-2 2v8.01A2 2 0 0 0 2 14h5.5a.5.5 0 0 0 0-1H2a1 1 0 0 1-.966-.741l5.64-3.471L8 9.583l7-4.2V8.5a.5.5 0 0 0 1 0V4a2 2 0 0 0-2-2H2Zm3.708 6.208L1 11.105V5.383l4.708 2.825ZM1 4.217V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v.217l-7 4.2-7-4.2Z" />
+									<path
+										d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-1.993-1.679a.5.5 0 0 0-.686.172l-1.17 1.95-.547-.547a.5.5 0 0 0-.708.708l.774.773a.75.75 0 0 0 1.174-.144l1.335-2.226a.5.5 0 0 0-.172-.686Z" />
+								</svg></button>';
+            $btnCheck       = '<button onclick="showMdlChecked(\''.$val->user_id.'\')" class="btn btn-soft-success btn-icon btn-sm me-2"><i class="bi-check"></i></button>';
+
+            $strip_email                    = explode("@", $val->email);
+            $models[$key]->name             = is_null($val->name) || $val->name == "" ? $strip_email[0] : $val->name;
+            $models[$key]->status_account   = $val->active == 0 ? 0 : $val->auth_status;
+        
+            if(!is_null($val->participant_id)){
+                if($val->status_step == 1){
+                    $models[$key]->step = '<span class="badge bg-soft-info">(1) Personal Data</span>';
+                    // $models[$key]->step_status = 1;
+                }elseif($val->status_step == 2){
+                    $models[$key]->step = '<span class="badge bg-soft-warning">(2) Others</span>';
+                    // $models[$key]->step_status = 2;
+                }elseif($val->status_step == 3){
+                    $models[$key]->step = '<span class="badge bg-soft-danger">(3) Question</span>';
+                    // $models[$key]->step_status = 3;
+                }elseif($val->status_step == 4){
+                    $models[$key]->step = '<span class="badge bg-soft-primary">(4) Programs</span>';
+                    // $models[$key]->step_status = 4;
+                }elseif($val->status_step == 5){
+                    $models[$key]->step = '<span class="badge bg-blue-dark">(5) Self Photo</span>';
+                    // $models[$key]->step_status = 5;
+                }elseif($val->status_step == 6 && $val->status < 2){
+                    $models[$key]->step = '<span class="badge bg-soft-success">(6) Payment & Agreement</span>';
+                    // $models[$key]->step_status = 6;
+                }elseif($val->status_step == 6 && $val->status >= 2){
+                    $models[$key]->step = '<span class="badge bg-soft-success">Waiting for review</span>';
+                    // $models[$key]->step_status = 7;
+                }
+            }
+
+            if(!is_null($val->participant_id)){
+                if($val->status == 0 || $val->status == 1){
+                    $models[$key]->statusSubmit       = '<span class="badge bg-soft-danger">Not Submitted</span>';
+                    $models[$key]->submissionState    = 1;
+
+                }elseif($val->status == 2){
+                    $models[$key]->statusSubmit       = '<span class="badge bg-soft-info">Submitted</span>';
+                    $models[$key]->submissionState    = 2;
+
+                    $summary['totalSubmitted']  += 1;
+                }elseif($val->status == 3){
+                    $models[$key]->step               = '<span class="badge bg-soft-success">Reviewed</span>';
+                    $models[$key]->statusSubmit       = '<span class="badge bg-soft-info">Submitted</span>';
+                    $models[$key]->statusCheck        = '<span class="badge bg-soft-success">Accepted</span>';
+                    $models[$key]->submissionState    = 3;
+
+                    $summary['totalSubmitted']  += 1;
+                    $summary['totalChecked']    += 1;
+                }elseif($val->status == 4){
+                    $models[$key]->step               = '<span class="badge bg-soft-success">Reviewed</span>';
+                    $models[$key]->statusSubmit       = '<span class="badge bg-soft-info">Submitted</span>';
+                    $models[$key]->statusCheck        = '<span class="badge bg-soft-warning">Rejected</span>';
+                    $models[$key]->submissionState    = 4;
+
+                    $summary['totalSubmitted']  += 1;
+                    $summary['totalChecked']    += 1;
+                }
+            }
+    
+            if($models[$key]->status_account == 1){
+                $summary['totalVerif'] += 1;
+                $models[$key]->statusAccount  = '<span class="badge bg-soft-success">Verified</span>';
+            }elseif($models[$key]->status_account == 2){
+                $models[$key]->statusAccount  = '<span class="badge bg-soft-warning">Suspended</span>';
+            }
+            
+            $models[$key]->action = ($models[$key]->submissionState == 2 ? $btnCheck : '').$btnDetail.$btnPass.($val->status_account > 0 ? $btnEmail : '').($val->status_account == 0 ? $btnVerified : '');
+            
+            $summary['totalUser']           += 1;
+        }
+
+        $totalRecords = count($models);
+        
+        $summary = [
+            'totalChecked' => number_format($summary['totalChecked']),
+            'totalSubmitted' => number_format($summary['totalSubmitted']),
+            'totalVerif' => number_format($summary['totalVerif']),
+            'totalUser' => number_format($summary['totalUser']),
+        ];
+
+        $models = array_slice($models, $offset, $limit);
+
+        return ['records' => array_values($models), 'totalDisplayRecords' => count($models), 'totalRecords' => $totalRecords, 'summary' => $summary];
+    }
+
     function get_statistik(){
         $total_pendaftar = $this->db->get_where('tb_auth', ['role' => 2])->num_rows();
-        $new_register = $this->db->get_where('tb_auth', ['role' => 2, 'created_at >=' => time(), 'created_at <=' => time()])->num_rows();
-        $total_participants = $this->db->get_where('tb_participants', ['status' => 2, 'is_deleted' => 0])->num_rows();
+        $new_register = $this->db->get_where('tb_auth', ['role' => 2, 'created_at <=' => time(), 'created_at >=' => strtotime("-1 day", time())])->num_rows();
+        $total_participants = $this->db->get_where('tb_participants', ['status' => 2, 'status' => 3, 'is_deleted' => 0])->num_rows();
 
         $arr = [
             'total' => $total_pendaftar,
@@ -277,6 +430,7 @@ class M_admin extends CI_Model
     {
         $this->db->select("FROM_UNIXTIME(created_at, '%Y-%m-%d') AS created_at, COUNT(FROM_UNIXTIME(created_at, '%Y-%m-%d')) AS count");
         $this->db->from('tb_auth');
+        $this->db->where(['role' => 2, 'is_deleted' => 0]);
         $this->db->group_by("FROM_UNIXTIME(created_at, '%Y-%m-%d')");
         return $this->db->get()->result();
     }

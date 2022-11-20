@@ -9,6 +9,11 @@ class Payments extends CI_Controller
     {
         parent::__construct();
         $this->load->model(['M_payment', 'M_master']);
+
+        if ($this->session->userdata('role') > 1) {
+            $this->session->set_flashdata('warning', "You don`t have access to this page");
+            redirect(base_url());
+        }
     }
 
     public function getDetailPaymentSetting(){

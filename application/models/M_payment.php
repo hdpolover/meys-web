@@ -234,7 +234,12 @@ class M_payment extends CI_Model
                 $summary['paymentPending'] += 1;
             } elseif ($val->status == 2) {
                 $summary['totalIncome'] += $val->amount;
-                $summary['manualIncome'] += $val->amount;
+
+                if($val->payment_setting == 1){
+                    $summary['paypalIncome'] += $val->amount;
+                }else{
+                    $summary['manualIncome'] += $val->amount;
+                }
                 
                 $summary['paymentSuccess'] += 1;
             } elseif ($val->status == 3) {
