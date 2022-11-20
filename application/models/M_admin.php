@@ -509,7 +509,10 @@ class M_admin extends CI_Model
     function activatedParticipant(){
         $this->db->where('user_id', $this->input->post('id'));
         $this->db->update('tb_auth', ['active' => 1, 'status' => 1]);
-        return ($this->db->affected_rows() != 1) ? false : true;
+        
+        $this->db->where('user_id', $this->input->post('id'));
+        $this->db->update('tb_token', ['status' => 1]);
+        return true;
     }
 
     public function getOnlineUsers()
