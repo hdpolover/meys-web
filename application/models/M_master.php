@@ -8,6 +8,29 @@ class M_master extends CI_Model
         parent::__construct();
     }
 
+    function getNationalitySearch($word = null){
+        $this->db->select('*')
+        ->from('m_countries')
+        ->like('en_short_name', $word)
+        ;
+
+        $models = $this->db->get()->result();
+
+        $arr = [];
+        if(!empty($models)){
+            foreach($models as $key => $val){
+                $arr[$key]['id'] = $val->num_code;
+                $arr[$key]['text'] = $val->en_short_name;
+            }
+        }
+        // $option = [
+        //     'id' => -1,
+        //     'text' => 'Can`find? Add new nationality'
+        // ];
+        // array_unshift($arr, $option);
+        return json_encode($arr);
+    }
+
     // faq
     function get_masterFaqContent()
     {

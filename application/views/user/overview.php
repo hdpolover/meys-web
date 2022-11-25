@@ -63,7 +63,7 @@
 				Your submission has been <b>ACCEPTED !</b>, welcome to MEYS program. Please wait for furthure notice
 			</div>
 			<?php endif;?>
-			<?php if (isset($participants->status) && $participants->status == 3):?>
+			<?php if (isset($participants->status) && $participants->status == 4):?>
 			<div class="alert alert-soft-danger small" role="alert">
 				Your submission has been <b>REJECTED !</b>
 			</div>

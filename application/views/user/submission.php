@@ -20,7 +20,7 @@
 				<?php endif;?>
 			</h4>
 		</div>
-		<?php if(!empty($participants) && $participants->status >= 2):?>
+		<?php if(!empty($participants) && $participants->status == 3):?>
 
 		<!-- Body -->
 		<div class="card-body">
@@ -178,6 +178,9 @@
 											<!-- End Col -->
 
 											<div class="col-sm-8 mb-2 mb-sm-0">
+												<?php if($participants->nationality == -1):?>
+												<span><?= $participants->nationality_custom;?></span>
+												<?php else:?>
 												<span>
 													<?php foreach($countries as $key => $val):?>
 													<?php if($participants->nationality == $val->num_code):?>
@@ -185,6 +188,7 @@
 													<?php endif;?>
 													<?php endforeach;?>
 												</span>
+												<?php endif;?>
 											</div>
 											<!-- End Col -->
 										</div>
@@ -637,7 +641,7 @@
 										<input type="text" class="form-control form-control-sm flatpickr"
 											id="validationFormBirthdate" placeholder="Birthdate" aria-label="Birthdate"
 											name="birthdate" required data-msg="Please enter your birthdate."
-											<?= isset($participants->name) ? 'value="'.date("F d, Y", $participants->birthdate).'"' : '';?>>
+											<?= isset($participants->birthdate) ? 'value="'.date("F d, Y", $participants->birthdate).'"' : 'value="'.date("F d, Y").'"';?>>
 										<span class="invalid-feedback">Please enter a valid birthdate.</span>
 									</div>
 								</div>
@@ -724,11 +728,13 @@
 								</div>
 								<!-- End Form Group -->
 								<!-- Form Group -->
-								<div class="mb-3">
+								<div class="mb-3"
+									style="display: <?= $participants->nationality == -1 ? 'none' : '';?>;"
+									id="select-nationality">
 									<label for="validationFormNationality" class="form-label">Nationality</label>
 
 									<div class="js-form-message">
-										<div class="tom-select-custom">
+										<!-- <div class="tom-select-custom">
 											<select class="js-select form-select form-select-sm" autocomplete="off"
 												id="validationFormNationality" name="nationality"
 												data-hs-tom-select-options='{"placeholder": "Choose Nationality..."}'
@@ -742,9 +748,32 @@
 												<?php endforeach;?>
 												<?php endif;?>
 											</select>
-										</div>
+										</div> -->
+										<select class="form-select select2" autocomplete="off"
+											id="validationFormNationality" name="nationality" required>
+										</select>
 										<span class="invalid-feedback">Please enter a valid nationality.</span>
 									</div>
+									<small> can't find your nationality? <span class="text-primary"
+											onclick="displayCustomNationality()" role="button">click here</span> to
+										insert new one</small>
+								</div>
+								<!-- End Form Group -->
+								<input type="hidden" name="is_custom_nationality" class="d-none" value="<?= $participants->nationality == -1 ? -1 : 0;?>">
+								<!-- Form Group -->
+								<div class="mb-3" style="display: <?= $participants->nationality > -1 ? 'none' : '';?>;"
+									id="custom-nationality">
+									<label for="validationFormCustomNationality" class="form-label">Nationality</label>
+									<div class="js-form-message">
+										<input type="text" class="form-control form-control-sm"
+											onkeypress="return isAlpha(event)" id="validationFormCustomNationality"
+											placeholder="Nationality" aria-label="Nationality" name="nationality_custom"
+											data-msg="Please enter your nationality."
+											<?= isset($participants->nationality_custom) ? 'value="'.$participants->nationality_custom.'"' : '';?>>
+										<span class="invalid-feedback">Please enter a valid nationality.</span>
+									</div>
+									<small> choose nationality we provide? <span class="text-primary"
+											onclick="displayCustomNationality()" role="button">click here</span></small>
 								</div>
 								<!-- End Form Group -->
 								<!-- Form Group -->
@@ -1044,8 +1073,9 @@
 									<div class="js-form-message">
 										<?php if($val->type == 'textarea'):?>
 										<span class="show" id="showtext<?= $val->id;?>">0 words</span>
-										<textarea class="form-control form-control-sm formEssay" name="essay[<?= $val->id;?>][]"
-											<?= $val->required == 1 ? 'required' : '';?> id="text<?= $val->id;?>"
+										<textarea class="form-control form-control-sm formEssay"
+											name="essay[<?= $val->id;?>][]" <?= $val->required == 1 ? 'required' : '';?>
+											id="text<?= $val->id;?>"
 											rows="5"><?= !empty($p_essay) && isset($p_essay[$val->id]->answer) ? $p_essay[$val->id]->answer : '';?></textarea>
 										<?php else:?>
 										<input class="form-control form-control-sm formEssay"
@@ -1063,7 +1093,7 @@
 								<script>
 									$(document).ready(function () {
 										$('textarea.formEssay').each(function () {
-											$('#' + $(this).attr('id')).keydown(function(e) {
+											$('#' + $(this).attr('id')).keydown(function (e) {
 												// Get the input text value
 												var text = document.getElementById($(this).attr('id')).value;
 												// Initialize the word counter
@@ -1085,13 +1115,13 @@
 												// (count of words = count of spaces + 1)
 												// numWords += 1;
 
-												if(numWords >= 200){
+												if (numWords >= 200) {
 													e.preventDefault();
 												}
 
-												console.log("show"+$(this).attr('id'));
+												console.log("show" + $(this).attr('id'));
 												// Display it as output
-												$("#show"+$(this).attr('id')).html(numWords+ " words");
+												$("#show" + $(this).attr('id')).html(numWords + " words");
 											});
 										});
 									});
@@ -1431,6 +1461,40 @@
 
 <script>
 	function stepOneSave() {
+		if ($('input[name="fullname"]').val() == '' ||
+			$('input[name="birthdate"]').val() == '' ||
+			$('input[name="address"]').val() == '' ||
+			$('input[name="postal_code"]').val() == '' ||
+			$('input[name="city"]').val() == '' ||
+			$('input[name="province"]').val() == '' ||
+			$('input[name="occupation"]').val() == '' ||
+			$('input[name="fieldofstudy"]').val() == '' ||
+			$('input[name="institution"]').val() == '' ||
+			$('input[name="whatsAppNumber"]').val() == '' ||
+			$('input[name="instagram"]').val() == '' ||
+			$('input[name="emergency"]').val() == '' ||
+			$('input[name="contactRelation"]').val() == '' ||
+			$('textarea[name="disease"]').val() == '') {
+			var Toast = Swal.mixin({
+				toast: true,
+				position: 'top-end',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+				didOpen: (toast) => {
+					toast.addEventListener('mouseenter', Swal.stopTimer)
+					toast.addEventListener('mouseleave', Swal.resumeTimer)
+				}
+			})
+
+			Toast.fire({
+				icon: 'warning',
+				title: 'Please fill the requirement field'
+			})
+
+			return false;
+		}
+
 		const formData = {
 			'fullname': $('input[name="fullname"]').val(),
 			'birthdate': $('input[name="birthdate"]').val(),
@@ -1440,6 +1504,8 @@
 			'city': $('input[name="city"]').val(),
 			'province': $('input[name="province"]').val(),
 			'nationality': $('select[name="nationality"]').val(),
+			'nationality_custom': $('input[name="nationality_custom"]').val(),
+			'is_custom_nationality': $('input[name="is_custom_nationality"]').val(),
 			'occupation': $('input[name="occupation"]').val(),
 			'fieldofstudy': $('input[name="fieldofstudy"]').val(),
 			'institution': $('input[name="institution"]').val(),
@@ -1498,6 +1564,30 @@
 	}
 
 	function stepTwoSave() {
+		if ($('textarea[name="experience"]').val() == '' ||
+			$('textarea[name="achievements"]').val() == '' ||
+			$('textarea[name="socialProjects"]').val() == '' ||
+			$('textarea[name="talents"]').val() == '') {
+			var Toast = Swal.mixin({
+				toast: true,
+				position: 'top-end',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+				didOpen: (toast) => {
+					toast.addEventListener('mouseenter', Swal.stopTimer)
+					toast.addEventListener('mouseleave', Swal.resumeTimer)
+				}
+			})
+
+			Toast.fire({
+				icon: 'warning',
+				title: 'Please fill the requirement field'
+			})
+
+			return false;
+		}
+
 		const formData = {
 			'experience': $('textarea[name="experience"]').val(),
 			'achievements': $('textarea[name="achievements"]').val(),
@@ -1604,6 +1694,29 @@
 	}
 
 	function stepFourSave() {
+		if ($('input[name="sourceAccount"]').val() == '' ||
+			$('input[name="twibbon_link"]').val() == '' ||
+			$('input[name="shareRequirement"]').val() == '') {
+			var Toast = Swal.mixin({
+				toast: true,
+				position: 'top-end',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+				didOpen: (toast) => {
+					toast.addEventListener('mouseenter', Swal.stopTimer)
+					toast.addEventListener('mouseleave', Swal.resumeTimer)
+				}
+			})
+
+			Toast.fire({
+				icon: 'warning',
+				title: 'Please fill the requirement field'
+			})
+
+			return false;
+		}
+
 		const formData = {
 			'source': $('select[name="source"]').val(),
 			'sourceAccount': $('input[name="sourceAccount"]').val(),
@@ -1730,6 +1843,26 @@
 	})
 
 	function stepFiveSave() {
+		if ($('#base64SelfPhoto').val() == '') {
+			var Toast = Swal.mixin({
+				toast: true,
+				position: 'top-end',
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+				didOpen: (toast) => {
+					toast.addEventListener('mouseenter', Swal.stopTimer)
+					toast.addEventListener('mouseleave', Swal.resumeTimer)
+				}
+			})
+
+			Toast.fire({
+				icon: 'warning',
+				title: 'Please fill the requirement field'
+			})
+
+			return false;
+		}
 
 		const formData = {
 			'image': $('#base64SelfPhoto').val(),
@@ -1825,6 +1958,47 @@
 				})
 			}
 		})
+	}
+
+	$(function () {
+		$('.select2').select2({
+			minimumInputLength: 3,
+			allowClear: true,
+			placeholder: 'Choose nationality',
+			ajax: {
+				dataType: 'json',
+				url: "<?= site_url('api/user/getNationality');?>",
+				delay: 800,
+				data: function (params) {
+					return {
+						search: params.term
+					}
+				},
+				processResults: function (data, page) {
+					return {
+						results: data
+					};
+				},
+			}
+		}).on('select2:select', function (evt) {
+			var data = $(".select2 option:selected").text();
+		});
+	});
+
+	function displayCustomNationality() {
+		custom = document.getElementById('custom-nationality');
+		select = document.getElementById('select-nationality');
+		is_custom = $('input[name="is_custom_nationality"]');
+
+		if (custom.style.display == 'none') {
+			is_custom.val(-1);
+			custom.style.display = 'block';
+			select.style.display = 'none';
+		} else {
+			is_custom.val(0);
+			custom.style.display = 'none';
+			select.style.display = 'block';
+		}
 	}
 
 </script>

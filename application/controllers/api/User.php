@@ -12,6 +12,17 @@ class User extends CI_Controller
         $this->load->library('uploader');
     }
 
+    public function getNationality(){
+        $word = $this->input->get('search');
+        $result = $this->M_master->getNationalitySearch($word);
+        
+        if(!empty($result)){
+            echo $result;
+        }else{
+            echo "Not found";
+        }
+    }
+
     public function ajxPostBasic(){
 
         if($this->M_user->formStepBasic() == true){

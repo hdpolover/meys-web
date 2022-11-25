@@ -265,8 +265,8 @@ class Admin extends CI_Controller
 
             $btn = $btnParticipant;
             if($val->status <= 1 || $val->status == 4  || $val->status == 3){
-                $btn .= $btnCheck;
             }
+            $btn .= $btnCheck;
             $btn .= $btnDetail;
 
             $arr[$key] = [

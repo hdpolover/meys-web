@@ -42,8 +42,8 @@
 							<td><?= $val->summit;?></td>
 							<td><?= $val->description;?></td>
 							<td>Rp. <?= number_format($val->amount);?> / $<?= number_format($val->amount_usd);?></td>
-							<td><?= date("d F Y", $val->start_date);?></td>
-							<td><?= date("d F Y", $val->end_date);?></td>
+							<td><?= date("d F Y", $val->start_date);?> 23:59</td>
+							<td><?= date("d F Y", $val->end_date);?> 23:59</td>
 						</tr>
 
 						<!-- Modal -->

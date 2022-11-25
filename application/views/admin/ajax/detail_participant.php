@@ -136,13 +136,19 @@
 										<!-- End Col -->
 
 										<div class="col-sm-8 mb-2 mb-sm-0">
+											<?php if($participants->nationality == -1):?>
+											<span><?= $participants->nationality_custom;?> <span
+													class="badge bg-soft-info"><i>(using custom input)</i></span></span>
+											<?php else:?>
 											<span>
 												<?php foreach($countries as $key => $val):?>
 												<?php if($participants->nationality == $val->num_code):?>
-												<?= $val->en_short_name; break;?>
+												<?= $val->en_short_name;
+													break;?>
 												<?php endif;?>
 												<?php endforeach;?>
 											</span>
+											<?php endif;?>
 										</div>
 										<!-- End Col -->
 									</div>
@@ -212,7 +218,8 @@
 										<!-- End Col -->
 
 										<div class="col-sm-8 mb-2 mb-sm-0">
-											<span><a href="https://www.instagram.com/<?= $participants->instagram;?>" target="_blank">@<?= $participants->instagram;?></a></span>
+											<span><a href="https://www.instagram.com/<?= $participants->instagram;?>"
+													target="_blank">@<?= $participants->instagram;?></a></span>
 										</div>
 										<!-- End Col -->
 									</div>
@@ -367,7 +374,8 @@
 								</li>
 								<?php endforeach;?>
 								<?php else:?>
-									<h4 class="mt-5 pt-5">This participant not yet fill this part, please contact participant</h4>
+								<h4 class="mt-5 pt-5">This participant not yet fill this part, please contact
+									participant</h4>
 								<?php endif;?>
 							</ul>
 						</div>
@@ -414,7 +422,8 @@
 										<!-- End Col -->
 
 										<div class="col-sm-8 mb-2 mb-sm-0">
-											<span><a href="<?= $participants->twibbon_link;?>" target="_blank"><?= $participants->twibbon_link;?></a></span>
+											<span><a href="<?= $participants->twibbon_link;?>"
+													target="_blank"><?= $participants->twibbon_link;?></a></span>
 										</div>
 										<!-- End Col -->
 									</div>
@@ -428,7 +437,8 @@
 										<!-- End Col -->
 
 										<div class="col-sm-8 mb-2 mb-sm-0">
-											<span><a href="<?= $participants->share_proof_link;?>" target="_blank"><?= $participants->share_proof_link;?></a></span>
+											<span><a href="<?= $participants->share_proof_link;?>"
+													target="_blank"><?= $participants->share_proof_link;?></a></span>
 										</div>
 										<!-- End Col -->
 									</div>
@@ -464,7 +474,8 @@
 										<div class="col-sm-12 mb-2 mb-sm-0">
 											<figure class="text-center mb-2">
 												<img id="imgthumbnail" class="img-thumbnail img-fluid"
-													alt="Thumbnail image" src="<?= base_url();?><?= isset($participants->self_photo) ? $participants->self_photo : 'assets/images/placeholder.jpg';?>">
+													alt="Thumbnail image"
+													src="<?= base_url();?><?= isset($participants->self_photo) ? $participants->self_photo : 'assets/images/placeholder.jpg';?>">
 											</figure>
 										</div>
 										<!-- End Col -->

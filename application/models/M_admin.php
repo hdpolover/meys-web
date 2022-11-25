@@ -374,7 +374,7 @@ class M_admin extends CI_Model
                 $models[$key]->statusAccount  = '<span class="badge bg-soft-warning">Suspended</span>';
             }
             
-            $models[$key]->action = ($models[$key]->submissionState == 2 ? $btnCheck : '').$btnDetail.$btnPass.($val->status_account > 0 ? $btnEmail : '').($val->status_account == 0 ? $btnVerified : '');
+            $models[$key]->action = ($models[$key]->submissionState == 2 || $models[$key]->submissionState == 3 || $models[$key]->submissionState == 4 ? $btnCheck : '').$btnDetail.$btnPass.($val->status_account > 0 ? $btnEmail : '').($val->status_account == 0 ? $btnVerified : '');
             
             $summary['totalUser']           += 1;
         }

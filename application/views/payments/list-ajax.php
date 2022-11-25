@@ -275,6 +275,7 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
 				<input type="hidden" name="id" class="mdlVerif_id">
+				<input type="hidden" name="user_id" class="mdlVerif_userid">
 				<button type="button" class="btn btn-soft-success btn-sm" id="verifBtn" onclick="verifData()">Verified</button>
 				<button type="button" class="btn btn-soft-danger btn-sm" id="rejectBtn" onclick="rejectData()">Reject</button>
 				<!-- <form action="<?= site_url('api/payments/verificationPayment')?> " method="post"
@@ -434,6 +435,7 @@
 
 	function verifData() {
 		var id = $('.mdlVerif_id').val();
+		var user_id = $('.mdlVerif_userid').val();
 
 		$('#verifBtn').prop("disabled", true);
 		// add spinner to button
@@ -445,7 +447,8 @@
 			url: "<?= site_url('api/payments/verificationPayment') ?>",
 			type: 'POST',
 			data: {
-				id: id
+				id: id,
+				user_id: user_id
 			},
 			success: function (data) {
 				$('#verifBtn').prop("disabled", false);
@@ -498,6 +501,7 @@
 
 	function rejectData() {
 		var id = $('.mdlVerif_id').val();
+		var user_id = $('.mdlVerif_userid').val();
 
 		$('#rejectBtn').prop("disabled", true);
 		// add spinner to button
@@ -509,7 +513,8 @@
 			url: "<?= site_url('api/payments/rejectedPayment') ?>",
 			type: 'POST',
 			data: {
-				id: id
+				id: id,
+				user_id: user_id
 			},
 			success: function (data) {
 				$('#rejectBtn').prop("disabled", false);

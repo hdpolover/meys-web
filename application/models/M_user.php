@@ -83,10 +83,20 @@ class M_user extends CI_Model
     }
 
     function formStepBasic(){
+        
+        if($this->input->post('is_custom_nationality') == -1){
+            $nationality_custom = $this->input->post('nationality_custom');
+            $nationality = -1;
+        }else{
+            $nationality_custom = null;
+            $nationality = $this->input->post('nationality');
+        } 
+        
         $formData = [
             'user_id'               => $this->session->userdata('user_id'),
             'birthdate'             => strtotime($this->input->post('birthdate')),
-            'nationality'           => $this->input->post('nationality'),
+            'nationality'           => $nationality,
+            'nationality_custom'    => $nationality_custom,
             'occupation'            => $this->input->post('occupation'),
             'field_of_study'        => $this->input->post('fieldofstudy'),
             'institution_workplace' => $this->input->post('institution'),
