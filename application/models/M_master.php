@@ -144,6 +144,17 @@ class M_master extends CI_Model
         return $models;
     }
 
+    function get_paymentsBatchByID($id = null){
+        $this->db->select('*')
+        ->from('m_payments_batch')
+        ->where(['id' => $id])
+        ;
+
+        $models = $this->db->get()->row();
+
+        return $models;
+    }
+
     public function addPaymentBatch()
     {
         $summit = $this->input->post('summit');

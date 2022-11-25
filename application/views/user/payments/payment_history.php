@@ -42,8 +42,13 @@
 								<?php endif;?>
 							</td>
 							<td>
+								<?php if($val->type_method == 'gateway_midtrans'):?>
+								<a href="<?= site_url('user/payments-transaction/'.$val->order_id.'?reff=history&method=gateway&id='.$this->uri->segment(3));?>"
+									class="text-info">check</a>
+								<?php else:?>
 								<a href="<?= site_url('user/payments-transaction/'.$val->id.'?reff=history&id='.$this->uri->segment(3));?>"
 									class="text-info">check</a>
+								<?php endif;?>
 							</td>
 						</tr>
 						<?php endforeach;?>

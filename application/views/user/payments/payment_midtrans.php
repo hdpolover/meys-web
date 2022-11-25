@@ -28,19 +28,6 @@
     						<dt class="col-sm-6">ID TRANSACTION</dt>
     						<dd class="col-sm-6 text-sm-end mb-0">#<?= $payment_detail->transaction_id?></dd>
     					</dl>
-    					<?php if($payment_detail->data !== "" && $payment_detail->data !== null):?>
-    					<dl class="row mb-4">
-    						<dt class="col-sm-6">DATA </dt>
-    						<dd class="col-sm-12 mb-0">
-    							<ul class="list-pointer list-pointer-sm list-pointer-primary">
-    								<?php foreach($payment_detail->data as $k => $v):?>
-    								<li class="list-pointer-item"><b><?= ucwords(str_replace("_", " ", $k));?></b>:
-    									<?= $v;?></li>
-    								<?php endforeach;?>
-    							</ul>
-    						</dd>
-    					</dl>
-    					<?php endif;?>
     					<dl class="row mt-4 mb-4">
     						<dt class="col-sm-6">PAYMENT STATUS</dt>
     						<dd class="col-sm-6 text-sm-end mb-0">
@@ -59,11 +46,6 @@
     							<span class="badge bg-warning">-</span>
     							<?php endif;?>
     						</dd>
-    					</dl>
-    					<dl class="row mt-4 mb-4">
-    						<dt class="col-sm-6">PAYMENT PROOF</dt>
-    						<dd class="col-sm-6 text-sm-end mb-0"><button class="btn btn-xs btn-soft-success"
-    								data-bs-toggle="modal" data-bs-target="#showEvidance">Show</button></dd>
     					</dl>
     					<dl class="row mt-4 mb-4">
     						<dt class="col-sm-6">DATE</dt>
@@ -132,29 +114,6 @@
     						data-bs-dismiss="modal">Close</button>
     					<button type="submit" class="btn btn-soft-danger btn-sm">Cancel Payment</button>
     				</form>
-    			</div>
-    		</div>
-    	</div>
-    </div>
-    <!-- End Modal -->
-    <!-- Modal -->
-    <div class="modal fade" id="showEvidance" tabindex="-1" aria-labelledby="mdlEvidenceLabel" aria-hidden="true">
-    	<div class="modal-dialog modal-lg modal-dialog-centered">
-    		<div class="modal-content">
-    			<div class="modal-header">
-    				<h5 class="modal-title" id="mdlEvidenceLabel">Payment Proof</h5>
-    				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    			</div>
-
-    			<div class="modal-body">
-    				<div iclass="text-center">
-    					<img class="w-100 img-thumbnail" src="<?= base_url();?><?= $payment_detail->evidance?>" />
-    				</div>
-    			</div>
-
-    			<div class="modal-footer">
-    				<button type="button" class="btn btn-outline-secondary btn-sm"
-    					data-bs-dismiss="modal">Close</button>
     			</div>
     		</div>
     	</div>

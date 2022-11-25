@@ -5,7 +5,8 @@
 	"require": {
 		"phpoffice/phpspreadsheet": "dev-master",
 		"phpmailer/phpmailer": "dev-master",
-		"tecnickcom/tcpdf": "dev-main"
+		"tecnickcom/tcpdf": "dev-main",
+		"midtrans/midtrans-php": "dev-master"
 	},
 	"license": "AFL-1.1",
 	"authors": [{

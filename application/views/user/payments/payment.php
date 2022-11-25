@@ -1,3 +1,6 @@
+<script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?= $client_key;?>">
+</script>
+
 <div class="d-grid gap-3 gap-lg-5">
 	<!-- Card -->
 	<div class="card">
@@ -58,8 +61,8 @@
 						<span class="text-secondary small"><?= $val->description;?></span>
 					</div>
 					<?php if(is_null($val->payments) || $val->payments->status == 4):?>
-					<button type="button" class="btn btn-outline-secondary btn-sm purchase-button w-100 mt-2"
-						disabled>Pay (auto) (locked)</button>
+					<button type="button" class="btn btn-outline-success btn-sm purchase-button w-100 mt-2"
+						onclick="pay(<?= $val->id;?>, <?= $val->amount;?>, <?= $val->amount_usd;?>)">Pay (payment gateway)</button>
 					<button type="button" class="btn btn-warning btn-sm purchase-button w-100 mt-2"
 						data-bs-toggle="modal" data-bs-target="#manual-transfer-<?= $val->id;?>">Manual
 						Transfer</button>
@@ -192,6 +195,11 @@
 	</div>
 </div>
 
+<form id="payment-form" method="post" action="<?= site_url('api/payments/finish') ?>">
+	<input type="hidden" name="result_type" id="result-type" value=""></div>
+	<input type="hidden" name="result_data" id="result-data" value=""></div>
+</form>
+
 <script>
 	function showGuide(id) {
 		console.log(id);
@@ -199,6 +207,49 @@
 		$('.guide').addClass('d-none');
 		$('#data-' + id).removeClass('d-none');
 		$('#guide-' + id).removeClass('d-none');
+	}
+
+	function pay(batch_id, amount, usd) {
+		$(this).attr("disabled", true);
+
+		$.ajax({
+			url: "<?=site_url('api/payments/pay')?>",
+			method: 'POST',
+			data: {
+				payment_batch: batch_id,
+				amount: amount,
+				amount_usd: usd,
+			},
+			cache: false,
+
+			success: function (data) {
+				var resultType = document.getElementById('result-type');
+				var resultData = document.getElementById('result-data');
+
+				function changeResult(type, data) {
+					$("#result-type").val(type);
+					$("#result-data").val(JSON.stringify(data));
+				}
+
+				snap.pay(data, {
+
+					onSuccess: function (result) {
+						changeResult('success', result);
+						$("#payment-form").submit();
+					},
+					onPending: function (result) {
+						changeResult('pending', result);
+						$("#payment-form").submit();
+					},
+					onError: function (result) {
+						changeResult('error', result);
+						$("#payment-form").submit();
+					}
+				});
+
+				$(this).attr("disabled", false);
+			}
+		});
 	}
 
 </script>

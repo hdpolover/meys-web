@@ -1,4 +1,6 @@
-<?php if (!defined('BASEPATH')) {
+<?php
+
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
 }
 
@@ -25,7 +27,6 @@ if (!function_exists('ej')) {
 if (!function_exists('time_ago')) {
     function time_ago($datetime, $full = false)
     {
-
         $now = new DateTime();
         $ago = new DateTime($datetime);
         $diff = $now->diff($ago);
@@ -54,7 +55,6 @@ if (!function_exists('time_ago')) {
             $string = array_slice($string, 0, 1);
         }
         return $string ? implode(', ', $string) . ' yang lalu' : 'baru saja';
-
     }
 }
 
@@ -93,12 +93,12 @@ if (!function_exists('sendMailTest')) {
         return $_ci->mailer->sendTest($mail);
     }
 }
-    
+
 if (!function_exists('penalty_remaining')) {
     function penalty_remaining($datetime, $full = false)
     {
         // $datetime = date(" Y - m - d H : i : s ", time()+120);
-        $now = new DateTime;
+        $now = new DateTime();
         $ago = new DateTime($datetime);
         $diff = $now->diff($ago);
 
@@ -123,25 +123,27 @@ if (!function_exists('penalty_remaining')) {
 }
 
 if (!function_exists('arrToObj')) {
-    function arrToObj($data) {
-    if (gettype($data) == 'array')
-        return (object)array_map("arrToObj", $data);
-    else
-        return $data;
+    function arrToObj($data)
+    {
+        if (gettype($data) == 'array') {
+            return (object)array_map("arrToObj", $data);
+        } else {
+            return $data;
+        }
     }
 }
 
 if (!function_exists('createPermalink')) {
-    function createPermalink($string){
-        
-		$permalink = null;
+    function createPermalink($string)
+    {
+        $permalink = null;
 
-		$chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-		$word = preg_replace("/[^a-zA-Z0-9]+/", "-", $string);
-		$word = strtolower($word);
-        
-		// generate permalink kursus
+        $word = preg_replace("/[^a-zA-Z0-9]+/", "-", $string);
+        $word = strtolower($word);
+
+        // generate permalink kursus
         $uniqid = "";
 
         for ($i = 1; $i <= 4; $i++) {
@@ -154,7 +156,8 @@ if (!function_exists('createPermalink')) {
 }
 
 if (!function_exists('createCode')) {
-    function createCode($string){
+    function createCode($string)
+    {
         $string = preg_replace('/[^a-z]/i', '', $string);
 
         $vocal = ["a", "e", "i", "o", "u", "A", "E", "I", "O", "U", " "];
@@ -170,9 +173,9 @@ if (!function_exists('createCode')) {
     }
 }
 
-if(!function_exists('base64ToImage')){
-
-    function base64ToImage($path, $base64){   
+if (!function_exists('base64ToImage')) {
+    function base64ToImage($path, $base64)
+    {
         try {
             $image_parts = explode(';base64,', $base64);
             $image_type_aux = explode('image/', $image_parts[0]);
@@ -191,7 +194,6 @@ if(!function_exists('base64ToImage')){
                 'data' => $namaFile,
                 'url' => $file,
             ];
-
         } catch (\Throwable $e) {
             return [
                 'status' => false,
@@ -202,21 +204,43 @@ if(!function_exists('base64ToImage')){
 }
 
 
-if(!function_exists('discordmsg')){
-    function discordmsg($msg, $webhook) {
-        if($webhook != "") {
-            $ch = curl_init( $webhook );
-            curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
-            curl_setopt( $ch, CURLOPT_POST, 1);
-            curl_setopt( $ch, CURLOPT_POSTFIELDS, $msg);
-            curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
-            curl_setopt( $ch, CURLOPT_HEADER, 0);
-            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
- 
-            $response = curl_exec( $ch );
+if (!function_exists('discordmsg')) {
+    function discordmsg($msg, $webhook)
+    {
+        if ($webhook != "") {
+            $ch = curl_init($webhook);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $msg);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+            $response = curl_exec($ch);
             // If you need to debug, or find out why you can't send message uncomment line below, and execute script.
             echo $response;
-            curl_close( $ch );
+            curl_close($ch);
+        }
+    }
+}
+
+if (!function_exists(('checkSession'))) {
+    function checkSession()
+    {
+        if ($_SESSION['logged_in'] == false || !$_SESSION['logged_in']) {
+            if (!empty($_SERVER['QUERY_STRING'])) {
+                $uri = uri_string() . '?' . $_SERVER['QUERY_STRING'];
+            } else {
+                $uri = uri_string();
+            }
+            return [
+                'status' => false,
+                'uri' => $uri
+            ];
+        }else{
+            return [
+                'status' => true
+            ];
         }
     }
 }

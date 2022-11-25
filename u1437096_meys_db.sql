@@ -1068,7 +1068,7 @@ INSERT INTO `tb_participants_essay` (`id`, `participans_id`, `user_id`, `m_essay
 DROP TABLE IF EXISTS `tb_payments`;
 CREATE TABLE `tb_payments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `transaction_code` varchar(255) DEFAULT NULL,
+  `transaction_id` varchar(255) DEFAULT NULL,
   `user_id` varchar(15) NOT NULL DEFAULT '0',
   `payment_batch` int(11) NOT NULL DEFAULT 0,
   `payment_setting` int(11) NOT NULL DEFAULT 0,
@@ -1085,7 +1085,7 @@ CREATE TABLE `tb_payments` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `tb_payments` (`id`, `transaction_code`, `user_id`, `payment_batch`, `payment_setting`, `evidance`, `remarks`, `status`, `amount`, `amount_usd`, `created_at`, `created_by`, `modified_at`, `modified_by`, `is_deleted`) VALUES
+INSERT INTO `tb_payments` (`id`, `transaction_id`, `user_id`, `payment_batch`, `payment_setting`, `evidance`, `remarks`, `status`, `amount`, `amount_usd`, `created_at`, `created_by`, `modified_at`, `modified_by`, `is_deleted`) VALUES
 (1,	'manual-gram-5uc6',	'USR-MHNDR-ff76c',	2,	3,	'berkas/user/USR-MHNDR-ff76c/payments/2/1667356504.jpg',	'Mahendra',	3,	0,	0,	1667356504,	'USR-MHNDR-ff76c',	0,	'0',	0),
 (2,	'manualmoney-gram-5uc6',	'USR-MHNDR-ff76c',	2,	1,	'berkas/user/USR-MHNDR-ff76c/payments/2/1667358553.jpg',	'Mahendra',	3,	0,	0,	1667358553,	'USR-MHNDR-ff76c',	0,	'0',	0),
 (3,	'MNLMN-7b76df',	'USR-MHNDR-ff76c',	2,	1,	'berkas/user/USR-MHNDR-ff76c/payments/2/1667358812.jpg',	'Mahendra',	3,	0,	0,	1667358812,	'USR-MHNDR-ff76c',	1667359441,	'USR-MHNDR-ff76c',	0),

@@ -88,11 +88,30 @@ class M_payment extends CI_Model
         return $models;
     }
 
-    function getUserPaymentBatchHistory($user_id , $batch_id){
-        $this->db->select('a.*, b.summit, c.payment_method, c.img_method')
+    function getUserPaymentDetailByOrderId($order_id){
+        $this->db->select('a.*, b.summit, c.payment_method, c.img_method, c.type_method, c.code_method, d.name')
         ->from('tb_payments a')
         ->join('m_payments_batch b', 'a.payment_batch = b.id')
         ->join('m_payments_settings c', 'a.payment_setting = c.id')
+        ->join('tb_user d', 'a.user_id = d.user_id')
+        ->where(['a.order_id' => $order_id, 'a.is_deleted' => 0])
+        ;
+
+        $models = $this->db->get()->row();
+        
+        if($models->type_method == 'gateway_midtrans'){
+            $models->remarks = $models->name;
+        }
+
+        return $models;
+    }
+
+    function getUserPaymentBatchHistory($user_id , $batch_id){
+        $this->db->select('a.*, b.summit, c.payment_method, c.img_method, c.type_method, c.code_method, d.name')
+        ->from('tb_payments a')
+        ->join('m_payments_batch b', 'a.payment_batch = b.id')
+        ->join('m_payments_settings c', 'a.payment_setting = c.id')
+        ->join('tb_user d', 'a.user_id = d.user_id')
         ->where(['a.user_id' => $user_id, 'a.payment_batch' => $batch_id, 'a.is_deleted' => 0])
         ->order_by('a.created_at DESC');
         ;
@@ -144,7 +163,7 @@ class M_payment extends CI_Model
 
         $data = [
             'user_id' => $user_id,
-            'transaction_code' => createCode("MANUAL".$this->input->post('code_method')),
+            'transaction_id' => createCode("MANUAL".$this->input->post('code_method')),
             'payment_batch' => $payment_batch,
             'payment_setting' => $payment_setting,
             'evidance' => $evidance,
@@ -308,6 +327,31 @@ class M_payment extends CI_Model
         $this->db->where('id', $id);
         $this->db->update('tb_payments', $data);
         return ($this->db->affected_rows() != 1) ? false : true;
+    }
+    
+    function savePaymentG($data = []){
+        $data = $this->db->insert('tb_payments', $data);
+        return [
+            'status' => ($this->db->affected_rows() != 1) ? false : true,
+            'data' => $data
+        ];
+    }
+    
+    function updatePaymentG($data = [], $where = []){
+        $this->db->where($where);
+        $data = $this->db->update('tb_payments', $data);
+        return [
+            'status' => ($this->db->affected_rows() != 1) ? false : true,
+            'data' => $data
+        ];
+    }
+    
+    function saveLogPayment($data = []){
+        $data = $this->db->insert('log_payments', $data);
+        return [
+            'status' => ($this->db->affected_rows() != 1) ? false : true,
+            'data' => $data
+        ];
     }
 
 }

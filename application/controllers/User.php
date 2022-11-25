@@ -4,6 +4,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class User extends CI_Controller
 {
+    // config
+    protected $_midtrans_prod = false;
+    protected $_server_key_production = '';
+    protected $_server_key_sandbox = 'SB-Mid-server-qC8YfWnkcF_fjPrZmuNEwb8P';
+    protected $_client_key_production = '';
+    protected $_client_key_sandbox = 'SB-Mid-client-LAEwpi34CdNrwLgt';
+
     // construct
     public function __construct()
     {
@@ -24,8 +31,8 @@ class User extends CI_Controller
 
         // cek akun aktif
         $user = $this->M_auth->get_userByID($this->session->userdata('user_id'));
-        if($user != false){
-            if($user->active == 0){
+        if ($user != false) {
+            if ($user->active == 0) {
                 $this->session->set_flashdata('error', "Hi {$user->name}, please verified your email first");
                 redirect(site_url('verification-email'));
             }
@@ -34,7 +41,6 @@ class User extends CI_Controller
 
     public function index()
     {
-
         $data['user'] = $this->M_auth->get_auth($this->session->userdata('email'));
         // style
         $data['navbar_style']   = "navbar-dark";
@@ -86,22 +92,24 @@ class User extends CI_Controller
         $data['btn_sign_up']    = "btn-light";
         $data['btn_sign_in']    = "btn-outline-light";
 
+        $data['client_key']     = ($this->_midtrans_prod == true ? $this->_client_key_production : $this->_client_key_sandbox);
+
         $data['payment_settings']   = $this->M_payment->getPaymentSettingsUser();
         $data['payment_batch']      = $this->M_payment->getUserPaymentBatch();
         $this->templateuser->view('user/payments/payment', $data);
     }
-    
+
     public function payments_history($batch_id = null)
     {
         $data['user'] = $this->M_auth->get_auth($this->session->userdata('email'));
-        
+
         // style
         $data['navbar_style']   = "navbar-dark";
         $data['logo_style']     = 1;
         $data['btn_sign_up']    = "btn-light";
         $data['btn_sign_in']    = "btn-outline-light";
         $data['payment_history']  = $this->M_payment->getUserPaymentBatchHistory($this->session->userdata('user_id'), $batch_id);
-        
+
         $this->templateuser->view('user/payments/payment_history', $data);
     }
 
@@ -116,28 +124,34 @@ class User extends CI_Controller
         $data['btn_sign_in']    = "btn-outline-light";
         $data['reff']['type']   = $this->input->get('reff');
         $data['reff']['id']     = $this->input->get('id');
-        
-        $data['payment_detail']  = $this->M_payment->getUserPaymentDetail($payment_id);
-        
-        $this->templatepayment->view('user/payments/payment_transaction', $data);
+
+        if ($this->input->get('method') && $this->input->get('method') == 'gateway') {
+            $data['payment_detail']  = $this->M_payment->getUserPaymentDetailByOrderId($payment_id);
+            
+            $this->templatepayment->view('user/payments/payment_midtrans', $data);
+        } else {
+            $data['payment_detail']  = $this->M_payment->getUserPaymentDetail($payment_id);
+
+            $this->templatepayment->view('user/payments/payment_transaction', $data);
+        }
     }
 
     public function submission()
     {
         $data['user'] = $this->M_auth->get_auth($this->session->userdata('email'));
-        
+
         // style
         $data['navbar_style']   = "navbar-dark";
         $data['logo_style']     = 1;
         $data['btn_sign_up']    = "btn-light";
         $data['btn_sign_in']    = "btn-outline-light";
-        
+
         $data['participants']   = $this->M_user->getUserParticipans($this->session->userdata('user_id'));
         $participans_id         = isset($data['participants']->id) ? $data['participants']->id : null;
         $data['p_essay']        = $this->M_user->getUserParticipansEssay($this->session->userdata('user_id'), $participans_id);
         $data['m_essay']        = $this->M_master->getParticipansEssay();
         $data['countries']      = $this->M_user->getAllCountries();
-        
+
         $this->templateuser->view('user/submission', $data);
     }
 
@@ -162,13 +176,12 @@ class User extends CI_Controller
 
         // mengambil data user dengan param email
         $user = $this->M_auth->get_auth($this->session->userdata('email'));
-                // ej($user);
+        // ej($user);
 
         if ($password == $conf_password) {
             //mengecek apakah password benar
             if (password_verify($cur_password, $user->password)) {
                 if ($this->M_user->changePassword($password) == true) {
-
                     // atur dataemailperubahan password
                     $now = date("d F Y - H:i");
                     $email = htmlspecialchars($this->session->userdata("email"), true);
