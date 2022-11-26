@@ -9,9 +9,9 @@ class User extends CI_Controller
 {
     // config
     protected $_midtrans_prod = false;
-    protected $_server_key_production = '';
+    protected $_server_key_production = 'Mid-server-gXaK3X0M-oZhY4RPL0g2Mt_z';
     protected $_server_key_sandbox = 'SB-Mid-server-qC8YfWnkcF_fjPrZmuNEwb8P';
-    protected $_client_key_production = '';
+    protected $_client_key_production = 'SB-Mid-client-LAEwpi34CdNrwLgt';
     protected $_client_key_sandbox = 'SB-Mid-client-LAEwpi34CdNrwLgt';
     protected $_user_testflight = ['USER-ADM-01', 'USR-MHNDR-b6331'];
 
@@ -43,19 +43,19 @@ class User extends CI_Controller
         }
 
         // get master midtrans setting
-        $this->_midtrans_prod = $this->M_payment->getMidtransConfig('_midtrans_prod');
+        $this->_midtrans_prod = $this->M_payment->getMidtransConfig('_midtrans_prod') == 1 ? true : false;
         $this->_server_key_production = $this->M_payment->getMidtransConfig('_server_key_production');
         $this->_server_key_sandbox = $this->M_payment->getMidtransConfig('_server_key_sandbox');
         $this->_client_key_production = $this->M_payment->getMidtransConfig('_client_key_production');
         $this->_client_key_sandbox = $this->M_payment->getMidtransConfig('_client_key_sandbox');
-
+        
         if(!is_null($this->M_payment->getMidtransConfig('_user_testflight'))){
            
            $this->_user_testflight = explode(',', $this->M_payment->getMidtransConfig('_user_testflight')) ;
         }
 
         $params = [
-            'server_key' => $this->_server_key_sandbox,
+            'server_key' => $this->_midtrans_prod == true ? $this->_server_key_production : $this->_server_key_sandbox,
             'production' => $this->_midtrans_prod
         ];
 
@@ -118,8 +118,14 @@ class User extends CI_Controller
         $data['btn_sign_up']    = "btn-light";
         $data['btn_sign_in']    = "btn-outline-light";
         
-        $data['is_allow_gateway'] = checkAllowGateway($this->session->userdata('user_id'), $this->_user_testflight);
+        
+        if($this->_midtrans_prod == false){
+            $data['is_allow_gateway'] = checkAllowGateway($this->session->userdata('user_id'), $this->_user_testflight);
+        }else{
+            $data['is_allow_gateway'] = true;
+        }
 
+        $data['midtrans_prod']  = $this->_midtrans_prod;
         $data['client_key']     = ($this->_midtrans_prod == true ? $this->_client_key_production : $this->_client_key_sandbox);
 
         $data['payment_settings']   = $this->M_payment->getPaymentSettingsUser();

@@ -1,5 +1,10 @@
+<?php if($midtrans_prod == true):?>
+<script type="text/javascript" src="https://app.midtrans.com/snap/snap.js" data-client-key="<?= $client_key;?>">
+</script>
+<?php else:?>
 <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?= $client_key;?>">
 </script>
+<?php endif;?>
 
 <div class="d-grid gap-3 gap-lg-5">
 	<!-- Card -->
