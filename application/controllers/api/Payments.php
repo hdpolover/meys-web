@@ -49,7 +49,7 @@ class Payments extends CI_Controller
         $result = json_decode($json_result);
 
         $data = [
-            'status'        => $this->MidtransPayments->cvtStatusToInt($result->transaction_status),
+            'status'        => $this->midtranspayments->cvtStatusToInt($result->transaction_status),
             'modified_at'   => time(),
             'modified_by'   => 0
         ];
@@ -297,7 +297,7 @@ class Payments extends CI_Controller
         $data = $this->veritrans->status($order_id);
 
         $data = [
-            'status'        => $this->MidtransPayments->cvtStatusToInt($data->transaction_status),
+            'status'        => $this->midtranspayments->cvtStatusToInt($data->transaction_status),
             'modified_at'   => time(),
             'modified_by'   => $this->session->userdata('user_id')
         ];
