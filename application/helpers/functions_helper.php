@@ -244,3 +244,15 @@ if (!function_exists(('checkSession'))) {
         }
     }
 }
+
+if (!function_exists(('checkAllowGateway'))) {
+    function checkAllowGateway($user_id = null, $user_testflight = [])
+    {
+            if(in_array($user_id, $user_testflight)){
+                return true;
+            }else{
+                return false;
+            }
+    }
+}
+

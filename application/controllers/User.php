@@ -1,5 +1,8 @@
 <?php
 
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, OPTIONS');
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class User extends CI_Controller
@@ -10,6 +13,7 @@ class User extends CI_Controller
     protected $_server_key_sandbox = 'SB-Mid-server-qC8YfWnkcF_fjPrZmuNEwb8P';
     protected $_client_key_production = '';
     protected $_client_key_sandbox = 'SB-Mid-client-LAEwpi34CdNrwLgt';
+    protected $_user_testflight = ['USER-ADM-01', 'USR-MHNDR-b6331'];
 
     // construct
     public function __construct()
@@ -37,6 +41,28 @@ class User extends CI_Controller
                 redirect(site_url('verification-email'));
             }
         }
+
+        // get master midtrans setting
+        $this->_midtrans_prod = $this->M_payment->getMidtransConfig('_midtrans_prod');
+        $this->_server_key_production = $this->M_payment->getMidtransConfig('_server_key_production');
+        $this->_server_key_sandbox = $this->M_payment->getMidtransConfig('_server_key_sandbox');
+        $this->_client_key_production = $this->M_payment->getMidtransConfig('_client_key_production');
+        $this->_client_key_sandbox = $this->M_payment->getMidtransConfig('_client_key_sandbox');
+
+        if(!is_null($this->M_payment->getMidtransConfig('_user_testflight'))){
+           
+           $this->_user_testflight = explode(',', $this->M_payment->getMidtransConfig('_user_testflight')) ;
+        }
+
+        $params = [
+            'server_key' => $this->_server_key_sandbox,
+            'production' => $this->_midtrans_prod
+        ];
+
+        $this->load->model(['M_master', 'M_payment', 'M_auth']);
+        $this->load->library(['Uploader', 'Midtrans', 'Veritrans', 'MidtransPayments']);
+        $this->midtrans->config($params);
+        $this->veritrans->config($params);
     }
 
     public function index()
@@ -91,6 +117,8 @@ class User extends CI_Controller
         $data['logo_style']     = 1;
         $data['btn_sign_up']    = "btn-light";
         $data['btn_sign_in']    = "btn-outline-light";
+        
+        $data['is_allow_gateway'] = checkAllowGateway($this->session->userdata('user_id'), $this->_user_testflight);
 
         $data['client_key']     = ($this->_midtrans_prod == true ? $this->_client_key_production : $this->_client_key_sandbox);
 
@@ -110,6 +138,13 @@ class User extends CI_Controller
         $data['btn_sign_in']    = "btn-outline-light";
         $data['payment_history']  = $this->M_payment->getUserPaymentBatchHistory($this->session->userdata('user_id'), $batch_id);
 
+        // urgent > can be improve later
+        foreach($data['payment_history'] as $key => $val){
+            if($val->type_method == 'gateway_midtrans'){
+                $this->status($val->order_id);
+            }
+        }
+
         $this->templateuser->view('user/payments/payment_history', $data);
     }
 
@@ -126,6 +161,9 @@ class User extends CI_Controller
         $data['reff']['id']     = $this->input->get('id');
 
         if ($this->input->get('method') && $this->input->get('method') == 'gateway') {
+
+            $this->status($payment_id);
+
             $data['payment_detail']  = $this->M_payment->getUserPaymentDetailByOrderId($payment_id);
             
             $this->templatepayment->view('user/payments/payment_midtrans', $data);
@@ -206,5 +244,27 @@ class User extends CI_Controller
             $this->session->set_flashdata('notif_warning', 'Password doesn`t match');
             redirect($this->agent->referrer());
         }
+    }
+
+    public function status($order_id = null){
+        
+        if($this->input->post('order_id')){
+            $order_id = $this->input->post('order_id');
+        }
+
+        $data = $this->veritrans->status($order_id);
+
+        $data = [
+            'status'        => $this->midtranspayments->cvtStatusToInt($data->transaction_status),
+            'modified_at'   => time(),
+            'modified_by'   => $this->session->userdata('user_id')
+        ];
+
+        $where = [
+            'order_id'  => $order_id,
+            'user_id'   => $this->session->userdata('user_id')
+        ];
+
+        $this->M_payment->updatePaymentG($data, $where);
     }
 }

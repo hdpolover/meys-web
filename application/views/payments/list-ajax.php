@@ -63,7 +63,7 @@
 		</div>
 		<!-- End Card -->
 	</div>
-	<div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+	<div class="col-sm-6 col-lg-3 mb-3 mb-lg-5 d-none">
 		<!-- Card -->
 		<div class="card">
 			<div class="card-body">
@@ -72,6 +72,23 @@
 				<div class="row align-items-center gx-2">
 					<div class="col">
 						<span class="text-dark" id="xenditIncome">Rp. 0</span>
+					</div>
+					<!-- End Col -->
+				</div>
+				<!-- End Row -->
+			</div>
+		</div>
+		<!-- End Card -->
+	</div>
+	<div class="col-sm-6 col-lg-3 mb-3 mb-lg-5">
+		<!-- Card -->
+		<div class="card">
+			<div class="card-body">
+				<h6 class="card-subtitle mb-2">Midtrans Income</h6>
+
+				<div class="row align-items-center gx-2">
+					<div class="col">
+						<span class="text-dark" id="midtransIncome">Rp. 0</span>
 					</div>
 					<!-- End Col -->
 				</div>
@@ -334,6 +351,7 @@
 				$('#manualIncome').html(json.manualIncome);
 				$('#paypalIncome').html(json.paypalIncome);
 				$('#xenditIncome').html(json.xenditIncome);
+				$('#midtransIncome').html(json.midtransIncome);
 
 				$('#paymentSuccess').html(json.paymentSuccess);
 				$('#paymentPending').html(json.paymentPending);

@@ -47,7 +47,7 @@ class MidtransPayments
         } elseif ($status == 2) {
             return 'success';
         } elseif ($status == 3) {
-            return 'expire';
+            return 'cancel';
         } elseif ($status == 4) {
             return 'deny';
         } elseif ($status == 5) {

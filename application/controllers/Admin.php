@@ -266,7 +266,9 @@ class Admin extends CI_Controller
             $btn = $btnParticipant;
             if($val->status <= 1 || $val->status == 4  || $val->status == 3){
             }
-            $btn .= $btnCheck;
+            if($val->type_method == 'manual'){
+                $btn .= $btnCheck;
+            }
             $btn .= $btnDetail;
 
             $arr[$key] = [
@@ -289,6 +291,7 @@ class Admin extends CI_Controller
             'manualIncome' => $payments['summary']['manualIncome'],
             'paypalIncome' => $payments['summary']['paypalIncome'],
             'xenditIncome' => $payments['summary']['xenditIncome'],
+            'midtransIncome' => $payments['summary']['midtransIncome'],
 
             'paymentSuccess' => $payments['summary']['paymentSuccess'],
             'paymentPending' => $payments['summary']['paymentPending'],

@@ -8,6 +8,16 @@ class M_payment extends CI_Model
         parent::__construct();
     }
 
+    function getMidtransConfig($key = null){
+        $models = $this->db->get_where('m_midtrans_config', ['is_deleted' => 0, 'key' => $key])->row();
+
+        if(!empty($models)){
+            return $models->value;
+        }else{
+            return null;
+        }
+    }
+
     function getPaymentSettings(){
         return $this->db->get_where('m_payments_settings', ['is_deleted' => 0, 'type_method' => 'manual'])->result();
     }
@@ -50,7 +60,7 @@ class M_payment extends CI_Model
     }
 
     function checkPaymentUser($batch_id = null){
-        $this->db->select('a.*, b.summit, c.payment_method, c.img_method')
+        $this->db->select('a.*, b.summit, c.payment_method, c.img_method, c.type_method, c.code_method')
         ->from('tb_payments a')
         ->join('m_payments_batch b', 'a.payment_batch = b.id')
         ->join('m_payments_settings c', 'a.payment_setting = c.id')
@@ -202,6 +212,7 @@ class M_payment extends CI_Model
             'manualIncome' => 0,
             'paypalIncome' => 0,
             'xenditIncome' => 0,
+            'midtransIncome' => 0,
 
             'paymentSuccess' => 0,
             'paymentPending' => 0,
@@ -223,14 +234,15 @@ class M_payment extends CI_Model
             $filter = implode(' AND ', $filter);
         }  
 
-        $this->db->select('a.*, b.summit, c.payment_method, c.img_method, d.email, e.name, e.phone, f.institution_workplace as institution')
+        $this->db->select('a.*, b.summit, c.payment_method, c.img_method, c.type_method, c.code_method, d.email, e.name, e.phone, f.institution_workplace as institution')
         ->from('tb_payments a')
         ->join('m_payments_batch b', 'a.payment_batch = b.id')
         ->join('m_payments_settings c', 'a.payment_setting = c.id')
         ->join('tb_auth d', 'a.user_id = d.user_id')
         ->join('tb_user e', 'a.user_id = e.user_id')
-        ->join('tb_participants f', 'a.user_id = f.user_id')
+        ->join('tb_participants f', 'a.user_id = f.user_id', 'left')
         ->where(['a.is_deleted' => 0])
+        ->where("a.status = 2 or a.status = 1 and a.is_deleted = 0")
         ;
 
 
@@ -240,7 +252,7 @@ class M_payment extends CI_Model
         ->order_by('a.status ASC, a.created_at DESC');
 
         $models = $this->db->get()->result();
-
+        // ej($models);
         foreach($models as $key => $val){
             $models[$key]->payment_history = $this->getUserPaymentBatchHistory($val->user_id, 2);
         }
@@ -256,7 +268,9 @@ class M_payment extends CI_Model
 
                 if($val->payment_setting == 1){
                     $summary['paypalIncome'] += $val->amount;
-                }else{
+                }elseif($val->type_method == 'gateway_midtrans'){
+                    $summary['midtransIncome'] += $val->amount;
+                }elseif($val->type_method == 'manual'){
                     $summary['manualIncome'] += $val->amount;
                 }
                 
@@ -277,6 +291,7 @@ class M_payment extends CI_Model
             'manualIncome' => "Rp. ".number_format($summary['manualIncome']),
             'paypalIncome' => "Rp. ".number_format($summary['paypalIncome']),
             'xenditIncome' => "Rp. ".number_format($summary['xenditIncome']),
+            'midtransIncome' => "Rp. ".number_format($summary['midtransIncome']),
 
             'paymentSuccess' => number_format($summary['paymentSuccess']),
             'paymentPending' => number_format($summary['paymentPending']),
@@ -353,5 +368,41 @@ class M_payment extends CI_Model
             'data' => $data
         ];
     }
+
+    function bulkCancelPayments(){
+
+        $data = [
+            'status'        => 3,
+            'modified_at'   => time(),
+            'modified_by'   => $this->session->userdata('user_id')
+        ];
+
+        $where = [
+            'user_id'           => $this->session->userdata('user_id'),
+            'status'            => 1
+        ];
+
+        $this->db->where($where);
+        $this->db->update('tb_payments', $data);
+    }
+
+    function bulkDeletePayments()
+    {
+        $data = [
+            'is_deleted'    => 1,
+            'modified_at'   => time(),
+            'modified_by'   => $this->session->userdata('user_id')
+        ];
+
+        $where = [
+            'user_id'           => $this->session->userdata('user_id'),
+            // 'status'            => 1,
+            'payment_setting'   => 0
+        ];
+
+        $this->db->where($where);
+        $this->db->update('tb_payments', $data);
+    }
+
 
 }

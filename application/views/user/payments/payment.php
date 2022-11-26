@@ -61,14 +61,26 @@
 						<span class="text-secondary small"><?= $val->description;?></span>
 					</div>
 					<?php if(is_null($val->payments) || $val->payments->status == 4):?>
+					<?php if($is_allow_gateway == true):?>
 					<button type="button" class="btn btn-outline-success btn-sm purchase-button w-100 mt-2"
-						onclick="pay(<?= $val->id;?>, <?= $val->amount;?>, <?= $val->amount_usd;?>)">Pay (payment gateway)</button>
+						onclick="pay(<?= $val->id;?>, <?= $val->amount;?>, <?= $val->amount_usd;?>)">Pay (payment
+						gateway)</button>
+					<?php else:?>
+					<button type="button" class="btn btn-outline-success btn-sm purchase-button w-100 mt-2" disabled>Pay
+						(payment
+						gateway) LOCKED</button>
+					<?php endif;?>
 					<button type="button" class="btn btn-warning btn-sm purchase-button w-100 mt-2"
 						data-bs-toggle="modal" data-bs-target="#manual-transfer-<?= $val->id;?>">Manual
 						Transfer</button>
 					<?php else:?>
+					<?php if($val->payments->type_method == 'gateway_midtrans'):?>
+					<a href="<?= site_url('user/payments-transaction/'.$val->payments->order_id.'?method=gateway');?>"
+						class="btn btn-warning btn-sm purchase-button w-100 mt-2">View Transaction</a>
+					<?php else:?>
 					<a href="<?= site_url('user/payments-transaction/'.$val->payments->id);?>"
 						class="btn btn-warning btn-sm purchase-button w-100 mt-2">View Transaction</a>
+					<?php endif;?>
 					<?php endif;?>
 					<a href="<?= site_url('user/payments-history/'.$val->id);?>"
 						class="btn btn-info btn-sm purchase-button w-100 mt-2">History</a>
@@ -192,6 +204,22 @@
 		<!-- End Modal -->
 		<?php endforeach;?>
 		<?php endif;?>
+	</div>
+
+	<div class="row">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-body">
+					<p><b>Note:</b></p>
+					<p>- The "Pay" button provides many different payment methods of your choice such as Credit/Debit
+						Card, Virtual Account, Bank Transfer, and GoPay).</p>
+					<p>- Confirm your PayPal payments by sending the payment proof, full name, and account email to <a
+							href="mailto:<?= $web_email;?>"><?= $web_email;?></a></p>
+					<p>- If there is an error, please reload your browser, if still send an email to <a
+							href="mailto:<?= $web_email;?>"><?= $web_email;?></a></p>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 

@@ -79,7 +79,7 @@
     						<?php if($payment_detail->status <= 1):?>
     						<div class="col">
     							<button class="btn btn-soft-danger w-100 mt-4 btn-sm" data-bs-toggle="modal"
-    								data-bs-target="#cancelPayment">Cancel Payment</button>
+    								data-bs-target="#cancelPaymentGateway">Cancel Payment</button>
     						</div>
     						<?php endif;?>
     					</div>
@@ -95,7 +95,7 @@
     <!-- End Row -->
 
     <!-- Modal -->
-    <div class="modal fade" id="cancelPayment" tabindex="-1" aria-labelledby="mdlCancelLabel" aria-hidden="true">
+    <div class="modal fade" id="cancelPaymentGateway" tabindex="-1" aria-labelledby="mdlCancelLabel" aria-hidden="true">
     	<div class="modal-dialog modal-dialog-centered">
     		<div class="modal-content">
     			<div class="modal-header">
@@ -105,11 +105,12 @@
 
     			<div class="modal-body text-center">
     				<h4 class="text-center">Are you sure cancel this payment ?</h4>
+					<span class="text-secondary small">you can cancel this payment to change your payment method or other purpose.</span>
     			</div>
 
     			<div class="modal-footer">
-    				<form action="<?= site_url('api/payments/manualPaymentCancel')?>" method="POST" class="js-validate">
-    					<input type="hidden" name="id" value="<?= $payment_detail->id?>">
+    				<form action="<?= site_url('api/payments/cancel')?>" method="POST" class="js-validate">
+    					<input type="hidden" name="order_id" value="<?= $payment_detail->order_id?>">
     					<button type="button" class="btn btn-outline-secondary btn-sm"
     						data-bs-dismiss="modal">Close</button>
     					<button type="submit" class="btn btn-soft-danger btn-sm">Cancel Payment</button>
