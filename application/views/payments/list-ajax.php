@@ -295,6 +295,10 @@
 				<input type="hidden" name="user_id" class="mdlVerif_userid">
 				<button type="button" class="btn btn-soft-success btn-sm" id="verifBtn" onclick="verifData()">Verified</button>
 				<button type="button" class="btn btn-soft-danger btn-sm" id="rejectBtn" onclick="rejectData()">Reject</button>
+				<?php if($this->session->userdata('role') == 0):?>
+				<button type="button" class="btn btn-soft-secondary btn-sm" id="pendingBtn" onclick="pendingData()">Pending</button>
+				<button type="button" class="btn btn-soft-warning btn-sm" id="cancelBtn" onclick="cancelData()">Cancel</button>
+				<?php endif;?>
 				<!-- <form action="<?= site_url('api/payments/verificationPayment')?> " method="post"
 					class="js-validate need-validate" novalidate>
 					<input type="hidden" name="id" class="mdlVerif_id">
@@ -555,6 +559,138 @@
 				Toast.fire({
 					icon: 'success',
 					title: "Succesfuly rejected payment"
+				})
+
+				table.ajax.reload();
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+
+				table.ajax.reload();
+
+				var Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				})
+
+				Toast.fire({
+					icon: 'error',
+					title: thrownError
+				})
+			}
+		});
+	}
+
+	function pendingData() {
+		var id = $('.mdlVerif_id').val();
+		var user_id = $('.mdlVerif_userid').val();
+
+		$('#pendingBtn').prop("disabled", true);
+		// add spinner to button
+		$('#pendingBtn').html(
+			`<span class="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true"></span> loading...`
+		);
+
+		jQuery.ajax({
+			url: "<?= site_url('api/payments/pendingPayment') ?>",
+			type: 'POST',
+			data: {
+				id: id,
+				user_id: user_id
+			},
+			success: function (data) {
+				$('#pendingBtn').prop("disabled", false);
+				$('#pendingBtn').html(`Pending`);
+
+				$('#mdlPaymentDetailVerif').modal('hide');
+
+				var Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				})
+
+				Toast.fire({
+					icon: 'success',
+					title: "Succesfuly set payment to pending"
+				})
+
+				table.ajax.reload();
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+
+				table.ajax.reload();
+
+				var Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				})
+
+				Toast.fire({
+					icon: 'error',
+					title: thrownError
+				})
+			}
+		});
+	}
+
+	function cancelData() {
+		var id = $('.mdlVerif_id').val();
+		var user_id = $('.mdlVerif_userid').val();
+
+		$('#cancelBtn').prop("disabled", true);
+		// add spinner to button
+		$('#cancelBtn').html(
+			`<span class="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true"></span> loading...`
+		);
+
+		jQuery.ajax({
+			url: "<?= site_url('api/payments/cancelPayment') ?>",
+			type: 'POST',
+			data: {
+				id: id,
+				user_id: user_id
+			},
+			success: function (data) {
+				$('#cancelBtn').prop("disabled", false);
+				$('#cancelBtn').html(`Cancel`);
+
+				$('#mdlPaymentDetailVerif').modal('hide');
+
+				var Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				})
+
+				Toast.fire({
+					icon: 'success',
+					title: "Succesfuly set payment to cancel"
 				})
 
 				table.ajax.reload();

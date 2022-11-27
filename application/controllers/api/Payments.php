@@ -28,7 +28,7 @@ class Payments extends CI_Controller
         $this->_server_key_sandbox = $this->M_payment->getMidtransConfig('_server_key_sandbox');
         $this->_client_key_production = $this->M_payment->getMidtransConfig('_client_key_production');
         $this->_client_key_sandbox = $this->M_payment->getMidtransConfig('_client_key_sandbox');
-        
+
         if (!is_null($this->M_payment->getMidtransConfig('_user_testflight'))) {
             $this->_user_testflight = explode(',', $this->M_payment->getMidtransConfig('_user_testflight')) ;
         }
@@ -48,55 +48,93 @@ class Payments extends CI_Controller
         $json_result = file_get_contents('php://input');
         $result = json_decode($json_result);
 
-        $data = [
-            'status'        => $this->midtranspayments->cvtStatusToInt($result->transaction_status),
-            'modified_at'   => time(),
-            'modified_by'   => 0
-        ];
-
-        $where = [
-            'order_id'  => $result->order_id,
-        ];
-
-        if ($result->status_code == 200) {
-            $this->M_payment->updatePaymentG($data, $where);
-        } elseif ($result->status_code == 202) {
-            $this->M_payment->updatePaymentG($data, $where);
-        } elseif ($result->status_code == 201) {
-            // todo
-        } else {
-            $this->M_payment->updatePaymentG($data, $where);
-        }
+        $detail_payment = $this->M_payment->getUserPaymentDetailByOrderId($result->order_id);
 
         $webhook = "https://discord.com/api/webhooks/1040091929729302569/D6kb3xoe96IG88xWtfPWJtLZz9AsF_ewTBBFvgVB3kT_TkqFpZVROFs37FUyAEnkwxN9";
         $timestamp = date("c", strtotime("now"));
-        $msg = json_encode([
-            "username" => "MEYS 2022 - Webhook Payments",
 
-            "tts" => false,
+        if (!empty($detail_payment)) {
+            $data = [
+                'status'        => $this->midtranspayments->cvtStatusToInt($result->transaction_status),
+                'modified_at'   => time(),
+                'modified_by'   => 0
+            ];
 
-            "embeds" => [
-                [
-                    // Title
-                    "title" => "Webhook succesful trigger",
+            $where = [
+                'id'  => $detail_payment->id,
+                'order_id'  => $result->order_id,
+                'transaction_id'  => $result->transaction_id,
+                'payment_type'  => 'bank_transfer',
+            ];
 
-                    // Embed Type, do not change.
-                    "type" => "rich",
+            $this->M_payment->saveLogHistoryPayments($detail_payment);
 
-                    // Description
-                    "description" => !empty($result) ? "```".json_encode($result)."```" : 'No online users',
+            if ($result->status_code == 200) {
+                $this->M_payment->updatePaymentG($data, $where);
+            } elseif ($result->status_code == 202) {
+                $this->M_payment->updatePaymentG($data, $where);
+            } elseif ($result->status_code == 201) {
+                // todo
+            } else {
+                $this->M_payment->updatePaymentG($data, $where);
+            }
 
-                    // Timestamp, only ISO8601
-                    "timestamp" => $timestamp,
+            $msg = json_encode([
+                "username" => "MEYS 2022 - Webhook Payments",
 
-                    // Left border color, in HEX
-                    "color" => hexdec("3366ff"),
+                "tts" => false,
+
+                "embeds" => [
+                    [
+                        // Title
+                        "title" => "Webhook succesful trigger",
+
+                        // Embed Type, do not change.
+                        "type" => "rich",
+
+                        // Description
+                        "description" => !empty($result) ? "```".json_encode($result)."```" : 'No data yet',
+
+                        // Timestamp, only ISO8601
+                        "timestamp" => $timestamp,
+
+                        // Left border color, in HEX
+                        "color" => hexdec("3366ff"),
+                    ]
                 ]
-            ]
 
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
-        discordmsg($msg, $webhook);
+            discordmsg($msg, $webhook);
+        } else {
+            $msg = json_encode([
+                "username" => "MEYS 2022 - Webhook Payments",
+
+                "tts" => false,
+
+                "embeds" => [
+                    [
+                        // Title
+                        "title" => "Webhook succesful trigger",
+
+                        // Embed Type, do not change.
+                        "type" => "rich",
+
+                        // Description
+                        "description" => "Can't find payment refer to order id #{$result->order_id}",
+
+                        // Timestamp, only ISO8601
+                        "timestamp" => $timestamp,
+
+                        // Left border color, in HEX
+                        "color" => hexdec("3366ff"),
+                    ]
+                ]
+
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+            discordmsg($msg, $webhook);
+        }
     }
 
     public function pay()
@@ -107,11 +145,11 @@ class Payments extends CI_Controller
             $this->session->set_flashdata('notif_warning', "Please login to continue");
             redirect('sign-in');
         }
-        
-        if($this->_midtrans_prod == false){
+
+        if ($this->_midtrans_prod == false) {
             $is_allow_gateway = checkAllowGateway($this->session->userdata('user_id'), $this->_user_testflight);
-    
-            if($is_allow_gateway == false){
+
+            if ($is_allow_gateway == false) {
                 $this->session->set_flashdata('warning', 'Your account is not allowed for this payment method !');
                 redirect(site_url('user'));
                 return false;
@@ -431,6 +469,30 @@ class Payments extends CI_Controller
         //     redirect(site_url('admin/payments'));
         // } else {
         //     $this->session->set_flashdata('notif_warning', 'There is a problem when trying to rejected payment, try again later');
+        //     redirect($this->agent->referrer());
+        // }
+    }
+
+    public function pendingPayment()
+    {
+        return $this->M_payment->pendingPayment();
+        // if ($this->M_payment->pendingPayment() == true) {
+        //     $this->session->set_flashdata('notif_success', 'Succesfuly pending payment ');
+        //     redirect(site_url('admin/payments'));
+        // } else {
+        //     $this->session->set_flashdata('notif_warning', 'There is a problem when trying to pending payment, try again later');
+        //     redirect($this->agent->referrer());
+        // }
+    }
+
+    public function cancelPayment()
+    {
+        return $this->M_payment->cancelPayment();
+        // if ($this->M_payment->cancelPayment() == true) {
+        //     $this->session->set_flashdata('notif_success', 'Succesfuly cancel payment ');
+        //     redirect(site_url('admin/payments'));
+        // } else {
+        //     $this->session->set_flashdata('notif_warning', 'There is a problem when trying to cancel payment, try again later');
         //     redirect($this->agent->referrer());
         // }
     }

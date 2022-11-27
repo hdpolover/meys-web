@@ -242,7 +242,7 @@ class Admin extends CI_Controller
         $search             = $this->input->post('search')['value'];
         $arr                = [];
         $no                 = $this->input->post('start')+1;
-
+        
         foreach ($payments['records'] as $key => $val) {
             $btnParticipant = '<button onclick="showMdlParticipantDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2"><i class="bi-eye"></i></button>';
             $btnDetail      = '<button onclick="mdlPaymentDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2" data-bs-toggle="tooltip" data-bs-html="true" title="See history of this user"><i class="bi-card-list"></i></button>';

@@ -29,7 +29,7 @@ class MidtransPayments
         } elseif ($status == 'settlement' || $status == 'capture' || $status == 'success') {
             return 2;
         } else {
-            return 4;
+            return 1;
         }
     }
 

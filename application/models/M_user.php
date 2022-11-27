@@ -20,11 +20,12 @@ class M_user extends CI_Model
     }
 
     function getUserParticipans($user_id){
-        $this->db->select('a.*, b.*, c.email, d.fullname')
+        $this->db->select('a.*, b.*, c.email, d.fullname, e.en_short_name')
         ->from('tb_participants a')
         ->join('tb_user b', 'a.user_id = b.user_id')
         ->join('tb_auth c', 'a.user_id = c.user_id')
         ->join('tb_ambassador d', 'a.referral_code = d.referral_code', 'left')
+        ->join('m_countries e', 'a.nationality = e.num_code', 'left')
         ->where(['a.is_deleted' => 0, 'c.status' => 1, 'a.user_id' => $user_id])
         ;
 

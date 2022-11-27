@@ -16,12 +16,16 @@
 		<tr>
 			<td><?= $no++;?></td>
 			<td>
+				<?php if($val->type_method == 'gateway_midtrans'):?>
+					<span type="button" class="btn btn-soft-primary btn-xs">Payment Gateway</span>
+				<?php else:?>
 				<!-- Media Viewer -->
 				<a class="media-viewer" href="<?= base_url();?><?= $val->evidance;?>" data-fslightbox="gallery">
 					<!-- End Media Viewer -->
 					<button type="button" class="btn btn-soft-info btn-xs"><i class="bi bi-card-image"></i>
 						proff </button>
 				</a>
+				<?php endif;?>
 			</td>
 			<td><?= $val->summit;?></td>
 			<td><?= date('F d, Y H:i:s', $val->created_at);?></td>

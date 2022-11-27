@@ -751,6 +751,9 @@
 										</div> -->
 										<select class="form-select select2" autocomplete="off"
 											id="validationFormNationality" name="nationality" required>
+											<?php if(isset($participants->nationality)):?>
+												<option value="<?= $participants->nationality;?>"><?= $participants->en_short_name;?></option>
+											<?php endif;?>
 										</select>
 										<span class="invalid-feedback">Please enter a valid nationality.</span>
 									</div>
@@ -759,7 +762,8 @@
 										insert new one</small>
 								</div>
 								<!-- End Form Group -->
-								<input type="hidden" name="is_custom_nationality" class="d-none" value="<?= $participants->nationality == -1 ? -1 : 0;?>">
+								<input type="hidden" name="is_custom_nationality" class="d-none"
+									value="<?= $participants->nationality == -1 ? -1 : 0;?>">
 								<!-- Form Group -->
 								<div class="mb-3" style="display: <?= $participants->nationality > -1 ? 'none' : '';?>;"
 									id="custom-nationality">
