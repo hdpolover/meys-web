@@ -249,15 +249,25 @@ class M_payment extends CI_Model
         if ($this->input->post('filterStatus') != null && $this->input->post('filterStatus') > 0) {
             $filter[] = "a.status = ".$this->input->post('filterStatus');
         }
+        if ($this->input->post('filterMethod') != null && $this->input->post('filterMethod') > 0) {
+            if($this->input->post('filterMethod') == 1){
+                $filter[] = "c.type_method = 'manual' and a.payment_setting != 1";
+            }elseif($this->input->post('filterMethod') == 2){
+                $filter[] = "a.payment_setting = 1";
+            }elseif($this->input->post('filterMethod') == 3){
+                $filter[] = "c.type_method = 'gateway_midtrans'";
+            }
+        }
+
 
         if ($filter != null) {
             $filter = implode(' AND ', $filter);
         }
 
-        $this->db->select('a.*, b.summit, c.payment_method, c.img_method, c.type_method, c.code_method, d.email, e.name, e.phone, f.institution_workplace as institution')
+        $this->db->select('a.*, b.summit, c.payment_method, c.img_method, c.type_method, c.code_method, d.email, e.name, e.phone, f.is_payment, f.institution_workplace as institution')
         ->from('tb_payments a')
         ->join('m_payments_batch b', 'a.payment_batch = b.id')
-        ->join('m_payments_settings c', 'a.payment_setting = c.id', 'left')
+        ->join('m_payments_settings c', 'a.payment_setting = c.id')
         ->join('tb_auth d', 'a.user_id = d.user_id')
         ->join('tb_user e', 'a.user_id = e.user_id')
         ->join('tb_participants f', 'a.user_id = f.user_id', 'left')
@@ -268,7 +278,7 @@ class M_payment extends CI_Model
 
         $this->db->where($filter)
 
-        ->order_by('a.created_at DESC, a.status ASC')
+        ->order_by('a.status ASC, a.created_at DESC')
         ->group_by('a.user_id');
 
         $models = $this->db->get()->result();
@@ -282,6 +292,11 @@ class M_payment extends CI_Model
         $totalRecords = count($models);
 
         foreach ($models as $key => $val) {
+
+            if($val->is_payment == 1){
+                $val->status = 2;
+            }
+
             if ($val->status == 1) {
                 $summary['paymentPending'] += 1;
             } elseif ($val->status == 2) {

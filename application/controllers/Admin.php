@@ -31,7 +31,7 @@ class Admin extends CI_Controller
     public function loadOnlineUsers()
     {
         $data['online_users'] = $this->M_admin->getOnlineUsers();
-        
+
         $this->load->view('online_users', $data);
     }
 
@@ -42,7 +42,6 @@ class Admin extends CI_Controller
 
     public function statistics()
     {
-
         // statistik
         $data['statistik'] = $this->M_admin->get_statistik();
 
@@ -71,12 +70,12 @@ class Admin extends CI_Controller
             $data['arrChartDailyAccount']['created_at'][] = "'".$val->created_at."'";
             $data['arrChartDailyAccount']['jmlPeserta'][] = $val->count;
         endforeach;
-        if(!empty($data['arrChartDaily'])){
+        if(!empty($data['arrChartDaily'])) {
             $data['arrChartDailyDate'] = array_unique(array_merge($data['arrChartDailyAccount']['created_at'], $data['arrChartDaily']['created_at']), SORT_REGULAR);
-        }else{
+        } else {
             $data['arrChartDailyDate'] = array_unique($data['arrChartDailyAccount']['created_at'], SORT_REGULAR);
         }
-        
+
         $this->templateback->view('admin/statistics', $data);
     }
 
@@ -99,7 +98,6 @@ class Admin extends CI_Controller
 
     public function settings()
     {
-        
         $page = $this->input->get('p');
         switch ($page) {
             case 'general':
@@ -165,12 +163,11 @@ class Admin extends CI_Controller
         }
     }
 
-    public function getDetailParticipant(){
-
+    public function getDetailParticipant()
+    {
         $user_id = $this->input->post('user_id');
-        
-		if (!is_null($this->M_user->getUserParticipans($user_id))) {
-        
+
+        if (!is_null($this->M_user->getUserParticipans($user_id))) {
             $data['participants']   = $this->M_user->getUserParticipans($user_id);
             $participans_id         = isset($data['participants']->id) ? $data['participants']->id : null;
             $data['p_essay']        = $this->M_user->getUserParticipansEssay($user_id, $participans_id);
@@ -178,22 +175,21 @@ class Admin extends CI_Controller
             $data['countries']      = $this->M_user->getAllCountries();
 
             $this->load->view('admin/ajax/detail_participant', $data);
-
-		} else {
-			echo "<center class='py-5'><h4>this participant's not yet make any progress at submission!</h4></center>";
-		}
+        } else {
+            echo "<center class='py-5'><h4>this participant's not yet make any progress at submission!</h4></center>";
+        }
     }
-    
-    public function getAjaxParticipant(){
+
+    public function getAjaxParticipant()
+    {
         $participants       = $this->M_admin->getParticipansAll_v2();
-        
+
         $draw               = $this->input->post('draw');
         $search             = $this->input->post('search')['value'];
         $arr                = [];
         $no                 = $this->input->post('start')+1;
 
         foreach ($participants['records'] as $key => $val) {
-
             $arr[$key] = [
                 "no"            => $no++,
                 "action"        => $val->action,
@@ -220,34 +216,34 @@ class Admin extends CI_Controller
         echo json_encode($response);
     }
 
-    public function getDetailPayment(){
-
+    public function getDetailPayment()
+    {
         $user_id = $this->input->post('user_id');
-        
-		if (!is_null($this->M_payment->getUserPaymenHistory($user_id))) {
-        
+
+        if (!is_null($this->M_payment->getUserPaymenHistory($user_id))) {
             $data['payment_history']   = $this->M_payment->getUserPaymenHistory($user_id);
 
             $this->load->view('payments/ajax/detail_payment', $data);
-
-		} else {
-			echo "<center class='py-5'><h4>There is an error when trying get user payment's data!</h4></center>";
-		}
+        } else {
+            echo "<center class='py-5'><h4>There is an error when trying get user payment's data!</h4></center>";
+        }
     }
 
-    function getAjaxPayment(){
+    public function getAjaxPayment()
+    {
         $payments           = $this->M_payment->getAllPayments();
 
         $draw               = $this->input->post('draw');
         $search             = $this->input->post('search')['value'];
         $arr                = [];
         $no                 = $this->input->post('start')+1;
-        
+
         foreach ($payments['records'] as $key => $val) {
             $btnParticipant = '<button onclick="showMdlParticipantDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2"><i class="bi-eye"></i></button>';
             $btnDetail      = '<button onclick="mdlPaymentDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2" data-bs-toggle="tooltip" data-bs-html="true" title="See history of this user"><i class="bi-card-list"></i></button>';
             $btnCheck       = '<button onclick="mdlPaymentDetailVerif(\''.$val->user_id.'\', \''.$val->id.'\', \''.base_url().$val->evidance.'\')" class="btn btn-soft-success btn-icon btn-sm me-2" data-bs-toggle="tooltip" data-bs-html="true" title="Change status of this payment"><i class="bi-check"></i></button>';
             $status         = '<span class="badge bg-soft-secondary">New</span>';
+            $methodPayment  = '<span class="badge bg-soft-warning">Manual Transfer</span>';
 
             if ($val->status == 1) {
                 $status = '<span class="badge bg-soft-secondary">pending</span>';
@@ -263,10 +259,14 @@ class Admin extends CI_Controller
                 $status = '<span class="badge bg-blue-dark">Haven`t make any payment</span>';
             }
 
-            $btn = $btnParticipant;
-            if($val->status <= 1 || $val->status == 4  || $val->status == 3){
+            if(!is_null($val->payment_type)) {
+                $methodPayment  = '<span class="badge bg-soft-primary">Payment Gateway</span>';
             }
-            if($val->type_method == 'manual'){
+
+            $btn = $btnParticipant;
+            if($val->status <= 1 || $val->status == 4  || $val->status == 3) {
+            }
+            if($val->type_method == 'manual') {
                 $btn .= $btnCheck;
             }
             $btn .= $btnDetail;
@@ -274,6 +274,7 @@ class Admin extends CI_Controller
             $arr[$key] = [
                 "no"            => $no++,
                 "action"        => $btn,
+                "paymentMethod" => $methodPayment,
                 "paymentState"  => $val->summit,
                 "status"        => $status,
                 "name"          => $val->name,
@@ -300,6 +301,5 @@ class Admin extends CI_Controller
         );
 
         echo json_encode($response);
-
     }
 }

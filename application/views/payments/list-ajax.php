@@ -228,6 +228,19 @@
 						</div>
 					</div>
 					<div class="col-sm mb-2 mb-sm-0">
+						<label for="">Payment Status</label>
+						<!-- Select -->
+						<div class="tom-select-custom">
+							<select class="js-select form-select form-select-sm" id="filter_method" autocomplete="off"
+								data-hs-tom-select-options='{"placeholder": "All Status", "hideSearch": true}'>
+								<option value="0">All Method</option>
+								<option value="1">Manual</option>
+								<option value="2">Paypal</option>
+								<option value="3">Midtrans</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-sm mb-2 mb-sm-0">
 						<button class="btn btn-sm btn-primary mt-4" id="searchBtn" onclick="btnSearch()"><i
 								class="bi-search"></i>&nbsp&nbspSearch</button>
 					</div>
@@ -243,6 +256,7 @@
 						<tr>
 							<th scope="col">No</th>
 							<th scope="col">Action</th>
+							<th scope="col">Method</th>
 							<th scope="col">Payment State</th>
 							<th scope="col">Status</th>
 							<th scope="col">Name</th>
@@ -349,6 +363,7 @@
 				d.filterInstitution = $('#filter_institution').val()
 				d.filterBatch = $('#filter_batch').val()
 				d.filterStatus = $('#filter_status').val()
+				d.filterMethod = $('#filter_method').val()
 			},
 			'dataSrc': function (json) {
 				$('#totalIncome').html(json.totalIncome);
@@ -371,6 +386,9 @@
 			},
 			{
 				data: 'action'
+			},
+			{
+				data: 'paymentMethod'
 			},
 			{
 				data: 'paymentState'

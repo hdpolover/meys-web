@@ -19,7 +19,11 @@
 		If you use manual transfer. Please transfer money as requested! if you transfer less or more your
 		payment had high chances to be decline by our.
 	</div>
-
+	<?php if($participants->is_payment == 1):?>
+		<div class="alert alert-soft-success">
+			Yey! Your payment for regristration FEE is accepted!
+		</div>
+	<?php else:?>
 	<div class="row">
 		<?php if(!empty($payment_batch)):?>
 		<?php foreach($payment_batch as $key => $val):?>
@@ -210,6 +214,7 @@
 		<?php endforeach;?>
 		<?php endif;?>
 	</div>
+	<?php endif;?>
 
 	<div class="row">
 		<div class="col-12">

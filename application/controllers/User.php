@@ -130,6 +130,7 @@ class User extends CI_Controller
 
         $data['payment_settings']   = $this->M_payment->getPaymentSettingsUser();
         $data['payment_batch']      = $this->M_payment->getUserPaymentBatch();
+        $data['participants']   = $this->M_user->getUserParticipans($this->session->userdata('user_id'));
         $this->templateuser->view('user/payments/payment', $data);
     }
 

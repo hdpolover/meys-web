@@ -62,6 +62,30 @@
 				</div>
 
 				<div class="col-lg-9">
+					<div class="row mb-4">
+						<div class="col-6">
+							<?php if($participants->is_payment == 1):?>
+							<span class="badge bg-soft-danger text-danger">Payment Accepted</span>
+							<?php endif;?>
+						</div>
+						<div class="col-6 text-right">
+							<?php if(!empty($participants)):?>
+							<?php if($participants->status == 0 || $participants->status == 1):?>
+							<span class="badge bg-soft-danger text-danger float-end">Not Submitted</span>
+							<?php elseif($participants->status == 2):?>
+							<span class="badge bg-soft-info float-end">Submitted</span>
+							<?php elseif($participants->status == 3):?>
+							<span class="badge bg-soft-success text-danger float-end">Submission Accepted</span>
+							<?php elseif($participants->status == 4):?>
+							<span class="badge bg-soft-danger text-danger float-end">Submission Rejected</span>
+							<?php else:?>
+							<span class="badge bg-soft-danger text-danger float-end">Unknow</span>
+							<?php endif;?>
+							<?php else:?>
+							<span class="badge bg-soft-danger text-danger float-end">Fill submission first</span>
+							<?php endif;?>
+						</div>
+					</div>
 					<!-- Content Step Form -->
 					<div id="basicVerStepFormContent">
 						<div id="basicForm" class="active" style="min-height: 15rem;">
