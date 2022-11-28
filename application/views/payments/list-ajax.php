@@ -228,7 +228,7 @@
 						</div>
 					</div>
 					<div class="col-sm mb-2 mb-sm-0">
-						<label for="">Payment Status</label>
+						<label for="">Payment Method</label>
 						<!-- Select -->
 						<div class="tom-select-custom">
 							<select class="js-select form-select form-select-sm" id="filter_method" autocomplete="off"
