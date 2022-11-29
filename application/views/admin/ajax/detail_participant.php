@@ -65,7 +65,7 @@
 					<div class="row mb-4">
 						<div class="col-6">
 							<?php if($participants->is_payment == 1):?>
-							<span class="badge bg-soft-danger text-danger">Payment Accepted</span>
+							<span class="badge bg-soft-success text-danger">Payment Accepted</span>
 							<?php endif;?>
 						</div>
 						<div class="col-6 text-right">
@@ -462,7 +462,7 @@
 
 										<div class="col-sm-8 mb-2 mb-sm-0">
 											<span><a href="<?= $participants->share_proof_link;?>"
-													target="_blank"><?= $participants->share_proof_link;?></a></span>
+													target="_blank">open link</a></span>
 										</div>
 										<!-- End Col -->
 									</div>
