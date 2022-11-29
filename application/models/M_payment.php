@@ -115,13 +115,17 @@ class M_payment extends CI_Model
         ->where(['a.order_id' => $order_id, 'a.is_deleted' => 0])
         ;
 
-        $models = $this->db->get()->row();
-
-        if ($models->type_method == 'gateway_midtrans') {
-            $models->remarks = $models->name;
+        $models = $this->db->get();
+        if($models->num_rows() > 0){
+            $models = $models->row();
+            if ($models->type_method == 'gateway_midtrans') {
+                $models->remarks = $models->name;
+            }
+    
+            return $models;
+        }else{
+            return null;
         }
-
-        return $models;
     }
 
     public function getUserPaymentBatchHistory($user_id = null, $batch_id = null)
@@ -422,10 +426,21 @@ class M_payment extends CI_Model
     public function updatePaymentG($data = [], $where = [])
     {
         $this->db->where($where);
-        $data = $this->db->update('tb_payments', $data);
+        $model = $this->db->update('tb_payments', $data);
+        $status  = ($this->db->affected_rows() != 1) ? false : true;
+
+        if($status == true && $data['status'] == 2){
+            $detail = $this->getUserPaymentDetailByOrderId($where['order_id']);
+
+            if(!is_null($detail)){
+                $this->db->where('user_id', $detail->user_id);
+                $this->db->update('tb_participants', ['is_payment' => 1]);
+            }
+        }
+
         return [
-            'status' => ($this->db->affected_rows() != 1) ? false : true,
-            'data' => $data
+            'status' => $status,
+            'data' => $model
         ];
     }
 

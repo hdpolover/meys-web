@@ -34,9 +34,11 @@
 								<?php elseif($val->status == 2):?>
 								<span class="badge bg-success">success</span>
 								<?php elseif($val->status == 3):?>
-								<span class="badge bg-danger">canceled</span>
+								<span class="badge bg-warning">canceled</span>
 								<?php elseif($val->status == 4):?>
 								<span class="badge bg-danger">rejected</span>
+								<?php elseif($val->status == 5):?>
+								<span class="badge bg-danger">expired</span>
 								<?php else:?>
 								<span class="badge bg-warning">-</span>
 								<?php endif;?>

@@ -24,7 +24,7 @@ class Cronjob extends CI_Controller
             }
         }
 
-        $webhook = "https://discord.com/api/webhooks/1040091929729302569/D6kb3xoe96IG88xWtfPWJtLZz9AsF_ewTBBFvgVB3kT_TkqFpZVROFs37FUyAEnkwxN9";
+        $webhook = "https://discord.com/api/webhooks/1046973518002257981/dWoW5mA8WQXEG8eHQSx7rl8i2hcc5ykVgkjYozpdC7kLN9pfYhC5wuuQzZqlHFweWYrk";
         $timestamp = date("c", strtotime("now"));
         $msg = json_encode([
             "username" => "MEYS 2022",
@@ -102,7 +102,7 @@ class Cronjob extends CI_Controller
         }
 
         // params discord
-        $webhook = "https://discord.com/api/webhooks/1040091929729302569/D6kb3xoe96IG88xWtfPWJtLZz9AsF_ewTBBFvgVB3kT_TkqFpZVROFs37FUyAEnkwxN9";
+        $webhook = "https://discord.com/api/webhooks/1046973518002257981/dWoW5mA8WQXEG8eHQSx7rl8i2hcc5ykVgkjYozpdC7kLN9pfYhC5wuuQzZqlHFweWYrk";
         $timestamp = date("c", strtotime("now"));
 
         // create backup file
@@ -154,5 +154,64 @@ class Cronjob extends CI_Controller
         }
 
         ej($arr);
+    }
+
+    public function checkPaymentsUpdate(){
+        $this->db->select('a.user_id, b.name, d.email, a.is_payment')
+        ->from('tb_participants a')
+        ->join('tb_user b', 'a.user_id = b.user_id')
+        ->join('tb_payments c', 'a.user_id = c.user_id')
+        ->join('tb_auth d', 'a.user_id = d.user_id')
+        ->where(['a.is_payment' => 0, 'c.status' => 2]);
+
+        $query = $this->db->get()->result();
+
+        $string = "";
+        if(!empty($query)){
+            foreach ($query as $key => $val) {
+                $this->db->where('user_id', $val->user_id);
+                $this->db->update('tb_participants', ['is_payment' => 1]);
+
+                $string .= "> #{$val->user_id} - {$val->name} {$val->email} \n";
+            }
+        }else{
+            $string = "No pending regristration payment";
+        }
+
+        // params discord
+        $webhook = "https://discord.com/api/webhooks/1046973518002257981/dWoW5mA8WQXEG8eHQSx7rl8i2hcc5ykVgkjYozpdC7kLN9pfYhC5wuuQzZqlHFweWYrk";
+        $timestamp = date("c", strtotime("now"));
+
+        $msg = json_encode([
+            "username" => "MEYS 2022 - Update payments",
+
+            "tts" => false,
+
+            "embeds" => [
+                [
+                    // Title
+                    "title" => "Cronjob update Payments",
+
+                    // Embed Type, do not change.
+                    "type" => "rich",
+
+                    // Description
+                    "description" => "``` {$string} ```",
+
+                    // Timestamp, only ISO8601
+                    "timestamp" => $timestamp,
+
+                    // Left border color, in HEX
+                    "color" => hexdec("3366ff"),
+                ]
+            ]
+
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+
+        discordmsg($msg, $webhook);
+
+
+        ej($string);
     }
 }

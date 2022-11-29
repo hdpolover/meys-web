@@ -269,8 +269,8 @@ class M_admin extends CI_Model
         if($filterVerified != null && $filterVerified > 0) $filter[] = ($filterVerified == 2 ? "a.status like '%{$filterVerified}%'" : ($filterVerified == 3 ? "a.active = 0" : "a.active like '%{$filterVerified}%'"));
         $null = NULL;
         if($filterSubmited != null && $filterSubmited > 0) $filter[] = $filterSubmited == 2 ? "c.status >= {$filterSubmited}" : "c.status <= {$filterSubmited} or c.status = {$null}";
-        if($filterChecked != null && $filterChecked > 0) $filter[] = $filterChecked == 2 ? "c.status < 2" : "c.status = {$filterChecked}";
-        if($filterStep != null && $filterStep > 0) $filter[] = $filterStep == 1 ? "c.step = 0 or c.step = 1" : "c.step = {$filterStep}";
+        if($filterChecked != null && $filterChecked > 0) $filter[] = $filterChecked == 2 ? "c.status <= 2" : "c.status = {$filterChecked}";
+        if($filterStep != null && $filterStep > 0) $filter[] = $filterStep == 1 ? "c.step = 0 or c.step = 1" : ($filterStep == 7 ? "c.step >= 6" : "c.step = {$filterStep}");
 
         if($filter != null){
             $filter = implode(' AND ', $filter);
@@ -280,7 +280,7 @@ class M_admin extends CI_Model
         ->from('tb_auth a')
         ->join('tb_user b', 'a.user_id = b.user_id', 'inner')
         ->join('tb_participants c', 'a.user_id = c.user_id', 'left')
-        ->where(['a.role' => 2])
+        ->where(['a.role' => 2, 'a.is_deleted' => 0])
         ;
 
         $this->db->where($filter);
@@ -362,8 +362,8 @@ class M_admin extends CI_Model
                     $models[$key]->statusCheck        = '<span class="badge bg-soft-warning">Rejected</span>';
                     $models[$key]->submissionState    = 4;
 
-                    $summary['totalSubmitted']  += 1;
                     $summary['totalChecked']    += 1;
+                    $summary['totalSubmitted']  += 1;
                 }
             }
     

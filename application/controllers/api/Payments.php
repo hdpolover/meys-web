@@ -50,10 +50,10 @@ class Payments extends CI_Controller
 
         $detail_payment = $this->M_payment->getUserPaymentDetailByOrderId($result->order_id);
 
-        $webhook = "https://discord.com/api/webhooks/1040091929729302569/D6kb3xoe96IG88xWtfPWJtLZz9AsF_ewTBBFvgVB3kT_TkqFpZVROFs37FUyAEnkwxN9";
+        $webhook = "https://discord.com/api/webhooks/1046973518002257981/dWoW5mA8WQXEG8eHQSx7rl8i2hcc5ykVgkjYozpdC7kLN9pfYhC5wuuQzZqlHFweWYrk";
         $timestamp = date("c", strtotime("now"));
 
-        if (!empty($detail_payment)) {
+        if (!is_null($detail_payment)) {
             $data = [
                 'status'        => $this->midtranspayments->cvtStatusToInt($result->transaction_status),
                 'modified_at'   => time(),
@@ -399,7 +399,7 @@ class Payments extends CI_Controller
 
         if (isset($_FILES['image'])) {
             $path = "berkas/user/{$this->session->userdata('user_id')}/payments/{$this->input->post('payment_batch')}/";
-            $upload = $this->Uploader->uploadImage($_FILES['image'], $path);
+            $upload = $this->uploader->uploadImage($_FILES['image'], $path);
 
             if ($upload['status'] == true) {
                 if ($this->M_payment->manualPayment($upload['filename']) == true) {

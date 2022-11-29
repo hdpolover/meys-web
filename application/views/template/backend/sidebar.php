@@ -87,13 +87,11 @@
   					</li>
   					<li class="nav-item" id="tour-payment-xendit">
   						<a class="nav-link <?= ($this->uri->segment(2) == "xendit-settings" ? "active" : "") ?>"
-  							href="<?= site_url('admin/xendit-settings'); ?>"><i
-  								class="bi bi-credit-card nav-icon"></i> Xendit Settings</a>
+  							href="<?= site_url('admin/xendit-settings'); ?>"><img src="<?= base_url();?>assets/images/payments/xendit.png" alt="" class=nav-icon" style="width: 25px !important; margin-left: -4px; margin-top: -5px; margin-right: 10px; "> Xendit Settings</a>
   					</li>
   					<li class="nav-item" id="tour-payment-midtrans">
   						<a class="nav-link <?= ($this->uri->segment(2) == "midtrans-settings" ? "active" : "") ?>"
-  							href="<?= site_url('admin/midtrans-settings'); ?>"><i
-  								class="bi bi-credit-card nav-icon"></i> Midtrans Settings</a>
+  							href="<?= site_url('admin/midtrans-settings'); ?>"><img src="<?= base_url();?>assets/images/payments/midtrans.jpg" alt="" class=nav-icon" style="width: 25px !important; margin-left: -4px; margin-top: -5px; margin-right: 10px; "> Midtrans Settings</a>
   					</li>
 
   					<li class="nav-item my-2 my-lg-5"></li>

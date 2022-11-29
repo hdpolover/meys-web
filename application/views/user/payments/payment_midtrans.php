@@ -42,6 +42,8 @@
     							<p class="my-0"><small class="text-info">your payment is rejected, please contact us for
     									more
     									info</small></p>
+    							<?php elseif($payment_detail->status == 5):?>
+    							<span class="badge bg-danger">expired</span>
     							<?php else:?>
     							<span class="badge bg-warning">-</span>
     							<?php endif;?>

@@ -172,9 +172,6 @@
 <div class="row">
 	<div class="col-12">
 		<div class="card">
-			<div class="alert alert-soft-primary">
-
-			</div>
 			<div class="card-header py-3">
 				<h4 class="card-header-title">Filter Payments Data</h4>
 			</div>

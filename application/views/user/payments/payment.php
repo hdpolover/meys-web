@@ -20,8 +20,8 @@
 		payment had high chances to be decline by our.
 	</div>
 	<?php if($participants->is_payment == 1):?>
-		<div class="alert alert-soft-success">
-			Yey! Your payment for regristration FEE is accepted!
+		<div class="alert alert-soft-success mb-0">
+			Yey! Your payment for regristration FEE is accepted! <a href="<?= site_url('user/payments-history');?>" class="text-primary fw-bold">View your payments history</a>
 		</div>
 	<?php else:?>
 	<div class="row">
@@ -45,6 +45,8 @@
 					<span class="badge bg-danger">rejected</span>
 					<p class="my-0"><small class="text-info">your payment is rejected, please contact us for more
 							info</small></p>
+					<?php elseif($val->payments->status == 5):?>
+					<span class="badge bg-danger">expired</span>
 					<?php else:?>
 					<span class="badge bg-warning">-</span>
 					<?php endif;?>
