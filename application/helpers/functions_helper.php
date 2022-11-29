@@ -237,7 +237,7 @@ if (!function_exists(('checkSession'))) {
                 'status' => false,
                 'uri' => $uri
             ];
-        }else{
+        } else {
             return [
                 'status' => true
             ];
@@ -248,11 +248,22 @@ if (!function_exists(('checkSession'))) {
 if (!function_exists(('checkAllowGateway'))) {
     function checkAllowGateway($user_id = null, $user_testflight = [])
     {
-            if(in_array($user_id, $user_testflight)){
-                return true;
-            }else{
-                return false;
-            }
+        if (in_array($user_id, $user_testflight)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
+if (!function_exists('formatSizeString')) {
+    function formatSizeString($size)
+    {
+        $mod = 1024;
+        $units = explode(' ', 'B KB MB GB TB PB');
+        for ($i = 0; $size > $mod; $i++) {
+            $size /= $mod;
+        }
+        return round($size, 2) . ' ' . $units[$i];
+    }
+}

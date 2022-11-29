@@ -64,7 +64,6 @@ class Payments extends CI_Controller
                 'id'  => $detail_payment->id,
                 'order_id'  => $result->order_id,
                 'transaction_id'  => $result->transaction_id,
-                'payment_type'  => 'bank_transfer',
             ];
 
             $this->M_payment->saveLogHistoryPayments($detail_payment);
