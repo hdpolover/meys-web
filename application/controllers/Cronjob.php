@@ -94,8 +94,7 @@ class Cronjob extends CI_Controller
         $list_file = "";
         foreach ($files as $file) {
             if (is_file($file)) {
-                $size = $file->getSize();
-                $list_file .= "{$file} - {$size} \n";
+                $list_file .= "{$file} \n";
                 if ($now - filemtime($file) >= 60 * 60 * 24) { // 1 days delete
                     unlink($file);
                 }

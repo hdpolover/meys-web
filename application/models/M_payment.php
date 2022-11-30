@@ -43,16 +43,20 @@ class M_payment extends CI_Model
 
     public function getUserPaymentBatch()
     {
+        $now = time();
         $this->db->select('*')
         ->from('m_payments_batch')
         ->where(['is_deleted' => 0])
-        ->where(['start_date >=' => time(), 'end_date <=' => time()])
-        ->or_where(['active' => 1])
+        ->where("$now BETWEEN start_date AND end_date")
+        ->where(['active' => 1])
         ;
 
         $models = $this->db->get()->result();
 
         foreach ($models as $key => $val) {
+            if(strtotime('-1 day', $val->end_date)){
+
+            }
             if ($this->checkPaymentUser($val->id)['status'] == true) {
                 $models[$key]->payment_status = $this->checkPaymentUser($val->id)['data']->status;
                 $models[$key]->payments = $this->checkPaymentUser($val->id)['data'];

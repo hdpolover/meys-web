@@ -147,6 +147,7 @@
 								<option value="5">(5) Self Photo</option>
 								<option value="6">(6) Payment & Agreement</option>
 								<option value="7">Waiting for review</option>
+								<option value="8">Reviewed</option>
 							</select>
 						</div>
 					</div>

@@ -111,15 +111,15 @@
 											<div class="mb-3 row">
 												<div class="col-6">
 													<label class="form-label" for="formPeriodeMulai">Start date</label>
-													<input type="date" name="start_date" id="formPeriodeMulai"
+													<input type="datetime-local" name="start_date" id="formPeriodeMulai"
 														class="form-control form-control-sm"
-														value="<?= date('Y-m-d', $val->start_date);?>" required>
+														value="<?= gmdate("Y-m-d\TH:i", $val->start_date);?>" required>
 												</div>
 												<div class="col-6">
 													<label class="form-label" for="formPeriodeSelesai">End date</label>
-													<input type="date" name="end_date" id="formPeriodeSelesai"
+													<input type="datetime-local" name="end_date" id="formPeriodeSelesai"
 														class="form-control form-control-sm"
-														value="<?= date('Y-m-d', $val->end_date);?>" required>
+														value="<?= gmdate("Y-m-d\TH:i", $val->end_date);?>" required>
 												</div>
 											</div>
 

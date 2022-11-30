@@ -270,7 +270,7 @@ class M_admin extends CI_Model
         $null = NULL;
         if($filterSubmited != null && $filterSubmited > 0) $filter[] = $filterSubmited == 2 ? "c.status >= {$filterSubmited}" : "c.status <= {$filterSubmited} or c.status = {$null}";
         if($filterChecked != null && $filterChecked > 0) $filter[] = $filterChecked == 2 ? "c.status <= 2" : "c.status = {$filterChecked}";
-        if($filterStep != null && $filterStep > 0) $filter[] = $filterStep == 1 ? "c.step = 0 or c.step = 1" : ($filterStep == 7 ? "c.step >= 6" : "c.step = {$filterStep}");
+        if($filterStep != null && $filterStep > 0) $filter[] = $filterStep == 1 ? "c.step = 0 or c.step = 1" : ($filterStep == 7 ? "c.step >= 6 AND c.status < 3" : ($filterStep == 8 ? "c.step >= 6 AND c.status = 3" : "c.step = {$filterStep}"));
 
         if($filter != null){
             $filter = implode(' AND ', $filter);
