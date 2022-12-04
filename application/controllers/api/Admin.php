@@ -59,4 +59,37 @@ class Admin extends CI_Controller
         // }
     }
 
+    function export_participants($status = 0){
+        
+        $participants = $this->M_admin->getParticipantsExport($status);
+        
+        if(!empty($participants)){
+
+            switch ($status) {
+                case 2:
+                    $status_txt = "Submitted";
+                    break;
+
+                case 3:
+                    $status_txt = "Accepted";
+                    break;
+
+                case 4:
+                    $status_txt = "Rejected";
+                    break;
+                
+                default:
+                    $status_txt = "All Status";
+                    break;
+            }
+
+            $this->load->library('Excel');
+            $this->excel->export_participants($participants, $status_txt);
+        }else{
+            $this->session->set_flashdata('notif_warning', 'There is no participants data to export');
+            redirect($this->agent->referrer());
+        }
+
+    }
+
 }

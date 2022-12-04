@@ -41,6 +41,7 @@ $route['master/master-faq'] = 'master/masterFaq';
 $route['master/payment-batch'] = 'master/paymentBatch';
 $route['master/entrant-form'] = 'master/entrantForm';
 $route['admin/settings'] = 'admin/settings';
+$route['admin/export-participants/(:num)'] = 'api/admin/export_participants/$1';
 
 // PAYMENTS
 

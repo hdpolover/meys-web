@@ -526,4 +526,17 @@ class M_admin extends CI_Model
 
     }
 
+    public function getParticipantsExport($status = 0){
+        $this->db->select('a.user_id, c.name, b.email, a.institution_workplace')
+        ->from('tb_participants a')
+        ->join('tb_auth b', 'a.user_id = b.user_id')
+        ->join('tb_user c', 'a.user_id = c.user_id')
+        ->where(['a.is_deleted' => 0, 'a.status' => $status])
+        ;
+
+        $models = $this->db->get()->result();
+
+        return $models;
+    }
+
 }

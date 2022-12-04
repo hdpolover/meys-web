@@ -3,7 +3,7 @@
 	"description": "Base code ci with ready to deploy library for new CI 3 project",
 	"type": "project",
 	"require": {
-		"phpoffice/phpspreadsheet": "dev-master",
+		"phpoffice/phpspreadsheet": "^1.23",
 		"phpmailer/phpmailer": "dev-master",
 		"tecnickcom/tcpdf": "dev-main",
 		"midtrans/midtrans-php": "dev-master"

@@ -71,7 +71,7 @@
 					<div>
 						<span class="text-secondary small"><?= $val->description;?></span>
 					</div>
-					<?php if(is_null($val->payments) || $val->payments->status == 4):?>
+					<?php if(is_null($val->payments) || $val->payments->status == 3 || $val->payments->status == 4 || $val->payments->status == 5):?>
 					<?php if($is_allow_gateway == true):?>
 					<button type="button" class="btn btn-outline-success btn-sm purchase-button w-100 mt-2"
 						onclick="pay(<?= $val->id;?>, <?= $val->amount;?>, <?= $val->amount_usd;?>)">Pay (payment

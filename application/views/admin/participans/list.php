@@ -11,10 +11,10 @@
 						Export
 					</button>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButtonClickAnimation">
-						<a class="dropdown-item" href="<?= site_url('admin/participant/export/1')?>">All</a>
-						<a class="dropdown-item" href="<?= site_url('admin/participant/export/2')?>">Verified</a>
-						<a class="dropdown-item" href="<?= site_url('admin/participant/export/3')?>">Submited</a>
-						<a class="dropdown-item" href="<?= site_url('admin/participant/export/4')?>">Checked</a>
+						<a class="dropdown-item" href="<?= site_url('admin/export-participants/0')?>" target="_blank">All</a>
+						<a class="dropdown-item" href="<?= site_url('admin/export-participants/2')?>" target="_blank">Submitted</a>
+						<a class="dropdown-item" href="<?= site_url('admin/export-participants/3')?>" target="_blank">Accepted</a>
+						<a class="dropdown-item" href="<?= site_url('admin/export-participants/4')?>" target="_blank">Rejected</a>
 					</div>
 				</div>
 			</h1>
