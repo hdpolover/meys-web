@@ -4,14 +4,14 @@ return [
     'public_path' => APP_PUBLIC_PATH,
     'public_dir' => APP_PUBLIC_DIR,
     'overwrite_on_upload' => false,
-    'timezone' => 'UTC', // https://www.php.net/manual/en/timezones.php
+    'timezone' => 'Asia/Jakarta', // https://www.php.net/manual/en/timezones.php
     'download_inline' => ['pdf'], // download inline in the browser, array of extensions, use * for all
 
     'frontend_config' => [
-        'app_name' => 'FileGator',
+        'app_name' => 'NgeFiles',
         'app_version' => APP_VERSION,
         'language' => 'english',
-        'logo' => 'https://filegator.io/filegator_logo.svg',
+        'logo' => 'https://i.ibb.co/wNDRQfg/Ngodingin-Logo-2022.png',
         'upload_max_size' => 100 * 1024 * 1024, // 100MB
         'upload_chunk_size' => 1 * 1024 * 1024, // 1MB
         'upload_simultaneous' => 3,
@@ -91,7 +91,7 @@ return [
                 'config' => [],
                 'adapter' => function () {
                     return new \League\Flysystem\Adapter\Local(
-                        $_SERVER['SERVER_NAME'].'/../../'
+                        __DIR__.'/../'
                     );
                 },
             ],

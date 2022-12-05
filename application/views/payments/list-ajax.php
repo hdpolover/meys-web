@@ -404,7 +404,7 @@
 			}
 		]
 	});
-	const mdlPaymentDetail = id => {
+	const mdlPaymentDetail = function (id, batch_id) {
 		$('#mdlChecked_id').val(id);
 
 		$("#modalPaymentContent").html(
@@ -417,7 +417,8 @@
 			url: "<?= site_url('admin/getDetailPayment') ?>",
 			type: 'POST',
 			data: {
-				user_id: id
+				user_id: id,
+				batch_id: batch_id
 			},
 			success: function (data) {
 				$("#modalPaymentContent").html(data);

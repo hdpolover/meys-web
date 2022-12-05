@@ -729,7 +729,7 @@
 								<!-- End Form Group -->
 								<!-- Form Group -->
 								<div class="mb-3"
-									style="display: <?= $participants->nationality == -1 ? 'none' : '';?>;"
+									style="display: <?= isset($participants->nationality) && $participants->nationality == -1 ? 'none' : '';?>;"
 									id="select-nationality">
 									<label for="validationFormNationality" class="form-label">Nationality</label>
 
@@ -763,9 +763,9 @@
 								</div>
 								<!-- End Form Group -->
 								<input type="hidden" name="is_custom_nationality" class="d-none"
-									value="<?= $participants->nationality == -1 ? -1 : 0;?>">
+									value="<?= isset($participants->nationality) && $participants->nationality  == -1 ? -1 : 0;?>">
 								<!-- Form Group -->
-								<div class="mb-3" style="display: <?= $participants->nationality > -1 ? 'none' : '';?>;"
+								<div class="mb-3" style="display: <?= !isset($participants->nationality) || $participants->nationality > -1 ? 'none' : '';?>;"
 									id="custom-nationality">
 									<label for="validationFormCustomNationality" class="form-label">Nationality</label>
 									<div class="js-form-message">
@@ -1065,7 +1065,7 @@
 
 							<div id="formEssay" style="display: none; min-height: 15rem;">
 								<p>ANSWER EACH OF THE FOLLOWING QUESTIONS AND EXPLAIN YOUR ANALYSIS BRIEFLY. EACH ANSWER
-									CAN BE FILLED IN USING A MAXIMUM OF 200 WORDS.
+									CAN BE FILLED IN USING A MAXIMUM OF <b>200 WORDS</b>.
 								</p>
 								<?php if(!empty($m_essay)):?>
 								<?php foreach($m_essay as $key => $val):?>

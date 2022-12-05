@@ -54,8 +54,7 @@ class M_payment extends CI_Model
         $models = $this->db->get()->result();
 
         foreach ($models as $key => $val) {
-            if(strtotime('-1 day', $val->end_date)){
-
+            if (strtotime('-1 day', $val->end_date)) {
             }
             if ($this->checkPaymentUser($val->id)['status'] == true) {
                 $models[$key]->payment_status = $this->checkPaymentUser($val->id)['data']->status;
@@ -69,9 +68,57 @@ class M_payment extends CI_Model
         return $models;
     }
 
+    public function getUserPaymentBatchV2()
+    {
+        $now = time();
+        $this->db->select('*')
+        ->from('m_payments_batch')
+        ->where(['is_deleted' => 0])
+        ->where("$now BETWEEN start_date AND end_date")
+        ->where(['active' => 1])
+        ->or_where(['is_registration' => 1])
+        ;
+
+        $models = $this->db->get()->result();
+        $arr = [];
+        $registration = 0;
+        foreach ($models as $key => $val) {
+            $arr[$key] = $val;
+            if ($this->checkPaymentUserV2($val->id)['status'] == true) {
+                if ($this->checkPaymentUserV2($val->id)['data']->is_registration == 1) {
+                    $registration = 1;
+                }
+                unset($arr[$key]);
+            }
+            if ($val->active == 0) {
+                unset($arr[$key]);
+            }
+        }
+        
+        foreach ($arr as $key => $val) {
+            if ($registration == 1) {
+                if($val->is_registration == 1){
+                    unset($arr[$key]);
+                }
+            }
+        }
+
+        foreach($arr as $key => $val){
+            if ($this->checkPaymentUser($val->id)['status'] == true) {
+                $arr[$key]->payment_status = $this->checkPaymentUser($val->id)['data']->status;
+                $arr[$key]->payments = $this->checkPaymentUser($val->id)['data'];
+            } else {
+                $arr[$key]->payment_status = 3;
+                $arr[$key]->payments = null;
+            }
+        }
+        
+        return $arr;
+    }
+
     public function checkPaymentUser($batch_id = null)
     {
-        $this->db->select('a.*, b.summit, c.payment_method, c.img_method, c.type_method, c.code_method')
+        $this->db->select('a.*, b.summit, b.is_registration, c.payment_method, c.img_method, c.type_method, c.code_method')
         ->from('tb_payments a')
         ->join('m_payments_batch b', 'a.payment_batch = b.id')
         ->join('m_payments_settings c', 'a.payment_setting = c.id')
@@ -93,9 +140,33 @@ class M_payment extends CI_Model
         }
     }
 
+    public function checkPaymentUserV2($batch_id = null)
+    {
+        $this->db->select('a.*, b.summit, b.is_registration, c.payment_method, c.img_method, c.type_method, c.code_method')
+        ->from('tb_payments a')
+        ->join('m_payments_batch b', 'a.payment_batch = b.id')
+        ->join('m_payments_settings c', 'a.payment_setting = c.id')
+        ->where(['a.user_id' => $this->session->userdata('user_id'), 'a.status' => 2, 'a.payment_batch' => $batch_id, 'a.is_deleted' => 0])
+        ;
+
+        $models = $this->db->get()->row();
+
+        if (!empty($models)) {
+            return [
+                'status' => true,
+                'data' => $models
+            ];
+        } else {
+            return [
+                'status' => false,
+                'data' => null
+            ];
+        }
+    }
+
     public function getUserPaymentDetail($payment_id)
     {
-        $this->db->select('a.*, b.summit, c.payment_method, c.img_method, c.data')
+        $this->db->select('a.*, b.summit, b.is_registration, c.payment_method, c.img_method, c.data')
         ->from('tb_payments a')
         ->join('m_payments_batch b', 'a.payment_batch = b.id')
         ->join('m_payments_settings c', 'a.payment_setting = c.id')
@@ -111,7 +182,7 @@ class M_payment extends CI_Model
 
     public function getUserPaymentDetailByOrderId($order_id)
     {
-        $this->db->select('a.*, b.summit, c.payment_method, c.img_method, c.type_method, c.code_method, d.name')
+        $this->db->select('a.*, b.summit, b.is_registration, c.payment_method, c.img_method, c.type_method, c.code_method, d.name')
         ->from('tb_payments a')
         ->join('m_payments_batch b', 'a.payment_batch = b.id')
         ->join('m_payments_settings c', 'a.payment_setting = c.id')
@@ -120,14 +191,14 @@ class M_payment extends CI_Model
         ;
 
         $models = $this->db->get();
-        if($models->num_rows() > 0){
+        if ($models->num_rows() > 0) {
             $models = $models->row();
             if ($models->type_method == 'gateway_midtrans') {
                 $models->remarks = $models->name;
             }
-    
+
             return $models;
-        }else{
+        } else {
             return null;
         }
     }
@@ -140,13 +211,18 @@ class M_payment extends CI_Model
         ->join('m_payments_settings c', 'a.payment_setting = c.id')
         ->join('tb_user d', 'a.user_id = d.user_id')
         ->where(['a.user_id' => $user_id, 'a.payment_batch >' => 0, 'a.payment_setting >' => 0, 'a.is_deleted' => 0])
-        ->order_by('a.status ASC, a.created_at DESC');
         ;
+        
+        if(!is_null($batch_id)){
+            $this->db->where('a.payment_batch', $batch_id);
+        }
 
+        $this->db->order_by('a.status ASC');
+        
         return $this->db->get()->result();
     }
 
-    public function getUserPaymenHistory($user_id)
+    public function getUserPaymenHistory($user_id = null, $batch_id = null)
     {
         $this->db->select('a.*, b.summit, c.payment_method, c.img_method, c.type_method, c.code_method, d.name')
         ->from('tb_payments a')
@@ -154,8 +230,13 @@ class M_payment extends CI_Model
         ->join('m_payments_settings c', 'a.payment_setting = c.id')
         ->join('tb_user d', 'a.user_id = d.user_id')
         ->where(['a.user_id' => $user_id, 'a.is_deleted' => 0])
-        ->order_by('a.status ASC, a.created_at DESC');
         ;
+        
+        if(!is_null($batch_id)){
+            $this->db->where('a.payment_batch', $batch_id);
+        }
+
+        $this->db->order_by('a.status ASC, a.created_at DESC');
 
         return $this->db->get()->result();
     }
@@ -258,11 +339,11 @@ class M_payment extends CI_Model
             $filter[] = "a.status = ".$this->input->post('filterStatus');
         }
         if ($this->input->post('filterMethod') != null && $this->input->post('filterMethod') > 0) {
-            if($this->input->post('filterMethod') == 1){
+            if ($this->input->post('filterMethod') == 1) {
                 $filter[] = "c.type_method = 'manual' and a.payment_setting != 1";
-            }elseif($this->input->post('filterMethod') == 2){
+            } elseif ($this->input->post('filterMethod') == 2) {
                 $filter[] = "a.payment_setting = 1";
-            }elseif($this->input->post('filterMethod') == 3){
+            } elseif ($this->input->post('filterMethod') == 3) {
                 $filter[] = "c.type_method = 'gateway_midtrans'";
             }
         }
@@ -287,7 +368,7 @@ class M_payment extends CI_Model
         $this->db->where($filter)
 
         ->order_by('a.status ASC, a.created_at DESC')
-        ->group_by('a.user_id');
+        ->group_by('a.user_id, a.payment_batch');
 
         $models = $this->db->get()->result();
         // ej($models);
@@ -300,8 +381,7 @@ class M_payment extends CI_Model
         $totalRecords = count($models);
 
         foreach ($models as $key => $val) {
-
-            if($val->is_payment == 1){
+            if ($val->is_payment == 1) {
                 $val->status = 2;
             }
 
@@ -351,24 +431,33 @@ class M_payment extends CI_Model
         $user_id = $this->input->post('user_id');
         $id = $this->input->post('id');
 
-        $data = [
-            'is_payment' => 1,
-            'modified_at' => time(),
-            'modified_by' => $this->session->userdata('user_id')
-        ];
+        // get detail payments
+        $detail = $this->getUserPaymentDetail($id);
+        if(!empty($detail)){
 
-        $this->db->where('user_id', $user_id);
-        $this->db->update('tb_participants', $data);
+            if($detail->is_registration == 1){
+                $data = [
+                    'is_payment' => 1,
+                    'modified_at' => time(),
+                    'modified_by' => $this->session->userdata('user_id')
+                ];
 
-        $data = [
-            'status' => 2,
-            'modified_at' => time(),
-            'modified_by' => $this->session->userdata('user_id')
-        ];
-
-        $this->db->where('id', $id);
-        $this->db->update('tb_payments', $data);
-        return ($this->db->affected_rows() != 1) ? false : true;
+                $this->db->where('user_id', $user_id);
+                $this->db->update('tb_participants', $data);
+            }
+    
+            $data = [
+                'status' => 2,
+                'modified_at' => time(),
+                'modified_by' => $this->session->userdata('user_id')
+            ];
+    
+            $this->db->where('id', $id);
+            $this->db->update('tb_payments', $data);
+            return ($this->db->affected_rows() != 1) ? false : true;
+        }else{
+            return false;
+        }
     }
 
     public function rejectedPayment()
@@ -433,12 +522,14 @@ class M_payment extends CI_Model
         $model = $this->db->update('tb_payments', $data);
         $status  = ($this->db->affected_rows() != 1) ? false : true;
 
-        if($status == true && $data['status'] == 2){
+        if ($status == true && $data['status'] == 2) {
             $detail = $this->getUserPaymentDetailByOrderId($where['order_id']);
 
-            if(!is_null($detail)){
-                $this->db->where('user_id', $detail->user_id);
-                $this->db->update('tb_participants', ['is_payment' => 1]);
+            if (!is_null($detail)) {
+                if($detail->is_registration == 1){
+                    $this->db->where('user_id', $detail->user_id);
+                    $this->db->update('tb_participants', ['is_payment' => 1]);
+                }
             }
         }
 
@@ -518,7 +609,7 @@ class M_payment extends CI_Model
             'status_code' => $data->status_code,
             'others' => $data->others,
             'created_at' => $data->created_at,
-            'created_by' => $data->tecreated_byst,
+            'created_by' => $data->created_by,
             'modified_at' => time(),
             'modified_by' => -1,
             'is_deleted' => $data->is_deleted,

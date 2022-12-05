@@ -85,7 +85,7 @@ class MidtransPayments
                 ];
             } elseif ($result->va_numbers[0]->bank == 'bni') {
                 $data = [
-                    'payment_setting' => 10, #payment setting see tb_payment_setting #> REQUIRED
+                    'payment_setting' => 19, #payment setting see tb_payment_setting #> REQUIRED
                     'va_number' => $result->va_numbers[0]->va_number, #> REQUIRED
                 ];
             } elseif ($result->va_numbers[0]->bank == 'bri') {

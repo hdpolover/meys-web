@@ -43,18 +43,18 @@
 			<!-- End CTA -->
 			<?php else:?>
 			<?php if (isset($participants->is_payment) && $participants->is_payment == 0):?>
-			<div class="alert alert-soft-info small" role="alert">
-				Your not yet make payment for your submission to be submitted. Please make payment at "Payment" menu or
+			<div class="alert alert-soft-danger small" role="alert">
+				You not yet make payment for your submission to be submitted. Please make payment at "Payment" menu or
 				<a href="<?= site_url('user/payment');?>" class="text-primary fw-bold">click here</a>
 			</div>
 			<?php endif;?>
-			<?php if (isset($participants->status) && $participants->is_payment == 1 && $participants->status == 0 || $participants->status == 1):?>
+			<?php if (isset($participants->status) && $participants->is_payment == 1 && ($participants->status == 0 || $participants->status == 1)):?>
 			<div class="alert alert-soft-info small" role="alert">
 				You has been paid your submission, you can submit your submission now !
 			</div>
 			<?php endif;?>
 			<?php if (isset($participants->status) && $participants->status == 2):?>
-			<div class="alert alert-soft-info small" role="alert">
+			<div class="alert alert-soft-primary small" role="alert">
 				Your submission has been submitted, please wait until your submission verified by our TEAM
 			</div>
 			<?php endif;?>

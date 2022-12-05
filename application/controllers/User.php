@@ -129,7 +129,7 @@ class User extends CI_Controller
         $data['client_key']     = ($this->_midtrans_prod == true ? $this->_client_key_production : $this->_client_key_sandbox);
 
         $data['payment_settings']   = $this->M_payment->getPaymentSettingsUser();
-        $data['payment_batch']      = $this->M_payment->getUserPaymentBatch();
+        $data['payment_batch']      = $this->M_payment->getUserPaymentBatchV2();
         $data['participants']   = $this->M_user->getUserParticipans($this->session->userdata('user_id'));
         $this->templateuser->view('user/payments/payment', $data);
     }

@@ -219,9 +219,10 @@ class Admin extends CI_Controller
     public function getDetailPayment()
     {
         $user_id = $this->input->post('user_id');
+        $batch_id = $this->input->post('batch_id');
 
-        if (!is_null($this->M_payment->getUserPaymenHistory($user_id))) {
-            $data['payment_history']   = $this->M_payment->getUserPaymenHistory($user_id);
+        if (!is_null($this->M_payment->getUserPaymenHistory($user_id, $batch_id))) {
+            $data['payment_history']   = $this->M_payment->getUserPaymenHistory($user_id, $batch_id);
 
             $this->load->view('payments/ajax/detail_payment', $data);
         } else {
@@ -240,7 +241,7 @@ class Admin extends CI_Controller
 
         foreach ($payments['records'] as $key => $val) {
             $btnParticipant = '<button onclick="showMdlParticipantDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2"><i class="bi-eye"></i></button>';
-            $btnDetail      = '<button onclick="mdlPaymentDetail(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2" data-bs-toggle="tooltip" data-bs-html="true" title="See history of this user"><i class="bi-card-list"></i></button>';
+            $btnDetail      = '<button onclick="mdlPaymentDetail(\''.$val->user_id.'\', \''.$val->payment_batch.'\')" class="btn btn-soft-info btn-icon btn-sm me-2" data-bs-toggle="tooltip" data-bs-html="true" title="See history of this user"><i class="bi-card-list"></i></button>';
             $btnCheck       = '<button onclick="mdlPaymentDetailVerif(\''.$val->user_id.'\', \''.$val->id.'\', \''.base_url().$val->evidance.'\')" class="btn btn-soft-success btn-icon btn-sm me-2" data-bs-toggle="tooltip" data-bs-html="true" title="Change status of this payment"><i class="bi-check"></i></button>';
             $status         = '<span class="badge bg-soft-secondary">New</span>';
             $methodPayment  = '<span class="badge bg-soft-warning">Manual Transfer</span>';
@@ -261,6 +262,10 @@ class Admin extends CI_Controller
 
             if(!is_null($val->payment_type)) {
                 $methodPayment  = '<span class="badge bg-soft-primary">Payment Gateway</span>';
+            }
+
+            if($val->code_method == 'paypal') {
+                $methodPayment  = '<span class="badge bg-soft-info">Paypal</span>';
             }
 
             $btn = $btnParticipant;
