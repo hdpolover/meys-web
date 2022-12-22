@@ -205,7 +205,7 @@ class M_payment extends CI_Model
 
     public function getUserPaymentBatchHistory($user_id = null, $batch_id = null)
     {
-        $this->db->select('a.*, b.summit, c.payment_method, c.img_method, c.type_method, c.code_method, d.name')
+        $this->db->select('a.*, b.summit, b.file, c.payment_method, c.img_method, c.type_method, c.code_method, d.name')
         ->from('tb_payments a')
         ->join('m_payments_batch b', 'a.payment_batch = b.id')
         ->join('m_payments_settings c', 'a.payment_setting = c.id')

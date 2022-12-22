@@ -495,4 +495,54 @@ class Payments extends CI_Controller
         //     redirect($this->agent->referrer());
         // }
     }
+    
+    public function invoice(){
+        // GET DATA 
+        $file   = ($this->input->post('file'));
+        $no     = ($this->input->post('no'));
+        $name   = ($this->input->post('name'));
+
+        $gambar = base_url().$file;
+
+        // CREATE GAMBAR
+        $image  = imagecreatefrompng($gambar);
+        $black  = imageColorAllocate($image, 0, 0, 0);
+
+        // ==== NO
+        $font_size = 20;
+        $y = 258;
+        $font = realpath('assets/font/Poppins_Bold.TTF');
+        $this->add_text($image, $no, $font_size, $black, $font, $y, 60);
+
+        // ==== NAME
+        $font_size = 18;
+        $y = 403;
+        $font = realpath('assets/font/Poppins_Bold.TTF');
+        $this->add_text($image, strtoupper($name), $font_size, $black, $font, $y, 28);
+
+        ob_clean();
+
+        header("Content-type: image/png");
+
+        imagepng($image);
+
+        // Clear Memory
+        imagedestroy($image);
+    }
+    
+    public function add_text($image, $text, $size, $color, $font, $y, $_x)
+    {
+        //definisikan lebar gambar agar posisi teks selalu ditengah berapapun jumlah hurufnya
+        $image_width = imagesx($image);
+        //membuat textbox agar text centered
+        $text_box = imagettfbbox($size, 0, $font, $text);
+        $text_width = $text_box[2] - $text_box[0]; // lower right corner - lower left corner
+        $text_height = $text_box[3] - $text_box[1];
+
+        // center
+        $x = ($image_width / 2) - ($text_width / 2) - 110;
+
+        //generate sertifikat beserta namanya
+        imagettftext($image, $size, 0, $x + $_x, $y, $color, $font, $text);
+    }
 }

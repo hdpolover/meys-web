@@ -137,4 +137,44 @@ class User extends CI_Controller
             ]);
         }
     }
+
+    public function uploadDocuments(){
+        if (isset($_FILES['proposal']['name']) && $_FILES['proposal']['name'] !== "") {
+            $path = "berkas/user/{$this->session->userdata('user_id')}/documents/";
+            $upload = $this->uploader->uploadFileMulti($_FILES['proposal'], 'proposal', $path);
+
+            if ($upload['status'] == true) {
+                if ($this->M_user->upload_dokumen('proposal', $upload['filename']) == true) {
+                    $this->session->set_flashdata('notif_success', 'Succesfuly upload your document ');
+                    redirect(site_url('user/submission'));
+                } else {
+                    $this->session->set_flashdata('notif_warning', 'There is a problem when trying to send your payment, try again later');
+                    redirect($this->agent->referrer());
+                }
+            } else {
+                $this->session->set_flashdata('notif_warning', $upload['message']['error']);
+                redirect($this->agent->referrer());
+            }
+        }
+
+        if (isset($_FILES['travel']['name']) && $_FILES['travel']['name'] !== "") {
+            $path = "berkas/user/{$this->session->userdata('user_id')}/documents/";
+            $upload = $this->uploader->uploadFileMulti($_FILES['travel'], 'travel', $path);
+
+            if ($upload['status'] == true) {
+                if ($this->M_user->upload_dokumen('travel', $upload['filename']) == true) {
+                    $this->session->set_flashdata('notif_success', 'Succesfuly upload your document ');
+                    redirect(site_url('user/submission'));
+                } else {
+                    $this->session->set_flashdata('notif_warning', 'There is a problem when trying to send your payment, try again later');
+                    redirect($this->agent->referrer());
+                }
+            } else {
+                $this->session->set_flashdata('notif_warning', $upload['message']);
+                redirect($this->agent->referrer());
+            }
+        }
+
+
+    }
 }

@@ -43,13 +43,19 @@
 								<span class="badge bg-warning">-</span>
 								<?php endif;?>
 							</td>
-							<td>
+							<td class="d-flex ">
+								<form method="post" action="<?= site_url('api/payments/invoice');?>">
+									<input type="hidden" name="file" value="<?= $val->file;?>">
+									<input type="hidden" name="no" value="<?= !is_null($val->order_id) ? $val->order_id : $val->transaction_id;?>">
+									<input type="hidden" name="name" value="<?= $this->session->userdata('name');?>">
+									<button type="submit" class="btn btn-xs btn-success" style="margin-right: 5px">Receipt</button>
+								</form>
 								<?php if($val->type_method == 'gateway_midtrans'):?>
 								<a href="<?= site_url('user/payments-transaction/'.$val->order_id.'?reff=history&method=gateway&id='.$this->uri->segment(3));?>"
-									class="text-info">check</a>
+									class="btn btn-xs btn-info">check</a>
 								<?php else:?>
 								<a href="<?= site_url('user/payments-transaction/'.$val->id.'?reff=history&id='.$this->uri->segment(3));?>"
-									class="text-info">check</a>
+									class="btn btn-xs btn-info">check</a>
 								<?php endif;?>
 							</td>
 						</tr>

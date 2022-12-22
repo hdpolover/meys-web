@@ -57,6 +57,26 @@
 								</div>
 							</a>
 						</li>
+
+						<li class="step-item">
+							<a class="step-content-wrapper" href="javascript:;"
+								data-hs-step-form-next-options='{"targetSelector": "#proposal"}'>
+								<span class="step-icon step-icon-soft-dark stepy-last">5</span>
+								<div class="step-content pb-5">
+									<span class="step-title mt-2">Proposal</span>
+								</div>
+							</a>
+						</li>
+
+						<li class="step-item">
+							<a class="step-content-wrapper" href="javascript:;"
+								data-hs-step-form-next-options='{"targetSelector": "#travel_document"}'>
+								<span class="step-icon step-icon-soft-dark stepy-last">5</span>
+								<div class="step-content pb-5">
+									<span class="step-title mt-2">Travel Document</span>
+								</div>
+							</a>
+						</li>
 					</ul>
 					<!-- End Step -->
 				</div>

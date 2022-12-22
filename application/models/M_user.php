@@ -325,4 +325,27 @@ class M_user extends CI_Model
 
         return ($this->db->affected_rows() != 1) ? false : true;
     }
+
+    function upload_dokumen($documents = null, $file = null){
+        $participans = $this->getUserParticipans($this->session->userdata('user_id'));
+
+        if($documents == 'proposal'){
+            $formData = [
+                'proposal'              => $file,
+                'modified_by'           => $this->session->userdata('user_id'),
+                'modified_at'           => time(),
+            ];
+        }else{
+            $formData = [
+                'travel'                => $file,
+                'modified_by'           => $this->session->userdata('user_id'),
+                'modified_at'           => time(),
+            ];
+        }
+
+        $this->db->where('id', $participans->id);
+        $this->db->update('tb_participants', $formData);
+
+        return ($this->db->affected_rows() != 1) ? false : true;
+    }
 }

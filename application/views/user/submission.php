@@ -1,8 +1,8 @@
 <div class="d-grid gap-3 gap-lg-5">
 	<!-- Card -->
 	<div class="card">
-		<div class="card-header py-4 border-bottom">
-			<h4 class="card-header-title">Overview
+		<div class="card-header py-3 border-bottom">
+			<h4 class="card-header-title my-0">Overview
 				<?php if(!empty($participants)):?>
 				<?php if($participants->status == 0 || $participants->status == 1):?>
 				<span class="badge bg-soft-danger text-danger float-end">Not Submitted</span>
@@ -22,16 +22,15 @@
 		</div>
 		<?php if(!empty($participants) && $participants->status == 3):?>
 
-		<!-- Body -->
+		<?php if(!empty($participants)):?>
 		<div class="card-body">
-			<?php if(!empty($participants)):?>
 			<?php if($participants->status == 2):?>
 			<div class="alert alert-soft-info small">
 				Submission submitted, waiting for approval
 			</div>
 			<?php elseif($participants->status == 3):?>
 			<div class="alert alert-soft-success small">
-				Horray! Your submission has been accepted, wait our Team to contact your for furthur information!
+				Horray! Your submission has been accepted, please upload necessary documents down below!
 			</div>
 			<?php elseif($participants->status == 4):?>
 			<div class="alert alert-soft-danger small">
@@ -43,7 +42,57 @@
 				submission progress. Please contact our TEAM and tell your had code 412 on your submission status
 			</div>
 			<?php endif;?>
-			<?php endif;?>
+		</div>
+		<?php endif;?>
+
+		<?php if(!empty($participants)):?>
+		<?php if($participants->status == 3):?>
+		<div class="card-header py-3 border-bottom">
+			<h4 class="card-header-title my-0">Your documents</h4>
+		</div>
+		<div class="card-body">
+			<div class="alert alert-soft-info">
+				Please upload these documents
+			</div>
+			<form action="<?= site_url('api/user/uploadDocuments');?>" method="post" enctype="multipart/form-data">
+				<div class="row mb-3">
+					<div class="col-sm-3 mb-3">
+						<label for="inputProposal" class="input-label">Proposal</label>
+					</div>
+					<div class="col-sm mb-3">
+						<input type="file" name="proposal" class="form-control form-control-sm" accept=".pdf" id="inputProposal">
+					</div>
+					<?php if(isset($participants->proposal) && !is_null($participants->proposal)):?>
+					<div class="col-sm-2 mb-3">
+						<a href="<?= base_url();?><?= $participants->proposal;?>" target="_blank""
+							class="btn btn-soft-info btn-sm w-100">file</a>
+					</div>
+					<?php endif;?>
+				</div>
+				<div class="row mb-3">
+					<div class="col-sm-3 mb-3">
+						<label for="inputTravel" class="input-label">Travel Document</label>
+					</div>
+					<div class="col-sm mb-3">
+						<input type="file" name="travel" class="form-control form-control-sm" accept=".pdf" id="inputTravel">
+					</div>
+					<?php if(isset($participants->travel) && !is_null($participants->travel)):?>
+					<div class="col-sm-2 mb-3">
+						<a href="<?= base_url();?><?= $participants->travel;?>" target="_blank"
+							class="btn btn-soft-info btn-sm w-100">file</a>
+					</div>
+					<?php endif;?>
+				</div>
+				<button type="submit" class="btn btn-soft-primary btn-sm float-end">Send your documents</button>
+			</form>
+		</div>
+		<?php endif;?>
+		<?php endif;?>
+		<div class="card-header py-3 border-bottom">
+			<h4 class="card-header-title my-0">Your submission data</h4>
+		</div>
+		<!-- Body -->
+		<div class="card-body">
 			<form class="js-step-form"
 				data-hs-step-form-options='{"progressSelector": "#basicVerStepFormProgress","stepsSelector": "#basicVerStepFormContent"}'>
 				<div class="row">
@@ -752,7 +801,8 @@
 										<select class="form-select select2" autocomplete="off"
 											id="validationFormNationality" name="nationality" required>
 											<?php if(isset($participants->nationality)):?>
-												<option value="<?= $participants->nationality;?>"><?= $participants->en_short_name;?></option>
+											<option value="<?= $participants->nationality;?>">
+												<?= $participants->en_short_name;?></option>
 											<?php endif;?>
 										</select>
 										<span class="invalid-feedback">Please enter a valid nationality.</span>
@@ -765,7 +815,8 @@
 								<input type="hidden" name="is_custom_nationality" class="d-none"
 									value="<?= isset($participants->nationality) && $participants->nationality  == -1 ? -1 : 0;?>">
 								<!-- Form Group -->
-								<div class="mb-3" style="display: <?= !isset($participants->nationality) || $participants->nationality > -1 ? 'none' : '';?>;"
+								<div class="mb-3"
+									style="display: <?= !isset($participants->nationality) || $participants->nationality > -1 ? 'none' : '';?>;"
 									id="custom-nationality">
 									<label for="validationFormCustomNationality" class="form-label">Nationality</label>
 									<div class="js-form-message">
