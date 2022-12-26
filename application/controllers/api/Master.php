@@ -8,7 +8,7 @@ class Master extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model(['M_master', 'M_announcements', 'M_auth']);
+        $this->load->model(['M_master', 'M_announcements', 'M_auth', 'M_user']);
         $this->load->library('uploader');
 
         if ($this->session->userdata('role') > 1) {

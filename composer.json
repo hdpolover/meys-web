@@ -6,7 +6,9 @@
 		"phpoffice/phpspreadsheet": "^1.23",
 		"phpmailer/phpmailer": "dev-master",
 		"tecnickcom/tcpdf": "dev-main",
-		"midtrans/midtrans-php": "dev-master"
+		"midtrans/midtrans-php": "dev-master",
+		"setasign/fpdf": "^1.8",
+		"setasign/fpdi": "^2.3"
 	},
 	"license": "AFL-1.1",
 	"authors": [{

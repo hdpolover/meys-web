@@ -43,7 +43,8 @@ $route['master/entrant-form'] = 'master/entrantForm';
 $route['admin/settings'] = 'admin/settings';
 $route['admin/export-participants/(:num)'] = 'api/admin/export_participants/$1';
 
-// PAYMENTS
+// DOCUMENTS
+$route['document/generate-loa'] = 'api/user/generate_loa';
 
 $route['default_controller'] = 'home';
 $route['404_override'] = 'home/e_404';

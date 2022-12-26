@@ -19,7 +19,7 @@ class User extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model(['M_user', 'M_auth', 'M_announcements', 'M_master', 'M_payment']);
+        $this->load->model(['M_user', 'M_auth', 'M_announcements', 'M_master', 'M_payment', 'M_travel']);
 
         // cek apakah user sudah login
         if ($this->session->userdata('logged_in') == false || !$this->session->userdata('logged_in')) {
@@ -88,8 +88,9 @@ class User extends CI_Controller
         $data['btn_sign_up']    = "btn-light";
         $data['btn_sign_in']    = "btn-outline-light";
 
-        $data['documents']  = $this->M_master->getDocuments();
-
+        // $data['documents']  = $this->M_master->getDocuments();
+        $data['documents']  = $this->M_user->getUserDocuments();
+        
         $this->templateuser->view('user/documents', $data);
     }
 
@@ -198,6 +199,25 @@ class User extends CI_Controller
         $data['countries']      = $this->M_user->getAllCountries();
 
         $this->templateuser->view('user/submission', $data);
+    }
+
+    public function travel_documents()
+    {
+        $data['user'] = $this->M_auth->get_auth($this->session->userdata('email'));
+
+        // style
+        $data['navbar_style']   = "navbar-dark";
+        $data['logo_style']     = 1;
+        $data['btn_sign_up']    = "btn-light";
+        $data['btn_sign_in']    = "btn-outline-light";
+        
+        $data['passport']       = $this->M_travel->getUserPassport($this->session->userdata('user_id'));
+        $data['flight']         = $this->M_travel->getUserFlight($this->session->userdata('user_id'));
+        $data['residence']      = $this->M_travel->getUserResidance($this->session->userdata('user_id'));
+        $data['visa']           = $this->M_travel->getUserVisa($this->session->userdata('user_id'));
+        $data['vaccine']        = $this->M_travel->getUserVaccine($this->session->userdata('user_id'));
+
+        $this->templateuser->view('user/travel_documents', $data);
     }
 
     public function settings()

@@ -326,26 +326,58 @@ class M_user extends CI_Model
         return ($this->db->affected_rows() != 1) ? false : true;
     }
 
-    function upload_dokumen($documents = null, $file = null){
-        $participans = $this->getUserParticipans($this->session->userdata('user_id'));
+    function uploadDocuments($file = null){
+        $documents = $this->db->get_where('tb_user_documents', ['user_id' => $this->session->userdata('user_id'), 'm_document_id' => $this->input->post('m_document_id')])->row();
 
-        if($documents == 'proposal'){
-            $formData = [
-                'proposal'              => $file,
-                'modified_by'           => $this->session->userdata('user_id'),
-                'modified_at'           => time(),
+        $data = [
+            'user_id'           => $this->session->userdata('user_id'),
+            'm_document_id'     => $this->input->post('m_document_id'),
+            'file'              => $file,
+        ];
+        if (empty($documents)) {
+            $log = [
+                'created_at'        => time(),
+                'created_by'        => $this->session->userdata('user_id'),
             ];
-        }else{
-            $formData = [
-                'travel'                => $file,
-                'modified_by'           => $this->session->userdata('user_id'),
-                'modified_at'           => time(),
+
+            $this->db->insert('tb_user_documents', array_merge($data, $log));
+
+            return ($this->db->affected_rows() != 1) ? false : true;
+        } else {
+            $log = [
+                'modified_at'        => time(),
+                'modified_by'        => $this->session->userdata('user_id'),
             ];
+
+            $this->db->where('id', $documents->id);
+            $this->db->update('tb_user_documents', array_merge($data, $log));
+
+            return ($this->db->affected_rows() != 1) ? false : true;
         }
 
-        $this->db->where('id', $participans->id);
-        $this->db->update('tb_participants', $formData);
+    }
 
-        return ($this->db->affected_rows() != 1) ? false : true;
+    function getUserDocuments(){
+        $this->db->select('*')
+        ->from('m_documents')
+        ->where(['is_deleted' => 0])
+        ;
+
+        $models = $this->db->get()->result();
+
+        foreach($models as $key => $val){
+
+            $documents = $this->db->get_where('tb_user_documents', ['user_id' => $this->session->userdata('user_id'), 'm_document_id' => $val->id])->row();
+
+            if(!empty($documents)){
+                $val->status    = (int) $documents->status;
+                $val->file      = $documents->file;
+            }else{
+                $val->status    = 0;
+                $val->file      = null;
+            }
+        }
+
+        return $models;
     }
 }

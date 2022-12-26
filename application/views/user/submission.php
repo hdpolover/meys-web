@@ -44,50 +44,6 @@
 			<?php endif;?>
 		</div>
 		<?php endif;?>
-
-		<?php if(!empty($participants)):?>
-		<?php if($participants->status == 3):?>
-		<div class="card-header py-3 border-bottom">
-			<h4 class="card-header-title my-0">Your documents</h4>
-		</div>
-		<div class="card-body">
-			<div class="alert alert-soft-info">
-				Please upload these documents
-			</div>
-			<form action="<?= site_url('api/user/uploadDocuments');?>" method="post" enctype="multipart/form-data">
-				<div class="row mb-3">
-					<div class="col-sm-3 mb-3">
-						<label for="inputProposal" class="input-label">Proposal</label>
-					</div>
-					<div class="col-sm mb-3">
-						<input type="file" name="proposal" class="form-control form-control-sm" accept=".pdf" id="inputProposal">
-					</div>
-					<?php if(isset($participants->proposal) && !is_null($participants->proposal)):?>
-					<div class="col-sm-2 mb-3">
-						<a href="<?= base_url();?><?= $participants->proposal;?>" target="_blank""
-							class="btn btn-soft-info btn-sm w-100">file</a>
-					</div>
-					<?php endif;?>
-				</div>
-				<div class="row mb-3">
-					<div class="col-sm-3 mb-3">
-						<label for="inputTravel" class="input-label">Travel Document</label>
-					</div>
-					<div class="col-sm mb-3">
-						<input type="file" name="travel" class="form-control form-control-sm" accept=".pdf" id="inputTravel">
-					</div>
-					<?php if(isset($participants->travel) && !is_null($participants->travel)):?>
-					<div class="col-sm-2 mb-3">
-						<a href="<?= base_url();?><?= $participants->travel;?>" target="_blank"
-							class="btn btn-soft-info btn-sm w-100">file</a>
-					</div>
-					<?php endif;?>
-				</div>
-				<button type="submit" class="btn btn-soft-primary btn-sm float-end">Send your documents</button>
-			</form>
-		</div>
-		<?php endif;?>
-		<?php endif;?>
 		<div class="card-header py-3 border-bottom">
 			<h4 class="card-header-title my-0">Your submission data</h4>
 		</div>

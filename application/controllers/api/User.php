@@ -2,6 +2,8 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use setasign\Fpdi\Fpdi;
+
 class User extends CI_Controller
 {
     // construct
@@ -10,6 +12,8 @@ class User extends CI_Controller
         parent::__construct();
         $this->load->model(['M_user', 'M_master']);
         $this->load->library('uploader');
+        $this->load->helper('download');
+
     }
 
     public function getNationality(){
@@ -139,42 +143,118 @@ class User extends CI_Controller
     }
 
     public function uploadDocuments(){
-        if (isset($_FILES['proposal']['name']) && $_FILES['proposal']['name'] !== "") {
+        if (isset($_FILES['file'])) {
             $path = "berkas/user/{$this->session->userdata('user_id')}/documents/";
-            $upload = $this->uploader->uploadFileMulti($_FILES['proposal'], 'proposal', $path);
+            $upload = $this->uploader->uploadFile($_FILES['file'], $path);
 
-            if ($upload['status'] == true) {
-                if ($this->M_user->upload_dokumen('proposal', $upload['filename']) == true) {
-                    $this->session->set_flashdata('notif_success', 'Succesfuly upload your document ');
-                    redirect(site_url('user/submission'));
+            if ($upload == true) {
+                if ($this->M_user->uploadDocuments($upload['filename']) == true) {
+                    $this->session->set_flashdata('notif_success', 'Succesfuly save your data');
+                    redirect(site_url('user/documents'));
                 } else {
-                    $this->session->set_flashdata('notif_warning', 'There is a problem when trying to send your payment, try again later');
-                    redirect($this->agent->referrer());
-                }
-            } else {
-                $this->session->set_flashdata('notif_warning', $upload['message']['error']);
-                redirect($this->agent->referrer());
-            }
-        }
-
-        if (isset($_FILES['travel']['name']) && $_FILES['travel']['name'] !== "") {
-            $path = "berkas/user/{$this->session->userdata('user_id')}/documents/";
-            $upload = $this->uploader->uploadFileMulti($_FILES['travel'], 'travel', $path);
-
-            if ($upload['status'] == true) {
-                if ($this->M_user->upload_dokumen('travel', $upload['filename']) == true) {
-                    $this->session->set_flashdata('notif_success', 'Succesfuly upload your document ');
-                    redirect(site_url('user/submission'));
-                } else {
-                    $this->session->set_flashdata('notif_warning', 'There is a problem when trying to send your payment, try again later');
+                    $this->session->set_flashdata('notif_warning', 'There is a problem when trying to save your data, try again later');
                     redirect($this->agent->referrer());
                 }
             } else {
                 $this->session->set_flashdata('notif_warning', $upload['message']);
                 redirect($this->agent->referrer());
             }
+        } else {
+            $this->session->set_flashdata('notif_warning', 'There is a no file choosen, try again later');
+            redirect($this->agent->referrer());
+        }
+    }
+
+    function generate_loa()
+    {
+
+        if ($this->session->userdata('logged_in') == false || !$this->session->userdata('logged_in')) {
+            if (!empty($_SERVER['QUERY_STRING'])) {
+                $uri = uri_string() . '?' . $_SERVER['QUERY_STRING'];
+            } else {
+                $uri = uri_string();
+            }
+            $this->session->set_userdata('redirect', $uri);
+            $this->session->set_flashdata('notif_warning', "Please login to continue");
+            redirect('sign-in');
+        }else{
+            $user       = $this->M_user->getUserParticipans($this->session->userdata('user_id'));
+            
+            if(!empty($user)){
+                $pdf = new Fpdi();
+                $pdf->AddPage();
+                // set the source file
+                $pdf->setSourceFile('berkas/docs/Fixed LoA MEYS 2023.pdf');
+                // import page 1
+                $tplIdx = $pdf->importPage(1);
+                $pdf->useTemplate($tplIdx, 0, 0, 220);
+        
+                // now write some text above the imported page
+                $pdf->SetFont('Times');
+                $pdf->SetTextColor(0, 0, 0);
+                $pdf->SetFontSize(10);
+                $pdf->SetXY(51, 55);
+                $pdf->Write(0, strtoupper(explode(' ', $user->name)[0]));
+                $pdf->SetXY(67, 94);
+                $pdf->Write(0, strtoupper($user->name));
+                $pdf->SetXY(67, 102);
+                $pdf->Write(0, strtoupper($user->institution_workplace));
+
+                $user->name = strtoupper($user->name);
+
+                $path = "berkas/user/{$this->session->userdata('user_id')}/documents/";
+
+                if (!file_exists($path)) {
+                    mkdir($path, 0777, true);
+                }
+
+                $pdf->Output("{$path}LoA - {$user->name}.pdf", 'F');
+                force_download("{$path}LoA - {$user->name}.pdf", NULL);
+            }else{
+                $this->session->set_flashdata('notif_warning', 'You need to complete at least first step of submission !');
+                redirect($this->agent->referrer());
+            }
         }
 
-
     }
+
+    // public function uploadDocuments(){
+    //     if (isset($_FILES['proposal']['name']) && $_FILES['proposal']['name'] !== "") {
+    //         $path = "berkas/user/{$this->session->userdata('user_id')}/documents/";
+    //         $upload = $this->uploader->uploadFileMulti($_FILES['proposal'], 'proposal', $path);
+
+    //         if ($upload['status'] == true) {
+    //             if ($this->M_user->upload_dokumen('proposal', $upload['filename']) == true) {
+    //                 $this->session->set_flashdata('notif_success', 'Succesfuly upload your document ');
+    //                 redirect(site_url('user/submission'));
+    //             } else {
+    //                 $this->session->set_flashdata('notif_warning', 'There is a problem when trying to send your payment, try again later');
+    //                 redirect($this->agent->referrer());
+    //             }
+    //         } else {
+    //             $this->session->set_flashdata('notif_warning', $upload['message']['error']);
+    //             redirect($this->agent->referrer());
+    //         }
+    //     }
+
+    //     if (isset($_FILES['travel']['name']) && $_FILES['travel']['name'] !== "") {
+    //         $path = "berkas/user/{$this->session->userdata('user_id')}/documents/";
+    //         $upload = $this->uploader->uploadFileMulti($_FILES['travel'], 'travel', $path);
+
+    //         if ($upload['status'] == true) {
+    //             if ($this->M_user->upload_dokumen('travel', $upload['filename']) == true) {
+    //                 $this->session->set_flashdata('notif_success', 'Succesfuly upload your document ');
+    //                 redirect(site_url('user/submission'));
+    //             } else {
+    //                 $this->session->set_flashdata('notif_warning', 'There is a problem when trying to send your payment, try again later');
+    //                 redirect($this->agent->referrer());
+    //             }
+    //         } else {
+    //             $this->session->set_flashdata('notif_warning', $upload['message']);
+    //             redirect($this->agent->referrer());
+    //         }
+    //     }
+
+
+    // }
 }
