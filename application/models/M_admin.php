@@ -308,6 +308,8 @@ class M_admin extends CI_Model
 										d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-1.993-1.679a.5.5 0 0 0-.686.172l-1.17 1.95-.547-.547a.5.5 0 0 0-.708.708l.774.773a.75.75 0 0 0 1.174-.144l1.335-2.226a.5.5 0 0 0-.172-.686Z" />
 								</svg></button>';
             $btnCheck       = '<button onclick="showMdlChecked(\''.$val->user_id.'\')" class="btn btn-soft-success btn-icon btn-sm me-2"><i class="bi-check"></i></button>';
+            $btnDocuments   = '<button onclick="showMdlDocuments(\''.$val->user_id.'\')" class="btn btn-soft-success btn-icon btn-sm me-2"><i class="bi-files"></i></button>';
+            $btnLoa         = '<button onclick="showMdlLoa(\''.$val->user_id.'\')" class="btn btn-soft-info btn-icon btn-sm me-2"><i class="bi-file-pdf"></i></button>';
 
             $strip_email                    = explode("@", $val->email);
             $models[$key]->name             = is_null($val->name) || $val->name == "" ? $strip_email[0] : $val->name;
@@ -374,7 +376,7 @@ class M_admin extends CI_Model
                 $models[$key]->statusAccount  = '<span class="badge bg-soft-warning">Suspended</span>';
             }
             
-            $models[$key]->action = ($models[$key]->submissionState == 2 || $models[$key]->submissionState == 3 || $models[$key]->submissionState == 4 ? $btnCheck : '').$btnDetail.$btnPass.($val->status_account > 0 ? $btnEmail : '').($val->status_account == 0 ? $btnVerified : '');
+            $models[$key]->action = (($models[$key]->submissionState == 2 || $models[$key]->submissionState == 4) && $val->status !== 3 ? $btnCheck : '').$btnDetail.$btnPass.($models[$key]->status_account > 0 ? $btnEmail : '').($val->status_account == 0 ? $btnVerified : '').($models[$key]->submissionState == 3 ? $btnDocuments.$btnLoa : '');
             
             $summary['totalUser']           += 1;
         }
@@ -544,6 +546,18 @@ class M_admin extends CI_Model
         $models = $this->db->get()->result();
 
         return $models;
+    }
+
+    function checkedParticipantDocumentsLoa(){
+        $this->db->where(['user_id' => $this->input->post('id'), 'm_document_id' => 4]);
+        $this->db->update('tb_user_documents', ['status' => 2]);
+        return ($this->db->affected_rows() != 1) ? false : true;
+    }
+
+    function rejectedParticipantDocumentsLoa(){
+        $this->db->where(['user_id' => $this->input->post('id'), 'm_document_id' => 4]);
+        $this->db->update('tb_user_documents', ['status' => 3]);
+        return ($this->db->affected_rows() != 1) ? false : true;
     }
 
 }

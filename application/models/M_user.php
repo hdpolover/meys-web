@@ -345,6 +345,7 @@ class M_user extends CI_Model
             return ($this->db->affected_rows() != 1) ? false : true;
         } else {
             $log = [
+                'status'             => 1,
                 'modified_at'        => time(),
                 'modified_by'        => $this->session->userdata('user_id'),
             ];
@@ -379,5 +380,29 @@ class M_user extends CI_Model
         }
 
         return $models;
+    }
+
+    function getUserDocumentPassport($user_id = null){
+        return $this->db->get_where('travel_passport', ['user_id' => $user_id])->row();
+    }
+
+    function getUserDocumentFlight($user_id = null){
+        return $this->db->get_where('travel_flight', ['user_id' => $user_id])->row();
+    }
+
+    function getUserDocumentResidance($user_id = null){
+        return $this->db->get_where('travel_residance', ['user_id' => $user_id])->row();
+    }
+
+    function getUserDocumentVaccine($user_id = null){
+        return $this->db->get_where('travel_vaccine', ['user_id' => $user_id])->row();
+    }
+
+    function getUserDocumentVisa($user_id = null){
+        return $this->db->get_where('travel_visa', ['user_id' => $user_id])->row();
+    }
+
+    function getUserDocumentLoa($user_id = null){
+        return $this->db->get_where('tb_user_documents', ['user_id' => $user_id, 'm_document_id' => 4])->row();
     }
 }

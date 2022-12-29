@@ -186,8 +186,8 @@
 						<li><i class="bi bi-eye me-2 text-success"></i> See participants submission data</li>
 						<li><i class="bi bi-key me-2 text-warning"></i> Change participants password with generated
 							password</li>
-						<li><i class="bi bi-envelope me-2 text-danger"></i> Change participants email (<span
-								class="text-danger">Don't change email without reaching participant</span>)</li>
+						<!-- <li><i class="bi bi-envelope me-2 text-danger"></i> Change participants email (<span
+								class="text-danger">Don't change email without reaching participant</span>)</li> -->
 						<li>
 							<span class="text-info me-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
 									fill="currentColor" class="bi bi-envelope-check" viewBox="0 0 16 16">
@@ -198,6 +198,8 @@
 								</svg>
 							</span> Verified email participants that had problem with <i>"verified email"</i> process
 						</li>
+						<li><i class="bi bi-files me-2 text-success"></i> Travel documents participant</li>
+						<li><i class="bi bi-files me-2 text-info"></i> LOA documents participant</li>
 					</ul>
 				</div>
 			</div>
@@ -236,6 +238,43 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body" id="modalParticipantContent">
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End Modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="mdlDocuments" tabindex="-1" aria-labelledby="mdlDeleteLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-xl">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="mdlDeleteLabel">Travel Documents</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="modalDocumentsContent">
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End Modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="mdlDocumentsLoa" tabindex="-1" aria-labelledby="mdlDeleteLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-xl">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="mdlDeleteLabel">LOA Documents</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body" id="modalDocumentsLoaContent">
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+				<input type="hidden" name="id" class="mdlChecked_id">
+				<button type="button" id="checkBtnDocuments" class="btn btn-soft-success btn-sm" onclick="checkDataDocuments()">Check</button>
+				<button type="button" id="rejectBtnDocuments" class="btn btn-soft-danger btn-sm" onclick="rejectDataDocuments()">Reject</button>
 			</div>
 		</div>
 	</div>
@@ -444,6 +483,46 @@
 			}
 		});
 	}
+	const showMdlDocuments = id => {
+		$('#mdlChecked_id').val(id);
+
+		$("#modalDocumentsContent").html(
+			`<center class="py-5"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading ...</center>`
+		);
+
+		$('#mdlDocuments').modal('show')
+
+		jQuery.ajax({
+			url: "<?= site_url('admin/getDetailDocuments') ?>",
+			type: 'POST',
+			data: {
+				user_id: id
+			},
+			success: function (data) {
+				$("#modalDocumentsContent").html(data);
+			}
+		});
+	}
+	const showMdlLoa = id => {
+		$('.mdlChecked_id').val(id);
+
+		$("#modalDocumentsLoaContent").html(
+			`<center class="py-5"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading ...</center>`
+		);
+
+		$('#mdlDocumentsLoa').modal('show')
+
+		jQuery.ajax({
+			url: "<?= site_url('admin/getDetailDocumentsLoa') ?>",
+			type: 'POST',
+			data: {
+				user_id: id
+			},
+			success: function (data) {
+				$("#modalDocumentsLoaContent").html(data);
+			}
+		});
+	}
 
 	const showMdlChangePassword = id => {
 		const pass = Math.random().toString(36).slice(-8);
@@ -570,6 +649,134 @@
 				$('#rejectBtn').html(`Reject`);
 
 				$('#mdlChecked').modal('hide');
+
+				var Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				})
+
+				Toast.fire({
+					icon: 'success',
+					title: "Succesfuly rejected participant submission"
+				})
+
+				table.ajax.reload();
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+
+                table.ajax.reload();
+
+				var Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				})
+
+				Toast.fire({
+					icon: 'error',
+					title: thrownError
+				})
+			}
+		});
+	}
+
+	function checkDataDocuments() {
+		var id = $('.mdlChecked_id').val();
+
+		$('#checkBtnDocuments').prop("disabled", true);
+		// add spinner to button
+		$('#checkBtnDocuments').html(
+			`<span class="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true"></span> loading...`
+		);
+
+		jQuery.ajax({
+			url: "<?= site_url('api/admin/checkedParticipantDocumentsLoa') ?>",
+			type: 'POST',
+			data: {
+				id: id
+			},
+			success: function (data) {
+				$('#checkBtnDocuments').prop("disabled", false);
+				$('#checkBtnDocuments').html(`Check`);
+
+				$('#mdlDocumentsLoa').modal('hide');
+
+				var Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				})
+
+				Toast.fire({
+					icon: 'success',
+					title: "Succesfuly checked/accepted participant submission"
+				})
+
+				table.ajax.reload();
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+
+                table.ajax.reload();
+
+				var Toast = Swal.mixin({
+					toast: true,
+					position: 'top-end',
+					showConfirmButton: false,
+					timer: 3000,
+					timerProgressBar: true,
+					didOpen: (toast) => {
+						toast.addEventListener('mouseenter', Swal.stopTimer)
+						toast.addEventListener('mouseleave', Swal.resumeTimer)
+					}
+				})
+
+				Toast.fire({
+					icon: 'error',
+					title: thrownError
+				})
+			}
+		});
+	}
+
+	function rejectDataDocuments() {
+		var id = $('.mdlChecked_id').val();
+
+		$('#rejectBtnDocuments').prop("disabled", true);
+		// add spinner to button
+		$('#rejectBtnDocuments').html(
+			`<span class="spinner-border spinner-border-sm text-white" role="status" aria-hidden="true"></span> loading...`
+		);
+
+		jQuery.ajax({
+			url: "<?= site_url('api/admin/rejectedParticipantDocumentsLoa') ?>",
+			type: 'POST',
+			data: {
+				id: id
+			},
+			success: function (data) {
+				$('#rejectBtnDocuments').prop("disabled", false);
+				$('#rejectBtnDocuments').html(`Reject`);
+
+				$('#mdlDocumentsLoa').modal('hide');
 
 				var Toast = Swal.mixin({
 					toast: true,

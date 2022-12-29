@@ -59,6 +59,31 @@ class Admin extends CI_Controller
         // }
     }
 
+    function checkedParticipantDocumentsLoa()
+    {
+        return $this->M_admin->checkedParticipantDocumentsLoa();
+        // if ($this->M_admin->checkedParticipant() == true) {
+        //     $this->session->set_flashdata('notif_success', 'Succesfuly checked/accepted participant submission ');
+        //     redirect(site_url('admin/participans'));
+        // } else {
+        //     $this->session->set_flashdata('notif_warning', 'There is a problem when trying to checked/accepted participant submission, try again later');
+        //     redirect($this->agent->referrer());
+        // }
+    }
+
+    function rejectedParticipantDocumentsLoa()
+    {
+        return $this->M_admin->rejectedParticipantDocumentsLoa();
+        // if ($this->M_admin->rejectedParticipant() == true) {
+        //     $this->session->set_flashdata('notif_success', 'Succesfuly rejected participant submission ');
+        //     redirect(site_url('admin/participans'));
+        // } else {
+        //     $this->session->set_flashdata('notif_warning', 'There is a problem when trying to rejected participant submission, try again later');
+        //     redirect($this->agent->referrer());
+        // }
+    }
+
+
     function export_participants($status = 0){
         
         $participants = $this->M_admin->getParticipantsExport($status);

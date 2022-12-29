@@ -180,6 +180,26 @@ class Admin extends CI_Controller
         }
     }
 
+    public function getDetailDocuments()
+    {
+        $user_id = $this->input->post('user_id');
+        $data['passport']        = $this->M_user->getUserDocumentPassport($user_id);
+        $data['flight']        = $this->M_user->getUserDocumentFlight($user_id);
+        $data['residance']        = $this->M_user->getUserDocumentResidance($user_id);
+        $data['vaccine']        = $this->M_user->getUserDocumentVaccine($user_id);
+        $data['visa']        = $this->M_user->getUserDocumentVisa($user_id);
+
+        $this->load->view('admin/ajax/flight_documents', $data);
+    }
+
+    public function getDetailDocumentsLoa()
+    {
+        $user_id = $this->input->post('user_id');
+        $data['loa']        = $this->M_user->getUserDocumentLoa($user_id);
+
+        $this->load->view('admin/ajax/loa_documents', $data);
+    }
+
     public function getAjaxParticipant()
     {
         $participants       = $this->M_admin->getParticipansAll_v2();
