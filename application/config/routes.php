@@ -42,6 +42,7 @@ $route['master/payment-batch'] = 'master/paymentBatch';
 $route['master/entrant-form'] = 'master/entrantForm';
 $route['admin/settings'] = 'admin/settings';
 $route['admin/export-participants/(:num)'] = 'api/admin/export_participants/$1';
+$route['admin/export-payments/(:num)'] = 'api/admin/export_payments/$1';
 
 // DOCUMENTS
 $route['document/generate-loa'] = 'api/user/generate_loa';

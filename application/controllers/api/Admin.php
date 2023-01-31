@@ -117,4 +117,46 @@ class Admin extends CI_Controller
 
     }
 
+
+    function export_payments($status = 0)
+    {
+        $payments = $this->M_admin->getPaymentsExport($status);
+        
+        if (!empty($payments)) {
+            switch ($status) {
+                case 1:
+                    $status_txt = "Pending";
+                    break;
+
+                case 2:
+                    $status_txt = "Success";
+                    break;
+
+                case 3:
+                    $status_txt = "Cancel";
+                    break;
+
+                case 4:
+                    $status_txt = "Rejected";
+                    break;
+
+                case 5:
+                    $status_txt = "Expired";
+                    break;
+
+
+                default:
+                    $status_txt = "All Status";
+                    break;
+            }
+
+            $this->load->library('Excel');
+            $this->excel->export_payments($payments, $status_txt);
+        } else {
+            $this->session->set_flashdata('notif_warning', 'There is no payments data to export');
+            redirect($this->agent->referrer());
+        }
+    }
+
+
 }

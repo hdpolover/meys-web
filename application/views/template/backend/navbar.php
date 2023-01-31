@@ -19,6 +19,11 @@
   						<!-- Navbar -->
   						<ul class="navbar-nav p-0">
   							<li class="nav-item">
+  								<a href="<?= site_url('user');?>" class="btn btn-ghost-secondary btn-sm">
+  									User page <i class="bi-people ms-1"></i>
+  								</a>
+  							</li>
+  							<li class="nav-item">
   								<a class="btn btn-ghost-secondary btn-sm" onclick="tournow()">
   									Help center <i class="bi-question-diamond-fill ms-1"></i>
   								</a>

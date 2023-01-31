@@ -3,6 +3,22 @@
 	<div class="row align-items-center">
 		<div class="col-sm">
 			<h1 class="docs-page-header-title">Payments
+				<div class="btn-group float-end">
+					<button class="btn btn-sm btn-success dropdown-toggle" type="button"
+						id="dropdownMenuButtonClickAnimation" data-bs-toggle="dropdown" aria-expanded="false"
+						data-bs-dropdown-animation>
+						<i class="bi-file-earmark-excel-fill"></i>&nbsp;
+						Export
+					</button>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuButtonClickAnimation">
+						<a class="dropdown-item" href="<?= site_url('admin/export-payments/0')?>" target="_blank">All</a>
+						<a class="dropdown-item" href="<?= site_url('admin/export-payments/1')?>" target="_blank">Pending</a>
+						<a class="dropdown-item" href="<?= site_url('admin/export-payments/2')?>" target="_blank">Success</a>
+						<a class="dropdown-item" href="<?= site_url('admin/export-payments/3')?>" target="_blank">Cancel</a>
+						<a class="dropdown-item" href="<?= site_url('admin/export-payments/4')?>" target="_blank">Rejected</a>
+						<a class="dropdown-item" href="<?= site_url('admin/export-payments/5')?>" target="_blank">Expired</a>
+					</div>
+				</div>
 			</h1>
 			<p class="docs-page-header-text">Manage payments for your programs.</p>
 		</div>
@@ -188,11 +204,6 @@
 						<input type="text" id="filter_name" class="form-control form-control-sm"
 							placeholder="Name Filter">
 					</div>
-					<div class="col-sm mb-2 mb-sm-0">
-						<label for="">Institution</label>
-						<input type="text" id="filter_institution" class="form-control form-control-sm"
-							placeholder="Institiution filter">
-					</div>
 				</div>
 				<div class="row mb-3">
 					<div class="col-sm mb-2 mb-sm-0">
@@ -258,7 +269,6 @@
 							<th scope="col">Status</th>
 							<th scope="col">Name</th>
 							<th scope="col">Email</th>
-							<th scope="col">Institution</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -398,9 +408,6 @@
 			},
 			{
 				data: 'email'
-			},
-			{
-				data: 'institution'
 			}
 		]
 	});

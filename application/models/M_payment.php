@@ -353,41 +353,34 @@ class M_payment extends CI_Model
             $filter = implode(' AND ', $filter);
         }
 
-        $this->db->select('a.*, b.summit, c.payment_method, c.img_method, c.type_method, c.code_method, d.email, e.name, e.phone, f.is_payment, f.institution_workplace as institution')
+        $this->db->select('a.*, b.summit, c.payment_method, c.img_method, c.type_method, c.code_method, d.email, e.name, e.phone')
         ->from('tb_payments a')
-        ->join('m_payments_batch b', 'a.payment_batch = b.id')
-        ->join('m_payments_settings c', 'a.payment_setting = c.id')
-        ->join('tb_auth d', 'a.user_id = d.user_id')
-        ->join('tb_user e', 'a.user_id = e.user_id')
-        ->join('tb_participants f', 'a.user_id = f.user_id', 'left')
-        ->where(['a.is_deleted' => 0, 'a.payment_setting >' => 0])
+        ->join('m_payments_batch b', 'a.payment_batch = b.id', 'left')
+        ->join('m_payments_settings c', 'a.payment_setting = c.id', 'left')
+        ->join('tb_auth d', 'a.user_id = d.user_id', 'left')
+        ->join('tb_user e', 'a.user_id = e.user_id', 'left')
+        ->where(['a.is_deleted' => 0])
         //->where("a.status = 2 or a.status = 1 and a.is_deleted = 0")
         ;
 
 
         $this->db->where($filter)
 
-        ->order_by('a.status ASC, a.created_at DESC')
-        ->group_by('a.user_id, a.payment_batch');
+        ->order_by('a.created_at DESC');
 
         $models = $this->db->get()->result();
-        // ej($models);
-        foreach ($models as $key => $val) {
-            $models[$key]->payment_history = $this->getUserPaymentBatchHistory($val->user_id);
-        }
 
         usort($models, fn ($a, $b) => $a->status <=> $b->status);
 
         $totalRecords = count($models);
 
         foreach ($models as $key => $val) {
-            if ($val->is_payment == 1) {
-                $val->status = 2;
-            }
+
 
             if ($val->status == 1) {
                 $summary['paymentPending'] += 1;
-            } elseif ($val->status == 2) {
+            }
+            if ($val->status == 2) {
                 $summary['totalIncome'] += $val->amount;
 
                 if ($val->payment_setting == 1) {
@@ -399,11 +392,14 @@ class M_payment extends CI_Model
                 }
 
                 $summary['paymentSuccess'] += 1;
-            } elseif ($val->status == 3) {
+            }
+            if ($val->status == 3) {
                 $summary['paymentFailed'] += 1;
-            } elseif ($val->status == 4) {
+            }
+            if ($val->status == 4) {
                 $summary['paymentFailed'] += 1;
-            } elseif ($val->status == 5) {
+            }
+            if ($val->status == 5) {
                 $summary['paymentExpired'] += 1;
             }
         }

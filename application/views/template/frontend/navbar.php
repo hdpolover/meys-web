@@ -45,6 +45,10 @@
   					<?php if($this->session->userdata('logged_in') || $this->session->userdata('logged_in') == true):?>
   					<?php if($this->session->userdata('role') == 0 || $this->session->userdata('role') == 1):?>
   					<li class="nav-item">
+  						<a class="nav-link fs-15" aria-current="page" href="<?= site_url('user');?>"
+  							role="button">User page</a>
+  					</li>
+  					<li class="nav-item">
   						<a class="nav-link fs-15" aria-current="page" href="<?= site_url('admin/dashboard');?>"
   							role="button">Admin dashboard</a>
   					</li>

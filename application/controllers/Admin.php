@@ -303,8 +303,7 @@ class Admin extends CI_Controller
                 "paymentState"  => $val->summit,
                 "status"        => $status,
                 "name"          => $val->name,
-                "email"         => $val->email,
-                "institution"   => $val->institution,
+                "email"         => $val->email
             ];
         }
 

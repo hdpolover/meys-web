@@ -548,6 +548,27 @@ class M_admin extends CI_Model
         return $models;
     }
 
+    public function getPaymentsExport($status = 0){
+        $status = (int) $status;
+        $this->db->select('a.*, b.summit, c.payment_method, c.img_method, c.type_method, c.code_method, d.email, e.name, e.phone')
+        ->from('tb_payments a')
+        ->join('m_payments_batch b', 'a.payment_batch = b.id', 'left')
+        ->join('m_payments_settings c', 'a.payment_setting = c.id', 'left')
+        ->join('tb_auth d', 'a.user_id = d.user_id', 'left')
+        ->join('tb_user e', 'a.user_id = e.user_id', 'left')
+        ->where(['a.is_deleted' => 0])
+        ;
+
+        if($status > 0){
+            $this->db->where('a.status', $status);
+        }
+
+        $this->db->order_by('e.name ASC');
+        $models = $this->db->get()->result();
+
+        return $models;
+    }
+
     function checkedParticipantDocumentsLoa(){
         $this->db->where(['user_id' => $this->input->post('id'), 'm_document_id' => 4]);
         $this->db->update('tb_user_documents', ['status' => 2]);
